@@ -16,7 +16,7 @@ namespace DG.Tweening
     /// Shortcuts/functions that are not strictly related to specific Modules
     /// but are available only on some Unity versions
     /// </summary>
-	public static class DOTweenModuleUnityVersion
+    public static class DOTweenModuleUnityVersion
     {
 #if UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_5 || UNITY_2017_1_OR_NEWER
         #region Unity 4.3 or Newer

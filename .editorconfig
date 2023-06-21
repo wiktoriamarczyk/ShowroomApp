@@ -13,8 +13,8 @@ dotnet_diagnostic.IDE0051.severity = none
 #### Podstawowe opcje EditorConfig ####
 
 # Wcięcia i odstępy
-indent_size = tab
-indent_style = tab
+indent_size = 4
+indent_style = space
 
 # Preferencje nowego wiersza
 end_of_line = crlf
