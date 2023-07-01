@@ -8,7 +8,6 @@ public class Icon : MonoBehaviour
     [SerializeField] Color iconDefaultColor = new Color(101, 101, 101);
     [SerializeField] Color iconAlternativeColor = Color.white;
 
-
     void Awake() {
         iconDefaultColor = ConvertColor(iconDefaultColor);
     }
