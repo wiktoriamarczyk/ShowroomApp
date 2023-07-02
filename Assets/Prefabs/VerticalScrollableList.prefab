@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 633495183338878053}
   - component: {fileID: 633495183338878055}
   m_Layer: 5
-  m_Name: ScrollableList
+  m_Name: VerticalScrollableList
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

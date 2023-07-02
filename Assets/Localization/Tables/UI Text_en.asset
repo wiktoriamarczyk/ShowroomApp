@@ -66,6 +66,10 @@ MonoBehaviour:
     m_Localized: Optional
     m_Metadata:
       m_Items: []
+  - m_Id: 109961347219456
+    m_Localized: Gallery
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

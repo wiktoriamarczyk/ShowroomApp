@@ -63,6 +63,10 @@ MonoBehaviour:
     m_Key: Input Field Optional
     m_Metadata:
       m_Items: []
+  - m_Id: 109961347219456
+    m_Key: Gallery Header
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

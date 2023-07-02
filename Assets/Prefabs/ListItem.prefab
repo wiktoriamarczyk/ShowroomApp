@@ -177,6 +177,10 @@ PrefabInstance:
       value: 6/12/2023 13:00 Harry
       objectReference: {fileID: 0}
     - target: {fileID: 2876080342642905185, guid: ce653b2d957962b43a922df5f93622eb, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 0d4d6b2b9cfa2b74cb484b8b367342b8, type: 2}
+    - target: {fileID: 2876080342642905185, guid: ce653b2d957962b43a922df5f93622eb, type: 3}
       propertyPath: m_fontColor.b
       value: 0.2
       objectReference: {fileID: 0}
@@ -188,6 +192,10 @@ PrefabInstance:
       propertyPath: m_fontColor.r
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 2876080342642905185, guid: ce653b2d957962b43a922df5f93622eb, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2185291504094703171, guid: 0d4d6b2b9cfa2b74cb484b8b367342b8, type: 2}
     - target: {fileID: 2876080342642905185, guid: ce653b2d957962b43a922df5f93622eb, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4281545523
