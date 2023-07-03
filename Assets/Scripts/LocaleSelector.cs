@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 
-public class LocaleSelector : MonoBehaviour
-{
+public class LocaleSelector : MonoBehaviour {
     private bool active = false;
     int index = 1;
 

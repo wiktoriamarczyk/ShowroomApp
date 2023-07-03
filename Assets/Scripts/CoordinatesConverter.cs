@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class CoordinatesConverter : MonoBehaviour
-{
+public class CoordinatesConverter : MonoBehaviour {
     /* A point in Cartesian space can be represented in spherical space,
     it is done by describing it using a radius of the sphere and two angles. */
     public static Vector3 GetSphericalCoordinates(Vector3 cartesian) {

@@ -4,8 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using Unity.VisualScripting;
 
-public class CameraController : MonoBehaviour
-{
+public class CameraController : MonoBehaviour {
     [SerializeField] GameObject target;
     [SerializeField] Vector3 startPosition;
     [SerializeField] Vector3 startRotation;

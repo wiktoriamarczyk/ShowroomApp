@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Button = UnityEngine.UI.Button;
 
 public class PanelManager : MonoBehaviour {
-
     [SerializeField] List<GameObject> panels;
     GameObject currentPanel;
 
@@ -21,8 +23,9 @@ public class PanelManager : MonoBehaviour {
     }
 
     public void HideCurrentPanel() {
-        if (currentPanel == null)
+        if (currentPanel == null) {
             return;
+        }
         currentPanel.SetActive(false);
         currentPanel = null;
     }
