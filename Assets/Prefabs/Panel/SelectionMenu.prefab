@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1691146868903731724}
   - component: {fileID: 5977500441276356584}
   m_Layer: 5
-  m_Name: ComboBoxPanel
+  m_Name: SelectionMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ComboBoxDisplayer : MonoBehaviour {
+public class SelectionMenuView : MonoBehaviour {
     Button defaultButton;
     Button[] buttons;
     Button selectedButton;

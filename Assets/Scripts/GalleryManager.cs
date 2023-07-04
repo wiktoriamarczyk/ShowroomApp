@@ -2,7 +2,7 @@ using System.Threading;
 using UnityEngine;
 
 public class GalleryManager : MonoBehaviour {
-    [SerializeField] CanvasManager canvasManager;
+    [SerializeField] SceneManager canvasManager;
     [SerializeField] GameObject gallery;
 
     ImagesProvider imgProvider;

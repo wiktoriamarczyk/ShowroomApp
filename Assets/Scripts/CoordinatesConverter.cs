@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 
 public class CoordinatesConverter : MonoBehaviour {
@@ -11,13 +12,9 @@ public class CoordinatesConverter : MonoBehaviour {
         float y = cartesian.y;
         float z = cartesian.z;
 
-        float radius = Mathf.Sqrt(
-            Mathf.Pow(x, 2) +
-            Mathf.Pow(y, 2) +
-            Mathf.Pow(z, 2)
-        );
+        float radius = cartesian.magnitude;
 
-        float phi = Mathf.Atan2(z / x, x);
+        float phi = Mathf.Atan2(x, z);
         float theta = Mathf.Acos(y / radius);
 
         return new Vector3(radius, phi, theta);
@@ -28,12 +25,13 @@ public class CoordinatesConverter : MonoBehaviour {
         float phi = spherical.y;
         float theta = spherical.z;
 
-        Vector3 ret = new Vector3();
+        Vector3 result;
+        var sinPhiRadius = Mathf.Sin(theta) * radius;
 
-        ret.x = radius * Mathf.Cos(theta) * Mathf.Cos(phi);
-        ret.y = radius * Mathf.Sin(theta);
-        ret.z = radius * Mathf.Cos(theta) * Mathf.Sin(phi);
+        result.x = sinPhiRadius * Mathf.Sin(phi);
+        result.y = Mathf.Cos(theta) * radius;
+        result.z = sinPhiRadius * Mathf.Cos(phi);
 
-        return ret;
+        return result;
     }
 }
