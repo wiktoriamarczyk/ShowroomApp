@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
-public class PostProcessingEffectsModifier : MonoBehaviour
-{
+public class PostProcessingEffectsModifier : MonoBehaviour {
     [SerializeField] PostProcessVolume galleryEffects;
 
     public void TurnOnGalleryEffects() {

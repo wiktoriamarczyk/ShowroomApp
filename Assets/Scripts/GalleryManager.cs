@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class GalleryManager : MonoBehaviour {
     [SerializeField] CanvasManager canvasManager;
@@ -10,11 +7,27 @@ public class GalleryManager : MonoBehaviour {
     ImagesProvider imgProvider;
     ImagesSetter imgSetter;
 
+    CancellationTokenSource cancelTokenSrc;
+    CancellationToken cancelToken;
+
     async void Awake() {
+        cancelTokenSrc = new CancellationTokenSource();
+        cancelToken = cancelTokenSrc.Token;
+
         imgProvider = new ImagesProvider();
         imgSetter = new ImagesSetter();
-        await imgProvider.LoadImages();
+        try {
+            await imgProvider.LoadImages(cancelToken);
+        }
+        catch (System.OperationCanceledException) {
+            Debug.Log("Image loading canceled");
+            return;
+        }
         imgSetter.DisplayThumbnails(imgProvider.texturesGetter, gallery.transform);
         canvasManager.DisableSplashScreen();
+    }
+
+    void OnDestroy() {
+        cancelTokenSrc.Cancel();
     }
 }

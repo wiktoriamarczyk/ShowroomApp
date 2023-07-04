@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class GalleryButton : MonoBehaviour, IDeselectHandler, ISelectHandler {
     [SerializeField] ComboBoxDisplayer myComboBox;
-    [SerializeField] GameObject galleryPanel;
+    [SerializeField] Panel galleryPanel;
     [SerializeField] PostProcessingEffectsModifier galleryEffectsModifier;
 
     public void OnDeselect(BaseEventData eventData) {

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -8,8 +9,8 @@ using Button = UnityEngine.UI.Button;
 
 public class PanelManager : MonoBehaviour {
     static public PanelManager Instance;
-    [SerializeField] List<GameObject> panels;
-    GameObject currentPanel;
+    [SerializeField] List<Panel> panels;
+    Panel currentPanel;
 
     void Awake() {
         if (Instance != null && Instance != this) {
@@ -20,13 +21,15 @@ public class PanelManager : MonoBehaviour {
         }
 
         foreach (var panel in panels) {
-            panel.SetActive(false);
+            panel.Hide();
         }
     }
 
-    public void ShowPanel(GameObject panel) {
+    public void ShowPanel(Panel panel) {
+        if (currentPanel == panel)
+            return;
         HideCurrentPanel();
-        panel?.SetActive(true);
+        panel.Show();
         currentPanel = panel;
     }
 
@@ -34,7 +37,7 @@ public class PanelManager : MonoBehaviour {
         if (currentPanel == null) {
             return;
         }
-        currentPanel.SetActive(false);
+        currentPanel.Hide();
         currentPanel = null;
     }
 }

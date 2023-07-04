@@ -19,7 +19,6 @@ public class ComboBoxDisplayer : MonoBehaviour {
         foreach (Button button in buttons) {
             button.onClick.AddListener(() => OnSelect(button));
         }
-
         SelectDefaultButton();
     }
 

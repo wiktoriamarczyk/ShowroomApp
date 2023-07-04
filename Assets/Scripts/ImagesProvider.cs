@@ -3,7 +3,7 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using UnityEngine.Networking;
 using System.IO;
-using UnityEngine.UI;
+using System.Threading;
 
 public class ImagesProvider : MonoBehaviour {
     const string siteURL = "http://itsilesia.com/3d/data/PraktykiGaleria/";
@@ -13,10 +13,11 @@ public class ImagesProvider : MonoBehaviour {
         get => textures;
     }
 
-    public async UniTask LoadImages() {
+    public async UniTask LoadImages(CancellationToken cancellationToken) {
         string url = Path.Combine(siteURL, "manifest.txt");
 
         using (UnityWebRequest uwr = UnityWebRequest.Get(url)) {
+            cancellationToken.ThrowIfCancellationRequested();
             await uwr.SendWebRequest();
 
             if (uwr.result != UnityWebRequest.Result.Success) {
@@ -28,17 +29,19 @@ public class ImagesProvider : MonoBehaviour {
             string[] imageNames = manifestText.Split('\n');
 
             foreach (string imageName in imageNames) {
-                string imgURL = Path.Combine(siteURL, imageName.Trim());
+                cancellationToken.ThrowIfCancellationRequested();
 
-                Texture2D texture = await GetImage(imgURL);
+                string imgURL = Path.Combine(siteURL, imageName.Trim());
+                Texture2D texture = await GetImage(imgURL, cancellationToken);
                 textures.Add(texture);
                 Debug.Log("Loaded image name: " + imageName);
             }
         }
     }
 
-    async UniTask<Texture2D> GetImage(string imagePath) {
+    async UniTask<Texture2D> GetImage(string imagePath, CancellationToken cancellationToken) {
         using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(imagePath)) {
+            cancellationToken.ThrowIfCancellationRequested();
             await uwr.SendWebRequest();
 
             if (uwr.result != UnityWebRequest.Result.Success) {
