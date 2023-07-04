@@ -7,10 +7,18 @@ using UnityEngine.UIElements;
 using Button = UnityEngine.UI.Button;
 
 public class PanelManager : MonoBehaviour {
+    static public PanelManager Instance;
     [SerializeField] List<GameObject> panels;
     GameObject currentPanel;
 
     void Awake() {
+        if (Instance != null && Instance != this) {
+            Destroy(gameObject);
+        }
+        else {
+            Instance = this;
+        }
+
         foreach (var panel in panels) {
             panel.SetActive(false);
         }

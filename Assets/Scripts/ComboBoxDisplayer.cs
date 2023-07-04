@@ -2,18 +2,25 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ComboBoxDisplayer : MonoBehaviour {
+    Button defaultButton;
     Button[] buttons;
     Button selectedButton;
     [SerializeField] Color deselectedBttnColor = Color.white;
     [SerializeField] Color selectedBttnColor;
 
+    public void SelectDefaultButton() {
+        defaultButton.Select();
+        OnSelect(defaultButton);
+    }
+
     void Awake() {
         buttons = GetComponentsInChildren<Button>();
+        defaultButton = buttons[0];
         foreach (Button button in buttons) {
             button.onClick.AddListener(() => OnSelect(button));
         }
-        buttons[0].Select();
-        OnSelect(buttons[0]);
+
+        SelectDefaultButton();
     }
 
     void OnSelect(Button button) {
