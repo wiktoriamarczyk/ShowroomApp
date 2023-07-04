@@ -1,18 +1,17 @@
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CenterPanel : Panel {
-    [SerializeField] float duration = 0.5f;
+    [SerializeField] float startDuration = 0.5f;
+    [SerializeField] float endDuration = 0.35f;
 
     public override void Hide() {
-        transform.DOScale(0, duration).onComplete = () => gameObject.SetActive(false);
+        transform.DOScale(0, endDuration).onComplete = () => gameObject.SetActive(false);
     }
 
     public override void Show() {
         gameObject.SetActive(true);
-        transform.DOScale(1, duration);
+        transform.DOScale(1, startDuration);
     }
 
     void OnDestroy() {

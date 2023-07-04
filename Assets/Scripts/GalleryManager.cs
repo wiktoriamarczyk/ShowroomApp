@@ -4,6 +4,7 @@ using UnityEngine;
 public class GalleryManager : MonoBehaviour {
     [SerializeField] CanvasManager canvasManager;
     [SerializeField] GameObject gallery;
+
     ImagesProvider imgProvider;
     ImagesSetter imgSetter;
 
