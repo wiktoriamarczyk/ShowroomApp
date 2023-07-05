@@ -9,8 +9,6 @@ public class SidePanel : Panel {
 
     void OnEnable() {
         rectTransform = GetComponent<RectTransform>();
-        Debug.Log("lokalna: " + rectTransform.localPosition);
-        Debug.Log("globalna: " + rectTransform.position);
         rectTransform.anchoredPosition = startPosition;
     }
 

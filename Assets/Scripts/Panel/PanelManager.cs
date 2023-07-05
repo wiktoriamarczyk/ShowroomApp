@@ -10,7 +10,7 @@ using Button = UnityEngine.UI.Button;
 public class PanelManager : MonoBehaviour {
     static public PanelManager Instance;
     [SerializeField] List<Panel> panels;
-    Panel currentPanel;
+    public Panel currentPanel { get; private set; }
 
     void Awake() {
         if (Instance != null && Instance != this) {

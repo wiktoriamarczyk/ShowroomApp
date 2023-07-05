@@ -70,6 +70,118 @@ MonoBehaviour:
     m_Localized: Galeria
     m_Metadata:
       m_Items: []
+  - m_Id: 1079048704102400
+    m_Localized: Konfigurator
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079102626074624
+    m_Localized: "Wybierz wersj\u0119"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079217730359296
+    m_Localized: "Proste i ekonomiczne auto z podstawowym wyposa\u017Ceniem. Idealny
+      dla os\xF3b szukaj\u0105cych rozs\u0105dnego i ekonomicznego \u015Brodka transportu."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079467912204288
+    m_Localized: "Samoch\xF3d z mocnym silnikiem i sportowym zawieszeniem zapewniaj\u0105cy
+      dynamiczn\u0105 jazd\u0119 i wyj\u0105tkowe wra\u017Cenia z jazdy."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079493191274496
+    m_Localized: "Samoch\xF3d z kombinacj\u0105 silnika benzynowego i elektrycznego,
+      co skutkuje oszcz\u0119dno\u015Bci\u0105 paliwa i ni\u017Csz\u0105 emisj\u0105
+      CO2."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079859597283328
+    m_Localized: "Nap\u0119d"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1080019278630912
+    m_Localized: T3 automat (160KM)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079937338707968
+    m_Localized: "T3 r\u0119czna skrzynia bieg\xF3w (160KM)"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1080330294661120
+    m_Localized: B4 hybryda(190KM)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1080399492288512
+    m_Localized: B4 AWD hybryda (190KM)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1080403179081728
+    m_Localized: B5 AWD hybryda (250 KM)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1080615326978048
+    m_Localized: Kolor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1080673686523904
+    m_Localized: Felgi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1080710210523136
+    m_Localized: Pakiety
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1080806633377792
+    m_Localized: "Czarny Kamie\u0144"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1080885972832256
+    m_Localized: "\u015Anie\u017Cna Biel"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1080951399780352
+    m_Localized: Niebieska Chmura
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1081160146096128
+    m_Localized: "Wy\u015Bcigowa Czerwie\u0144"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1082083740225536
+    m_Localized: Fuzja Magenty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1083261446262784
+    m_Localized: "Limonkowa Ziele\u0144"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1083336436224000
+    m_Localized: Czarne
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1083416803282944
+    m_Localized: Metalowe
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1083457488031744
+    m_Localized: "\u2122*"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1083545606164480
+    m_Localized: Zima
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1083639042674688
+    m_Localized: Parking
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1083693979668480
+    m_Localized: Technologia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1083743283712000
+    m_Localized: "O\u015Bwietlenie"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

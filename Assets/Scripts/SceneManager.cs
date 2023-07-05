@@ -5,6 +5,7 @@ public class SceneManager : MonoBehaviour {
     [SerializeField] CameraController cameraController;
 
     void Awake() {
+        return;
         splashScreen.SetActive(true);
         cameraController.enabled = false;
     }

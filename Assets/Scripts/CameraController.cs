@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Unity.VisualScripting;
+using UnityEngine.UI;
 
 public class CameraController : MonoBehaviour {
     [SerializeField] GameObject target;
@@ -20,13 +21,13 @@ public class CameraController : MonoBehaviour {
     float timer = timeToScreenSaver;
     bool directMovementControl = false;
     bool dampingEnabled = true;
-    eMovementType movementType = eMovementType.PLAYER_INPUT;
     Vector3 lastPosition;
     Vector3 swipeStartPos;
     Vector3 sphereCoord;
     Vector3 speed;
+    public eMovementType movementType { get; set; } = eMovementType.PLAYER_INPUT;
 
-    enum eMovementType {
+    public enum eMovementType {
         NONE,
         PLAYER_INPUT,
         SCREEN_SAVER

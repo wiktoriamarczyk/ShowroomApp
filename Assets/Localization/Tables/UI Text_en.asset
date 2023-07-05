@@ -70,6 +70,117 @@ MonoBehaviour:
     m_Localized: Gallery
     m_Metadata:
       m_Items: []
+  - m_Id: 1079048704102400
+    m_Localized: Configurator
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079102626074624
+    m_Localized: Choose version
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079217730359296
+    m_Localized: A simple and economical car with basic equipment. Ideal for those
+      looking for a sensible and economical means of transport.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079467912204288
+    m_Localized: A car with a powerful engine and sporty suspension for a dynamic
+      ride and a unique driving experience.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079493191274496
+    m_Localized: A car with a combination of petrol and electric engine, resulting
+      in fuel savings and lower CO2 emissions.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079859597283328
+    m_Localized: Drive
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1079937338707968
+    m_Localized: T3 manual (160KM)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1080019278630912
+    m_Localized: T3 automatic (160KM
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1080330294661120
+    m_Localized: B4 mild hybrid (190KM)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1080399492288512
+    m_Localized: B4 AWD mild hybrid (190KM)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1080403179081728
+    m_Localized: B5 AWD mild hybrid (250 KM)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1080615326978048
+    m_Localized: Color
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1080673686523904
+    m_Localized: Rims
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1080710210523136
+    m_Localized: Packages
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1080806633377792
+    m_Localized: Black Stone
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1080885972832256
+    m_Localized: Ice White
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1080951399780352
+    m_Localized: Cloud Blue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1081160146096128
+    m_Localized: Race Red
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1082083740225536
+    m_Localized: Magenta Fusion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1083261446262784
+    m_Localized: Its Lime Green
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1083336436224000
+    m_Localized: Black
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1083416803282944
+    m_Localized: Metal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1083457488031744
+    m_Localized: "ColorMatch\u2122*"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1083545606164480
+    m_Localized: Winter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1083639042674688
+    m_Localized: Parking
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1083693979668480
+    m_Localized: Technology
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1083743283712000
+    m_Localized: Lightning
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
