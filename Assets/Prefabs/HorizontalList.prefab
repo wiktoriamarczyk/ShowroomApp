@@ -93,7 +93,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 633495183338878059, guid: 6edff74c2bc1b7b43bfa50d96bdf8a97, type: 3}
       propertyPath: m_Name
-      value: HorizontalScrollableList
+      value: HorizontalList
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 633495183338878052, guid: 6edff74c2bc1b7b43bfa50d96bdf8a97, type: 3}

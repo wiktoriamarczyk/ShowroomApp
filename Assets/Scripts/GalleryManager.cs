@@ -4,6 +4,7 @@ using UnityEngine;
 public class GalleryManager : MonoBehaviour {
     [SerializeField] SceneManager canvasManager;
     [SerializeField] GameObject gallery;
+    [SerializeField] GameObject fullSizeImage;
 
     ImagesProvider imgProvider;
     ImagesSetter imgSetter;
@@ -12,7 +13,6 @@ public class GalleryManager : MonoBehaviour {
     CancellationToken cancelToken;
 
     async void Awake() {
-        return;
         cancelTokenSrc = new CancellationTokenSource();
         cancelToken = cancelTokenSrc.Token;
 
@@ -26,6 +26,8 @@ public class GalleryManager : MonoBehaviour {
             return;
         }
         imgSetter.DisplayThumbnails(imgProvider.texturesGetter, gallery.transform);
+        fullSizeImage.SetActive(false);
+        imgSetter.fullSizeImage = fullSizeImage;
         canvasManager.DisableSplashScreen();
     }
 

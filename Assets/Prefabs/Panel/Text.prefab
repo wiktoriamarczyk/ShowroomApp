@@ -8,6 +8,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1462283147063055642, guid: 085b486f8a5f8884dbf77c4cca2b0599, type: 3}
+      propertyPath: m_text
+      value: Text
+      objectReference: {fileID: 0}
+    - target: {fileID: 1462283147063055642, guid: 085b486f8a5f8884dbf77c4cca2b0599, type: 3}
       propertyPath: m_fontSize
       value: 16
       objectReference: {fileID: 0}
@@ -22,7 +26,7 @@ PrefabInstance:
     - target: {fileID: 1462283147063055642, guid: 085b486f8a5f8884dbf77c4cca2b0599, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 1719365737315360562, guid: 0d4d6b2b9cfa2b74cb484b8b367342b8, type: 2}
+      objectReference: {fileID: 2185291504094703171, guid: 0d4d6b2b9cfa2b74cb484b8b367342b8, type: 2}
     - target: {fileID: 1462283147063055642, guid: 085b486f8a5f8884dbf77c4cca2b0599, type: 3}
       propertyPath: m_VerticalAlignment
       value: 512

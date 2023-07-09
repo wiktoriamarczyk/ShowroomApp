@@ -4,26 +4,34 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ImagesSetter : MonoBehaviour {
+    public GameObject fullSizeImage { get; set; }
     List<Image> images = new List<Image>();
-    Vector2 thumbnailSize = new Vector2(385, 250);
 
     public void DisplayThumbnails(List<Texture2D> textures, Transform parent) {
         foreach (var texture in textures) {
             GameObject imageObject = new GameObject("Image");
-            Image imageComponent = imageObject.AddComponent<Image>();
+            imageObject.AddComponent<RectTransform>();
+            imageObject.AddComponent<RectMask2D>();
+            GameObject imageHolder = new GameObject("ImageHolder");
+            imageHolder.transform.SetParent(imageObject.transform);
+            Image imageComponent = imageHolder.AddComponent<Image>();
+            AspectRatioFitter aspect = imageHolder.AddComponent<AspectRatioFitter>();
+            aspect.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
+            aspect.aspectRatio = (float)texture.width / (float)texture.height;
             imageComponent.sprite = GetSprite(texture);
-            Vector2 originalSize = imageComponent.sprite.rect.size;
-            imageComponent.rectTransform.sizeDelta = GetScaledSize(originalSize, thumbnailSize);
+
+            Button button = imageObject.AddComponent<Button>();
+            button.onClick.AddListener(() => DisplayFullSizeImage(imageComponent.sprite));
+
             images.Add(imageComponent);
             imageObject.transform.SetParent(parent);
+            imageObject.GetComponent<RectTransform>().localScale = Vector3.one;
         }
-        SetProperThumbnailsScale();
     }
-
-    void SetProperThumbnailsScale() {
-        foreach (var thumbnail in images) {
-            thumbnail.rectTransform.localScale = Vector3.one;
-        }
+    
+    void DisplayFullSizeImage(Sprite sprite) {
+        fullSizeImage.SetActive(true);
+        fullSizeImage.GetComponentsInChildren<Image>()[1].sprite = sprite;
     }
 
     Sprite GetSprite(Texture2D tex) {
@@ -41,14 +49,9 @@ public class ImagesSetter : MonoBehaviour {
         return s;
     }
 
-    Vector2 GetScaledSize(Vector2 originalSize, Vector2 desiredSize) {
-        float originalAspectRatio = originalSize.x / originalSize.y;
-        float desiredAspectRatio = desiredSize.x / desiredSize.y;
-        if (originalAspectRatio > desiredAspectRatio) {
-            return new Vector2(desiredSize.x, desiredSize.x / originalAspectRatio);
-        }
-        else {
-            return new Vector2(desiredSize.y * originalAspectRatio, desiredSize.y);
+    void OnDestroy() {
+        foreach (var image in images) {
+            Destroy(image.sprite);
         }
     }
 }

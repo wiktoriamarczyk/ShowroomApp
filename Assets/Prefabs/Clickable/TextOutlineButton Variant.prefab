@@ -63,6 +63,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: TextOutlineButton Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 5708048792391623087, guid: 039c4d1f4cb09a14680c8832fc9c07fa, type: 3}
+      propertyPath: m_ChildControlWidth
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5708048792391623087, guid: 039c4d1f4cb09a14680c8832fc9c07fa, type: 3}
+      propertyPath: m_ChildForceExpandWidth
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6680849051010547164, guid: 039c4d1f4cb09a14680c8832fc9c07fa, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -77,7 +85,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6680849051010547164, guid: 039c4d1f4cb09a14680c8832fc9c07fa, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 6680849051010547164, guid: 039c4d1f4cb09a14680c8832fc9c07fa, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -173,12 +181,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9082199790405941622, guid: 039c4d1f4cb09a14680c8832fc9c07fa, type: 3}
       propertyPath: m_Type
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9082199790405941622, guid: 039c4d1f4cb09a14680c8832fc9c07fa, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 630abcf45ffca2b4dae1825468fbbf41, type: 3}
+      objectReference: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 9082199790405941622, guid: 039c4d1f4cb09a14680c8832fc9c07fa, type: 3}
       propertyPath: m_Color.b
       value: 1

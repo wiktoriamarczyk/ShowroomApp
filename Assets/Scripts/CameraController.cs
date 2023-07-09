@@ -14,7 +14,7 @@ public class CameraController : MonoBehaviour {
     const float maxHeight = 3.80f;
     const float radius = 3f;
     const float movementSpeed = 0.5f;
-    const float screenSaverSpeed = 250f;
+    const float screenSaverSpeed = 150f;
     const float timeToScreenSaver = 3f;
 
     float lastTime;
