@@ -26,8 +26,9 @@ public class PanelManager : MonoBehaviour {
     }
 
     public void ShowPanel(Panel panel) {
-        if (currentPanel == panel)
+        if (currentPanel == panel) {
             return;
+        }
         HideCurrentPanel();
         panel.Show();
         currentPanel = panel;

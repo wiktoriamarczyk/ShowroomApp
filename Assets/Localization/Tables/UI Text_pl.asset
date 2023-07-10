@@ -182,6 +182,18 @@ MonoBehaviour:
     m_Localized: "O\u015Bwietlenie"
     m_Metadata:
       m_Items: []
+  - m_Id: 2973938933305344
+    m_Localized: "POWR\xD3T"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2974092809736192
+    m_Localized: ZAPISZ
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2974977799491584
+    m_Localized: 
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
