@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine.UI;
+using static System.Net.Mime.MediaTypeNames;
 
 public class CameraController : MonoBehaviour {
     [SerializeField] GameObject target;
@@ -14,8 +15,9 @@ public class CameraController : MonoBehaviour {
     const float maxHeight = 3.80f;
     const float radius = 3f;
     const float movementSpeed = 0.5f;
-    const float screenSaverSpeed = 150f;
+    const float screenSaverSpeed = 0.75f;
     const float timeToScreenSaver = 3f;
+    const float distanceToSpeedMultiplier = 0.01f;
 
     float lastTime;
     float timer = timeToScreenSaver;
@@ -25,7 +27,10 @@ public class CameraController : MonoBehaviour {
     Vector3 swipeStartPos;
     Vector3 sphereCoord;
     Vector3 speed;
+
     public eMovementType movementType { get; set; } = eMovementType.PLAYER_INPUT;
+
+    [SerializeField] UnityEngine.UI.Text text;
 
     public enum eMovementType {
         NONE,
@@ -33,13 +38,28 @@ public class CameraController : MonoBehaviour {
         SCREEN_SAVER
     }
 
-    void Start() {
+    void Awake() {
         transform.position = startPosition;
         transform.eulerAngles = startRotation;
         sphereCoord = CoordinatesConverter.GetSphericalCoordinates(transform.position - target.transform.position);
+        Input.simulateMouseWithTouches = false;
     }
 
     void Update() {
+        text.text = $"Movement type: {movementType}\n" +
+                    $"Speed: {speed}\n" +
+                    $"Timer: {timer}\n" +
+                    $"Last position: {lastPosition}\n" +
+                    $"Direct movement control: {directMovementControl}\n" +
+                    $"Damping enabled: {dampingEnabled}\n" +
+                    $"Sphere coord: {sphereCoord}\n" +
+                    $"Camera position: {transform.position}\n" +
+                    $"Camera rotation: {transform.eulerAngles}\n" +
+                    $"Input.mousePosition: {Input.mousePosition}\n" +
+                    $"ScreenToWorldPosition: {ScreenToWorldPosition(Input.mousePosition)}\n";
+
+
+
         if (movementType == eMovementType.NONE) {
             return;
         }
@@ -51,11 +71,27 @@ public class CameraController : MonoBehaviour {
         }
         
         CameraMovement();
-
         HandleScreenSaver();
 
         // update the last mouse position
-        lastPosition = Input.mousePosition;
+        lastPosition = ScreenToWorldPosition(Input.mousePosition);
+    }
+
+    Vector3 ScreenToWorldPosition(Vector3 screenPosition) {
+        return new Vector3( (screenPosition.x / Camera.main.pixelWidth) * 1920 ,
+                            (screenPosition.y / Camera.main.pixelHeight) * 1080,
+                            0);
+    }
+
+    public void EnableRotation() {
+        movementType = eMovementType.PLAYER_INPUT;
+        timer = timeToScreenSaver;
+        dampingEnabled = true;
+    }
+
+    public void DisableRotation() {
+        movementType = eMovementType.NONE;
+        dampingEnabled = false;
     }
 
     void HandleScreenSaver() {
@@ -65,27 +101,29 @@ public class CameraController : MonoBehaviour {
         if (timer <= 0) {
             movementType = eMovementType.SCREEN_SAVER;
         }
-        if (Input.mousePosition != lastPosition) {
-            timer = timeToScreenSaver;
-            dampingEnabled = true;
-            movementType = eMovementType.PLAYER_INPUT;
+        if (ScreenToWorldPosition(Input.mousePosition) != lastPosition) {
+            EnableRotation();
         }
     }
 
     void HandlePlayerInput() {
         /* Whenever the left mouse button is pressed, the mouse cursor's position
          and current time is remembered */
-        if (Input.GetMouseButtonDown(0)) {
+        bool IsTouchActive = Input.touchCount > 0;
+
+        if ( (!IsTouchActive && Input.GetMouseButtonDown(0)) ||
+             (IsTouchActive && Input.GetTouch(0).phase == TouchPhase.Began)) { 
             lastTime = Time.time;
-            swipeStartPos = lastPosition = Input.mousePosition;
+            swipeStartPos = lastPosition = ScreenToWorldPosition(Input.mousePosition);
             directMovementControl = true;
         }
         // while the left mouse button is pressed, we manually calculate the camera's speed
         if (directMovementControl) {
-            speed = (lastPosition - Input.mousePosition) * movementSpeed;
+            speed = (lastPosition - ScreenToWorldPosition(Input.mousePosition)) / Time.deltaTime * movementSpeed * distanceToSpeedMultiplier;
         }
         // when user releases left mouse button, gesture is ended
-        if (Input.GetMouseButtonUp(0)) {
+        if ( (!IsTouchActive && Input.GetMouseButtonUp(0)) ||
+             (IsTouchActive && Input.GetTouch(0).phase == TouchPhase.Ended) ) {
             directMovementControl = false;
             // calculate time from gesture start to now
             float time = Time.time - lastTime;
@@ -93,7 +131,7 @@ public class CameraController : MonoBehaviour {
             lastTime = Time.time;
             /* our speed is a vector from start to end cursor's position
              divided by the gesture duration (vector length is proportional to speed) */
-            speed = (swipeStartPos - Input.mousePosition) / time;
+            speed = (swipeStartPos - ScreenToWorldPosition(Input.mousePosition)) / time * movementSpeed * distanceToSpeedMultiplier;
         }
     }
 
@@ -115,8 +153,8 @@ public class CameraController : MonoBehaviour {
             }
             if (!directMovementControl) {
                 // use DampingMultiplier to smoothly deaccelerate camera movement
-                dx *= Time.deltaTime * dampingFactor;
-                dy *= Time.deltaTime * dampingFactor;
+                dx *= dampingFactor;
+                dy *= dampingFactor;
             }
 
             // update camera's posiiton
@@ -124,16 +162,10 @@ public class CameraController : MonoBehaviour {
                 // rotate the camera
                 sphereCoord.y -= dx * Time.deltaTime;
                 // and prevent it from turning upside down (1.5f = approx. Pi / 2)
-                sphereCoord.z = Mathf.Clamp(sphereCoord.z - dy * Time.deltaTime, -1.5f, 1.5f);
+                sphereCoord.z = Mathf.Clamp(sphereCoord.z - dy * Time.deltaTime, 0.01f, 1.5f);
 
                 // calculate the cartesian coordinates for Unity
                 transform.position = CoordinatesConverter.GetCartesianCoordinates(sphereCoord) + target.transform.position;
-
-                // prevent the camera from going below the ground and above the ceiling
-                if (transform.position.y <= minHeight)
-                    transform.position = new Vector3(transform.position.x, minHeight, transform.position.z);
-                else if (transform.position.y >= maxHeight)
-                    transform.position = new Vector3(transform.position.x, maxHeight, transform.position.z);
 
                 // make the camera look at the target
                 transform.LookAt(target.transform.position);
@@ -143,8 +175,7 @@ public class CameraController : MonoBehaviour {
 
     /* This function calculates damping multiplier as logarithmic function (1/x)
      which is modified in such a way that its value in 0 is ~1 and value above 1 is 0 */
-    static float DampingMultiplier(float t)
-    {
+    static float DampingMultiplier(float t) {
         float Val = 1 / (t * 10 + 1) - 1 / 11.0f;
         Val = Mathf.Clamp(Val, 0, 1);
         return Val;

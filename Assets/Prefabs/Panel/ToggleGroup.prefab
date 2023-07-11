@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5977500441276356584}
   - component: {fileID: 5497163903187411599}
   m_Layer: 5
-  m_Name: SelectionMenu
+  m_Name: ToggleGroup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

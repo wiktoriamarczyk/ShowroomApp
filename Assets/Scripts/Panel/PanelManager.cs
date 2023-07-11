@@ -3,14 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UI.Button;
 
 public class PanelManager : MonoBehaviour {
     static public PanelManager Instance;
+    
     [SerializeField] List<Panel> panels;
-    public Panel currentPanel { get; private set; }
+    
+    Panel currentPanel;
+    public UnityEvent onPanelOpened;
+    public UnityEvent onPanelClosed;
 
     void Awake() {
         if (Instance != null && Instance != this) {
@@ -32,6 +37,7 @@ public class PanelManager : MonoBehaviour {
         HideCurrentPanel();
         panel.Show();
         currentPanel = panel;
+        onPanelOpened?.Invoke();
     }
 
     public void HideCurrentPanel() {
@@ -40,5 +46,6 @@ public class PanelManager : MonoBehaviour {
         }
         currentPanel.Hide();
         currentPanel = null;
+        onPanelClosed?.Invoke();
     }
 }

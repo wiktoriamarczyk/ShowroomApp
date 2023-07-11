@@ -107,7 +107,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1080330294661120
-    m_Localized: B4 hybryda(190KM)
+    m_Localized: B4 hybryda (190KM)
     m_Metadata:
       m_Items: []
   - m_Id: 1080399492288512
@@ -163,7 +163,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1083457488031744
-    m_Localized: "\u2122*"
+    m_Localized: "ColorMatch\u2122*"
     m_Metadata:
       m_Items: []
   - m_Id: 1083545606164480
@@ -188,10 +188,6 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 2974092809736192
     m_Localized: ZAPISZ
-    m_Metadata:
-      m_Items: []
-  - m_Id: 2974977799491584
-    m_Localized: 
     m_Metadata:
       m_Items: []
   references:

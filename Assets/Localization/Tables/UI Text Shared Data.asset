@@ -187,14 +187,6 @@ MonoBehaviour:
     m_Key: Save Button
     m_Metadata:
       m_Items: []
-  - m_Id: 2974977799491584
-    m_Key: 
-    m_Metadata:
-      m_Items: []
-  - m_Id: 2975008627625984
-    m_Key: New Entry 1
-    m_Metadata:
-      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

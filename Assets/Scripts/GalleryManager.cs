@@ -1,9 +1,9 @@
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class GalleryManager : MonoBehaviour {
-    [SerializeField] SceneManager canvasManager;
     [SerializeField] Panel galleryPanel;
     [SerializeField] GameObject imagesContainer;
     [SerializeField] Image centerImage;
@@ -14,6 +14,8 @@ public class GalleryManager : MonoBehaviour {
     
     CancellationTokenSource cancelTokenSrc;
     CancellationToken cancelToken;
+
+    public UnityEvent onGalleryLoaded;
 
     public void DisplayNextCenterImage() {
         imgSetter.DisplayNextCenterImage();
@@ -48,7 +50,7 @@ public class GalleryManager : MonoBehaviour {
         }
         
         imgSetter.DisplayThumbnails(imgProvider.texturesGetter, imagesContainer.transform);
-        canvasManager.DisableSplashScreen();
+        onGalleryLoaded?.Invoke();
     }
 
     void TurnOnGalleryEffects() {

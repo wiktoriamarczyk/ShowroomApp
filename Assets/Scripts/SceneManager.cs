@@ -3,9 +3,13 @@ using UnityEngine;
 public class SceneManager : MonoBehaviour {
     [SerializeField] GameObject splashScreen;
     [SerializeField] CameraController cameraController;
+    [SerializeField] GalleryManager gallery;
 
     void Awake() {
-        return;
+        PanelManager.Instance.onPanelOpened.AddListener(() => cameraController.DisableRotation());
+        PanelManager.Instance.onPanelClosed.AddListener(() => cameraController.EnableRotation());
+        gallery.onGalleryLoaded.AddListener(DisableSplashScreen);
+       // return;
         splashScreen.SetActive(true);
         cameraController.enabled = false;
     }
@@ -14,4 +18,6 @@ public class SceneManager : MonoBehaviour {
         splashScreen.SetActive(false);
         cameraController.enabled = true;
     }
+
+
 }
