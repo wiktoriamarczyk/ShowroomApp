@@ -37,7 +37,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2184545841364449748, guid: 0b3ca6f461a9a3443b981b1edba1b648, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 420
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2184545841364449748, guid: 0b3ca6f461a9a3443b981b1edba1b648, type: 3}
       propertyPath: m_SizeDelta.y
@@ -95,6 +95,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ClickableListItem
       objectReference: {fileID: 0}
+    - target: {fileID: 8537361171011469506, guid: 0b3ca6f461a9a3443b981b1edba1b648, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 0694ad4a9d948d74ba9c245c755cba0d, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b3ca6f461a9a3443b981b1edba1b648, type: 3}
 --- !u!114 &333734720239019177 stripped

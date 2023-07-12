@@ -9,7 +9,7 @@ public class SceneManager : MonoBehaviour {
         PanelManager.Instance.onPanelOpened.AddListener(() => cameraController.DisableRotation());
         PanelManager.Instance.onPanelClosed.AddListener(() => cameraController.EnableRotation());
         gallery.onGalleryLoaded.AddListener(DisableSplashScreen);
-       // return;
+        return;
         splashScreen.SetActive(true);
         cameraController.enabled = false;
     }

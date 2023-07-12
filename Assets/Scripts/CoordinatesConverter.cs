@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
-
 
 public class CoordinatesConverter : MonoBehaviour {
     /* A point in Cartesian space can be represented in spherical space,
