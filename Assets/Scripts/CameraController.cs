@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
-using Unity.VisualScripting;
-using UnityEngine.UI;
-using static System.Net.Mime.MediaTypeNames;
+using System;
 
 public class CameraController : MonoBehaviour {
     [SerializeField] GameObject target;
@@ -27,6 +22,9 @@ public class CameraController : MonoBehaviour {
     Vector3 swipeStartPos;
     Vector3 sphereCoord;
     Vector3 speed;
+
+    public event Action onScreenSaver;
+    public event Action onCameraMovement;
 
     public eMovementType movementType { get; set; } = eMovementType.PLAYER_INPUT;
 
@@ -65,11 +63,11 @@ public class CameraController : MonoBehaviour {
         }
         else if (movementType == eMovementType.PLAYER_INPUT) {
             HandlePlayerInput();
-        } 
+        }
         else if (movementType == eMovementType.SCREEN_SAVER) {
             SimulateMovement();
         }
-        
+
         CameraMovement();
         HandleScreenSaver();
 
@@ -84,6 +82,9 @@ public class CameraController : MonoBehaviour {
     }
 
     public void EnableRotation() {
+        if (movementType != eMovementType.PLAYER_INPUT) {
+             onCameraMovement?.Invoke();
+        }
         movementType = eMovementType.PLAYER_INPUT;
         timer = timeToScreenSaver;
         dampingEnabled = true;
@@ -99,6 +100,9 @@ public class CameraController : MonoBehaviour {
             timer -= Time.deltaTime;
         }
         if (timer <= 0) {
+            if (movementType != eMovementType.SCREEN_SAVER) {
+                onScreenSaver?.Invoke();
+            }
             movementType = eMovementType.SCREEN_SAVER;
         }
         if (ScreenToWorldPosition(Input.mousePosition) != lastPosition) {
@@ -112,7 +116,7 @@ public class CameraController : MonoBehaviour {
         bool IsTouchActive = Input.touchCount > 0;
 
         if ( (!IsTouchActive && Input.GetMouseButtonDown(0)) ||
-             (IsTouchActive && Input.GetTouch(0).phase == TouchPhase.Began)) { 
+             (IsTouchActive && Input.GetTouch(0).phase == TouchPhase.Began)) {
             lastTime = Time.time;
             swipeStartPos = lastPosition = ScreenToWorldPosition(Input.mousePosition);
             directMovementControl = true;
@@ -147,7 +151,7 @@ public class CameraController : MonoBehaviour {
             float dx = speed.x;
             float dy = speed.y;
             float dampingFactor = 1f;
-            
+
             if (dampingEnabled) {
                 dampingFactor = DampingMultiplier(Time.time - lastTime);
             }

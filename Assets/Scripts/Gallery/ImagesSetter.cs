@@ -1,11 +1,12 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ImagesSetter : MonoBehaviour {
     public Image centerImageProperty {
-        get { 
-            return centerImageContainer; 
+        get {
+            return centerImageContainer;
         }
         set {
             centerImageContainer = value;
@@ -14,8 +15,10 @@ public class ImagesSetter : MonoBehaviour {
     }
     Image centerImageContainer { get; set; }
     Image centerImage;
-    List<Image> images = new List<Image>();
+    List<Image> thumbnails = new List<Image>();
     int imgIndex = 0;
+
+    public Func<string, Texture2D> LoadTexture;
 
     public void DisplayThumbnails(List<Texture2D> textures, Transform parent) {
         foreach (var texture in textures) {
@@ -25,15 +28,16 @@ public class ImagesSetter : MonoBehaviour {
             GameObject imageHolder = new GameObject("ImageHolder");
             imageHolder.transform.SetParent(imageObject.transform);
             Image imageComponent = imageHolder.AddComponent<Image>();
+            imageComponent.name = texture.name;
             AspectRatioFitter aspect = imageHolder.AddComponent<AspectRatioFitter>();
             aspect.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
             aspect.aspectRatio = (float)texture.width / (float)texture.height;
             imageComponent.sprite = GetSprite(texture);
-            
+
             Button button = imageObject.AddComponent<Button>();
             button.onClick.AddListener(() => DisplayCenterImage(imageComponent));
 
-            images.Add(imageComponent);
+            thumbnails.Add(imageComponent);
             imageObject.transform.SetParent(parent);
             imageObject.GetComponent<RectTransform>().localScale = Vector3.one;
         }
@@ -46,26 +50,27 @@ public class ImagesSetter : MonoBehaviour {
 
     public void DisplayNextCenterImage() {
         imgIndex++;
-        if (imgIndex >= images.Count) {
+        if (imgIndex >= thumbnails.Count) {
             imgIndex = 0;
         }
-        DisplayCenterImage(images[imgIndex]);
+        DisplayCenterImage(thumbnails[imgIndex]);
     }
 
     public void DisplayPreviousCenterImage() {
         imgIndex--;
         if (imgIndex < 0) {
-            imgIndex = images.Count - 1;
+            imgIndex = thumbnails.Count - 1;
         }
-        DisplayCenterImage(images[imgIndex]);
+        DisplayCenterImage(thumbnails[imgIndex]);
     }
 
-    void DisplayCenterImage(Image image) {
+    void DisplayCenterImage(Image thumbnail) {
         centerImageContainer.gameObject.SetActive(true);
-        imgIndex = images.IndexOf(image);
+        imgIndex = thumbnails.IndexOf(thumbnail);
+        Texture2D texture = LoadTexture(thumbnail.name);
         AspectRatioFitter aspect = centerImage.GetComponent<AspectRatioFitter>();
-        aspect.aspectRatio = (float)image.sprite.texture.width / (float)image.sprite.texture.height;
-        centerImage.sprite = image.sprite;
+        aspect.aspectRatio = (float)texture.width / (float)texture.height;
+        centerImage.sprite = GetSprite(texture);
     }
 
     void DisposeCenterImage() {
@@ -88,7 +93,7 @@ public class ImagesSetter : MonoBehaviour {
     }
 
     void OnDestroy() {
-        foreach (var image in images) {
+        foreach (var image in thumbnails) {
             Destroy(image.sprite);
         }
     }

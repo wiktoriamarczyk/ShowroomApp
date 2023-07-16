@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
+using System;
 
 public abstract class Panel : MonoBehaviour {
-    public UnityEvent onPanelOpened;
-    public UnityEvent onPanelClosed;
+    public event Action onPanelOpened;
+    public event Action onPanelClosed;
     public virtual void Show() { onPanelOpened?.Invoke(); }
     public virtual void Hide() { onPanelClosed?.Invoke(); }
 }

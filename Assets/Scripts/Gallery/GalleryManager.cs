@@ -11,11 +11,13 @@ public class GalleryManager : MonoBehaviour {
 
     ImagesProvider imgProvider;
     ImagesSetter imgSetter;
-    
+
     CancellationTokenSource cancelTokenSrc;
     CancellationToken cancelToken;
 
     public UnityEvent onGalleryLoaded;
+
+    const string siteURL = "http://itsilesia.com/3d/data/PraktykiGaleria/";
 
     public void DisplayNextCenterImage() {
         imgSetter.DisplayNextCenterImage();
@@ -32,25 +34,30 @@ public class GalleryManager : MonoBehaviour {
     async void Awake() {
         cancelTokenSrc = new CancellationTokenSource();
         cancelToken = cancelTokenSrc.Token;
-        
+
         imgProvider = new ImagesProvider();
         imgSetter = new ImagesSetter();
         centerImage.gameObject.SetActive(false);
         imgSetter.centerImageProperty = centerImage;
+        imgSetter.LoadTexture = GetFullSizeFromThumbnail;
 
-        galleryPanel.onPanelOpened.AddListener(TurnOnGalleryEffects);
-        galleryPanel.onPanelClosed.AddListener(TurnOffGalleryEffects);
+        galleryPanel.onPanelOpened += TurnOnGalleryEffects;
+        galleryPanel.onPanelClosed += TurnOffGalleryEffects;
 
         try {
-            await imgProvider.LoadImages(cancelToken);
+            await imgProvider.LoadTexturesFromManifest(cancelToken, siteURL, new Vector2Int(385, 250));
         }
         catch (System.OperationCanceledException) {
             Debug.Log("Image loading canceled");
             return;
         }
-        
-        imgSetter.DisplayThumbnails(imgProvider.texturesGetter, imagesContainer.transform);
+
+        imgSetter.DisplayThumbnails(imgProvider.LoadThumbnails(), imagesContainer.transform);
         onGalleryLoaded?.Invoke();
+    }
+
+    public Texture2D GetFullSizeFromThumbnail(string imageName) {
+        return imgProvider.LoadTextureFromDisk(imageName);
     }
 
     void TurnOnGalleryEffects() {
@@ -64,7 +71,7 @@ public class GalleryManager : MonoBehaviour {
     void OnDestroy() {
         cancelTokenSrc.Cancel();
         cancelTokenSrc.Dispose();
-        galleryPanel.onPanelOpened.RemoveListener(TurnOnGalleryEffects);
-        galleryPanel.onPanelClosed.RemoveListener(TurnOffGalleryEffects);
+        galleryPanel.onPanelOpened -= TurnOnGalleryEffects;
+        galleryPanel.onPanelClosed -= TurnOffGalleryEffects;
     }
 }

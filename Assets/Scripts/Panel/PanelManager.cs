@@ -7,15 +7,16 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UI.Button;
+using System;
 
 public class PanelManager : MonoBehaviour {
     static public PanelManager Instance;
-    
+
     [SerializeField] List<Panel> panels;
-    
+
     Panel currentPanel;
-    public UnityEvent onPanelOpened;
-    public UnityEvent onPanelClosed;
+    public event Action onPanelOpened;
+    public event Action onPanelClosed;
 
     void Awake() {
         if (Instance != null && Instance != this) {
