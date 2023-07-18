@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.Events;
@@ -15,7 +16,7 @@ public class GalleryManager : MonoBehaviour {
     CancellationTokenSource cancelTokenSrc;
     CancellationToken cancelToken;
 
-    public UnityEvent onGalleryLoaded;
+    public event Action onGalleryLoaded;
 
     const string siteURL = "http://itsilesia.com/3d/data/PraktykiGaleria/";
 
@@ -29,6 +30,10 @@ public class GalleryManager : MonoBehaviour {
 
     public void DisableCenterImage() {
         imgSetter.DisableCenterImage();
+    }
+
+    public Texture2D GetFullSizeFromThumbnail(string imageName) {
+        return imgProvider.LoadTextureFromDisk(imageName);
     }
 
     async void Awake() {
@@ -54,10 +59,6 @@ public class GalleryManager : MonoBehaviour {
 
         imgSetter.DisplayThumbnails(imgProvider.LoadThumbnails(), imagesContainer.transform);
         onGalleryLoaded?.Invoke();
-    }
-
-    public Texture2D GetFullSizeFromThumbnail(string imageName) {
-        return imgProvider.LoadTextureFromDisk(imageName);
     }
 
     void TurnOnGalleryEffects() {

@@ -12,7 +12,7 @@ public class TestDriveData : MonoBehaviour {
 
     [System.Serializable]
     public class Leaderboard {
-        public Entry entry;
+        public Entry[] entry;
     }
 
     [System.Serializable]

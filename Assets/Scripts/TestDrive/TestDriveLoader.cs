@@ -1,8 +1,13 @@
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
+using UnityEditor.VersionControl;
 using UnityEngine;
+using UnityEngine.Localization.SmartFormat.Core.Parsing;
 using UnityEngine.Networking;
+using static TestDriveData;
 
 public class TestDriveLoader : MonoBehaviour {
     public async UniTask<List<string>> GetData(string url) { 
@@ -15,15 +20,18 @@ public class TestDriveLoader : MonoBehaviour {
             }
 
             string json = uwr.downloadHandler.text;
-            string[] drives = json.Split("},{");
+            RootObject rootObject = JsonConvert.DeserializeObject<RootObject>(json);
             List<string> testDrivesList = new List<string>();
 
-            for (int i = 0; i < drives.Length; ++i) {
-                TestDriveData.RootObject testDriveObject = JsonConvert.DeserializeObject<TestDriveData.RootObject>(drives[i]);
-                TestDriveData.Entry testDriveData = testDriveObject.dreamlo.leaderboard.entry;
-                testDrivesList.Add(testDriveData.name.Replace("-", "/") + " " + testDriveData.text);
+            foreach (Entry entry in rootObject.dreamlo.leaderboard.entry) {
+                string dateString = entry.name;
+                string format = "yyyy-MM-dd-HH-mm";
+                string newFormat = "dd/MM/yyyy HH:mm";
+                DateTime date = DateTime.ParseExact(dateString, format, CultureInfo.InvariantCulture);
+                string formattedDate = date.ToString(newFormat, CultureInfo.InvariantCulture);
+                testDrivesList.Add(formattedDate + " " + entry.text);
             }
-            
+
             return testDrivesList;
         }
     }

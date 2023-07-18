@@ -18,19 +18,6 @@ public class PanelManager : MonoBehaviour {
     public event Action onPanelOpened;
     public event Action onPanelClosed;
 
-    void Awake() {
-        if (Instance != null && Instance != this) {
-            Destroy(gameObject);
-        }
-        else {
-            Instance = this;
-        }
-
-        foreach (var panel in panels) {
-            panel.Hide();
-        }
-    }
-
     public void ShowPanel(Panel panel) {
         if (currentPanel == panel) {
             return;
@@ -48,5 +35,18 @@ public class PanelManager : MonoBehaviour {
         currentPanel.Hide();
         currentPanel = null;
         onPanelClosed?.Invoke();
+    }
+
+    void Awake() {
+        if (Instance != null && Instance != this) {
+            Destroy(gameObject);
+        }
+        else {
+            Instance = this;
+        }
+
+        foreach (var panel in panels) {
+            panel.Hide();
+        }
     }
 }

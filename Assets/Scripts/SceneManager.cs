@@ -12,13 +12,14 @@ public class SceneManager : MonoBehaviour {
         PanelManager.Instance.onPanelClosed += cameraController.EnableRotation;
         cameraController.onScreenSaver += HideUI;
         cameraController.onCameraMovement += ShowHiddenUI;
+        gallery.onGalleryLoaded += DisableSplashScreen;
 
         return;
         splashScreen.SetActive(true);
         cameraController.enabled = false;
     }
 
-    public void DisableSplashScreen() {
+    void DisableSplashScreen() {
         splashScreen.SetActive(false);
         cameraController.enabled = true;
     }
@@ -40,5 +41,6 @@ public class SceneManager : MonoBehaviour {
         PanelManager.Instance.onPanelClosed -= cameraController.EnableRotation;
         cameraController.onScreenSaver -= HideUI;
         cameraController.onCameraMovement -= ShowHiddenUI;
+        gallery.onGalleryLoaded -= DisableSplashScreen;
     }
 }
