@@ -16,6 +16,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     [SerializeField] TMP_InputField? driverName;
     [SerializeField] Button submit;
     [SerializeField] Button refresh;
+    [SerializeField] Button restart;
     [SerializeField] GameObject testDriveItemPrefab;
     [SerializeField] GameObject testDriveList;
 
@@ -37,12 +38,6 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     enum eDisplayedDrives {
         ALL = 0,
         TODAY = 1,
-        TOMORROW = 2,
-        DAY_AFTER_TOMORROW = 3,
-        IN_3_DAYS = 4,
-        IN_4_DAYS = 5,
-        IN_5_DAYS = 6,
-        IN_6_DAYS = 7,
     }
 
     enum eTestDriveInfo : int {
@@ -55,6 +50,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         modifier = new TestDriveLoader();
         refresh.onClick.AddListener(async () => await RefreshData());
         submit.onClick.AddListener(OnSubmit);
+        restart.onClick.AddListener(RestartFirstDayOfEvent);
         driveDate.onValueChanged.AddListener(delegate { ChangeDisplayedTime(); });
         driverName.onValueChanged.AddListener(delegate { OnNameChanged(); });
         registeredDates.onValueChanged.AddListener(delegate { DisplayRegisteredTestDrives(); });
@@ -62,6 +58,19 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         InsertData();
     }
 
+    void RestartFirstDayOfEvent() {
+        PlayerPrefs.SetInt("startEventDay", DateTime.Now.Day);
+        PlayerPrefs.SetInt("startEventMonth", DateTime.Now.Month);
+        PlayerPrefs.SetInt("startEventYear", DateTime.Now.Year);
+        InsertData();
+    }
+    
+    DateTime GetStartEventDate() {
+        int x = PlayerPrefs.GetInt("startEventYear");
+        return new DateTime(PlayerPrefs.GetInt("startEventYear"), 
+                            PlayerPrefs.GetInt("startEventMonth"), 
+                            PlayerPrefs.GetInt("startEventDay"));
+    }
 
     void OnNameChanged() {
         driverName.text = driverName.text.Trim();
@@ -88,6 +97,9 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     
     List<string> RemoveOccupiedHours(List<string> hours) {
         int selectedDateIndex = driveDate.value;
+        if (selectedDateIndex < 1) {
+            return hours;
+        }
         string selectedDate = driveDate.options[selectedDateIndex].text;
         List<string> testDrives = GetRegisteredTestDrivesInfo();
 
@@ -125,18 +137,22 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         registeredDates.ClearOptions();
         List<string> dropdownInfo = new List<string>();
         dropdownInfo.Add("All");
-        List<string> uniqueTestDrives = GetRegisteredTestDrivesDates();
+        dropdownInfo.Add("Today");
+        List<string> testDrives = GetRegisteredTestDrivesDates();
+        List<string> uniqueTestDrives = testDrives.Union(testDrives).ToList();
 
         uniqueTestDrives.Sort();
-        string firstTestDriveDate = uniqueTestDrives[0];
         
-        DateTime firstTestDriveDateTime;
-        DateTime.TryParseExact(firstTestDriveDate, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out firstTestDriveDateTime);
-
-        if (firstTestDriveDateTime == DateTime.Now.Date) {
-            dropdownInfo.Add("Today");
-            uniqueTestDrives.RemoveAt(0);
+        foreach (var drive in uniqueTestDrives) {
+            string driveDate = drive;
+            DateTime driveDateTime;
+            DateTime.TryParseExact(driveDate, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out driveDateTime);
+            if (driveDateTime == DateTime.Now.Date) {
+                uniqueTestDrives.Remove(driveDate);
+                break;
+            }
         }
+
         dropdownInfo.AddRange(uniqueTestDrives);
         registeredDates.AddOptions(dropdownInfo);
     }
@@ -154,9 +170,9 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
                 testDriveObjects[i].SetActive(true);
             }
             else if (selectedDateIndex == (int)eDisplayedDrives.TODAY) {
-                DateTime testDriveDateTime;
-                DateTime.TryParseExact(dates[i], "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out testDriveDateTime);
-                if (testDriveDateTime == DateTime.Now.Date) {
+                DateTime driveDateTime;
+                DateTime.TryParseExact(dates[i], "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out driveDateTime);
+                if (driveDateTime == DateTime.Now.Date) {
                     testDriveObjects[i].SetActive(true);
                 }
             }
@@ -170,14 +186,13 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         driveDate.ClearOptions();
         
         List<string> dateList = new List<string>();
-        DateTime earliestDate = DateTime.Now;
-        
-        if (earliestDate.Hour >= lastestDrivingHour) {
+        DateTime earliestDate = GetStartEventDate();
+        if (earliestDate.Date == DateTime.Now.Date && earliestDate.Hour >= lastestDrivingHour) {
             earliestDate = earliestDate.AddDays(1);
         }
         
         DateTime lastDate = earliestDate.AddDays(eventDays - 1);
-        for (DateTime date = earliestDate; date <= lastDate; date = date.AddDays(1)) {
+        for (DateTime date = DateTime.Now; date <= lastDate; date = date.AddDays(1)) {
             dateList.Add(date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture));
         }
         
@@ -190,6 +205,12 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         string date = driveDate.captionText.text;
         string time = driveTime.captionText.text;
         string name = driverName.text;
+
+        if (date == null || date == String.Empty ||
+            time == null || time == string.Empty) {
+            Debug.Log("Enter proper data!");
+            return;
+        }
 
         string urlAddition = "/1";
         if (name != null && name != String.Empty) {

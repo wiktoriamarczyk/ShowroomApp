@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,8 +11,8 @@ public class SceneManager : MonoBehaviour {
     void Awake() {
         PanelManager.Instance.onPanelOpened += cameraController.DisableRotation;
         PanelManager.Instance.onPanelClosed += cameraController.EnableRotation;
-        cameraController.onScreenSaver += HideUI;
         cameraController.onCameraMovement += ShowHiddenUI;
+        cameraController.onScreenSaver += HideUI;
         gallery.onGalleryLoaded += DisableSplashScreen;
 
         return;
@@ -25,14 +26,14 @@ public class SceneManager : MonoBehaviour {
     }
 
     void HideUI() {
-        foreach (var panel in UIToHide) {
-            panel.Hide();
+        foreach (var ui in UIToHide) {
+            ui.Hide();
         }
     }
 
     void ShowHiddenUI() {
-        foreach (var panel in UIToHide) {
-            panel.Show();
+        foreach (var ui in UIToHide) {
+            ui.Show();
         }
     }
 
