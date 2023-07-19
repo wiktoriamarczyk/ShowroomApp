@@ -31,6 +31,10 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     const int eventDays = 7;
     const int maxNameLength = 20;
 
+    const string startEventDay = "startEventDay";
+    const string startEventMonth = "startEventMonth";
+    const string startEventYear = "startEventYear";
+
     enum eDate {
         TODAY = 0,
     }
@@ -59,17 +63,16 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     }
 
     void RestartFirstDayOfEvent() {
-        PlayerPrefs.SetInt("startEventDay", DateTime.Now.Day);
-        PlayerPrefs.SetInt("startEventMonth", DateTime.Now.Month);
-        PlayerPrefs.SetInt("startEventYear", DateTime.Now.Year);
+        PlayerPrefs.SetInt(startEventDay, DateTime.Now.Day);
+        PlayerPrefs.SetInt(startEventMonth, DateTime.Now.Month);
+        PlayerPrefs.SetInt(startEventYear, DateTime.Now.Year);
         InsertData();
     }
     
     DateTime GetStartEventDate() {
-        int x = PlayerPrefs.GetInt("startEventYear");
-        return new DateTime(PlayerPrefs.GetInt("startEventYear"), 
-                            PlayerPrefs.GetInt("startEventMonth"), 
-                            PlayerPrefs.GetInt("startEventDay"));
+        return new DateTime(PlayerPrefs.GetInt(startEventYear), 
+                            PlayerPrefs.GetInt(startEventMonth), 
+                            PlayerPrefs.GetInt(startEventDay));
     }
 
     void OnNameChanged() {
