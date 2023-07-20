@@ -2,27 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PositionChanger : MonoBehaviour {
-    [SerializeField] GameObject target;
-    Vector3 newPosition = new Vector3(-0.3f, 1, 0);
+public class MoveTowardsTarget : MonoBehaviour {
+    [SerializeField] GameObject rotationTarget;
+    [SerializeField] GameObject positionTarget;
     Vector3 lastPosition = new Vector3();
     float speed = 2f;
-    CameraController cameraController;
-
-    private void Awake() {
-        cameraController = GetComponent<CameraController>();
-    }
 
     public void ChangePosition() {
-        Vector3 targetPosition = newPosition;
-        if (transform.position == newPosition) {
+        Vector3 targetPosition = positionTarget.transform.position;
+        if (transform.position == positionTarget.transform.position) {
             targetPosition = lastPosition;
         }
         else {
             lastPosition = transform.position;
-            targetPosition = newPosition;
+            targetPosition = positionTarget.transform.position;
         }
-
         StartCoroutine(SetNewPosition(targetPosition));
     }
 
@@ -30,7 +24,7 @@ public class PositionChanger : MonoBehaviour {
         while (transform.position != targetPosition) {
             float step = speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
-            transform.LookAt(target.transform.position);
+            transform.LookAt(rotationTarget.transform.position);
             yield return null;
         }
     }

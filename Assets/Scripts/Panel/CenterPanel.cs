@@ -4,16 +4,20 @@ using UnityEngine;
 public class CenterPanel : Panel {
     [SerializeField] float startAnimDuration = 0.5f;
     [SerializeField] float endAnimDuration = 0.35f;
+    Tween currentTween;
 
     public override void Hide() {
         base.Hide();
-        transform.DOScale(0, endAnimDuration).onComplete = () => gameObject.SetActive(false);
+        currentTween?.Kill();
+        currentTween = transform.DOScale(0, endAnimDuration);
+        currentTween.onComplete = () => gameObject.SetActive(false);
     }
 
     public override void Show() {
         base.Show();
+        currentTween?.Kill();
         gameObject.SetActive(true);
-        transform.DOScale(1, startAnimDuration);
+        currentTween = transform.DOScale(1, startAnimDuration);
     }
 
     void OnDestroy() {

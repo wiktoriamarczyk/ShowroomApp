@@ -1,12 +1,5 @@
-using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
-using Button = UnityEngine.UI.Button;
 using System;
 
 public class PanelManager : MonoBehaviour {

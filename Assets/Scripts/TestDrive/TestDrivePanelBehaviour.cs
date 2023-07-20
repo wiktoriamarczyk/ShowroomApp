@@ -68,10 +68,10 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         PlayerPrefs.SetInt(startEventYear, DateTime.Now.Year);
         InsertData();
     }
-    
+
     DateTime GetStartEventDate() {
-        return new DateTime(PlayerPrefs.GetInt(startEventYear), 
-                            PlayerPrefs.GetInt(startEventMonth), 
+        return new DateTime(PlayerPrefs.GetInt(startEventYear),
+                            PlayerPrefs.GetInt(startEventMonth),
                             PlayerPrefs.GetInt(startEventDay));
     }
 
@@ -97,7 +97,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         }
         driveTime.AddOptions(RemoveOccupiedHours(hoursList));
     }
-    
+
     List<string> RemoveOccupiedHours(List<string> hours) {
         int selectedDateIndex = driveDate.value;
         if (selectedDateIndex < 1) {
@@ -135,7 +135,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         }
         return testDrivesDates;
     }
-    
+
     void InsertRegisteredTestDrivesDates() {
         registeredDates.ClearOptions();
         List<string> dropdownInfo = new List<string>();
@@ -145,7 +145,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         List<string> uniqueTestDrives = testDrives.Union(testDrives).ToList();
 
         uniqueTestDrives.Sort();
-        
+
         foreach (var drive in uniqueTestDrives) {
             string driveDate = drive;
             DateTime driveDateTime;
@@ -187,18 +187,18 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
 
     void InsertData() {
         driveDate.ClearOptions();
-        
+
         List<string> dateList = new List<string>();
         DateTime earliestDate = GetStartEventDate();
         if (earliestDate.Date == DateTime.Now.Date && earliestDate.Hour >= lastestDrivingHour) {
             earliestDate = earliestDate.AddDays(1);
         }
-        
-        DateTime lastDate = earliestDate.AddDays(eventDays - 1);
+
+        DateTime lastDate = earliestDate.AddDays(eventDays);
         for (DateTime date = DateTime.Now; date <= lastDate; date = date.AddDays(1)) {
             dateList.Add(date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture));
         }
-        
+
         driveDate.AddOptions(dateList);
         ChangeDisplayedTime();
     }
@@ -220,7 +220,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
             urlAddition += "/0/" + name;
         }
 
-        string formattedDate = ConvertFromSavedToDisplayedDate(date + " " + time);
+        string formattedDate = ConvertDateFromDisplayedToSaved(date + " " + time);
         string finalUrl = Path.Combine(modifyDataPath, "add/" + formattedDate + urlAddition);
 
         await modifier.UpdateData(finalUrl);
@@ -237,7 +237,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     async void OnDelete(GameObject item) {
         TextMeshProUGUI textMeshPro = item.GetComponentInChildren<TextMeshProUGUI>();
         string listItem = textMeshPro.text;
-        string formattedDate = ConvertFromSavedToDisplayedDate(listItem);
+        string formattedDate = ConvertDateFromDisplayedToSaved(listItem);
         string url = Path.Combine(modifyDataPath, "delete/" + formattedDate);
 
         await modifier.UpdateData(url);
@@ -245,7 +245,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         Destroy(item);
         await RefreshData();
     }
-    
+
     void AddTestDrive(string testDriveInfo) {
         GameObject testDriveItem = Instantiate(testDriveItemPrefab);
         testDriveItem.name = "TestDriveItem";
@@ -266,8 +266,9 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
             testDriveObjects.Clear();
         }
         List<string> data = await modifier.GetData(dataPath);
-        foreach (var testDriveInfo in data) {
-            AddTestDrive(testDriveInfo);
+        for (int i = 0; i < data.Count; ++i) {
+            data[i] = ConvertDateFromSavedToDisplayed(data[i]);
+            AddTestDrive(data[i]);
         }
         InsertRegisteredTestDrivesDates();
         DisplayRegisteredTestDrives();
@@ -278,7 +279,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         dropdown.RefreshShownValue();
     }
 
-    static string ConvertFromSavedToDisplayedDate(string date) {
+    static string ConvertDateFromDisplayedToSaved(string date) {
         string[] parts = date.Split(' ');
         string dateString = parts[(int)eTestDriveInfo.DATE] + " " + parts[(int)eTestDriveInfo.TIME];
         string format = "dd/MM/yyyy HH:mm";
@@ -287,10 +288,12 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         return dateTime.ToString(newFormat, CultureInfo.InvariantCulture);
     }
 
-    static string ConvertFromDisplayedToSavedDate(string date) {
+    static string ConvertDateFromSavedToDisplayed(string date) {
+        string[] parts = date.Split(' ');
+        string dateString = parts[(int)eTestDriveInfo.DATE];
         string format = "yyyy-MM-dd-HH-mm";
         string newFormat = "dd/MM/yyyy HH:mm";
-        DateTime dateTime = DateTime.ParseExact(date, format, CultureInfo.InvariantCulture);
+        DateTime dateTime = DateTime.ParseExact(dateString, format, CultureInfo.InvariantCulture);
         return dateTime.ToString(newFormat, CultureInfo.InvariantCulture);
     }
 

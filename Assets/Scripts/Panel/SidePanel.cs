@@ -6,7 +6,7 @@ public class SidePanel : Panel {
     [SerializeField] Vector2 endPosition = new Vector2(20, 0);
     [SerializeField] Vector2 startPosition = new Vector2(500, 0);
     [SerializeField] float animDuration = 0.5f;
-    
+    Tween currentTween;
     RectTransform rectTransform;
 
     void OnEnable() {
@@ -16,13 +16,16 @@ public class SidePanel : Panel {
 
     public override void Hide() {
         base.Hide();
-        rectTransform.DOAnchorPos(startPosition, animDuration).onComplete = () => gameObject.SetActive(false);
+        currentTween?.Kill();
+        currentTween = rectTransform.DOAnchorPos(startPosition, animDuration);
+        currentTween.onComplete = () => gameObject.SetActive(false);
     }
 
     public override void Show() {
         base.Show();
+        currentTween?.Kill();
         gameObject.SetActive(true);
-        rectTransform.DOAnchorPos(endPosition, animDuration);
+        currentTween = rectTransform.DOAnchorPos(endPosition, animDuration);
     }
 
     void OnDestroy() {

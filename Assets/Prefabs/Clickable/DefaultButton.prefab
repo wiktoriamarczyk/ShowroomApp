@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5708048792391623087}
   - component: {fileID: 3622227410274803979}
   m_Layer: 5
-  m_Name: BlueTextButton
+  m_Name: DefaultButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

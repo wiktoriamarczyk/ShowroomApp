@@ -1,17 +1,12 @@
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
-using UnityEditor.VersionControl;
 using UnityEngine;
-using UnityEngine.Localization.SmartFormat.Core.Parsing;
 using UnityEngine.Networking;
 using static TestDriveData;
 
 public class TestDriveLoader : MonoBehaviour {
-    public async UniTask<List<string>> GetData(string url) { 
+    public async UniTask<List<string>> GetData(string url) {
         using (UnityWebRequest uwr = UnityWebRequest.Get(url)) {
             await uwr.SendWebRequest();
 
@@ -22,21 +17,16 @@ public class TestDriveLoader : MonoBehaviour {
 
             string json = uwr.downloadHandler.text;
             RootObject rootObject = JsonConvert.DeserializeObject<RootObject>(json);
-            List<string> testDrivesList = new List<string>();
+            List<string> data = new List<string>();
 
             foreach (Entry entry in rootObject.dreamlo.leaderboard.entry) {
-                string dateString = entry.name;
-                string format = "yyyy-MM-dd-HH-mm";
-                string newFormat = "dd/MM/yyyy HH:mm";
-                DateTime date = DateTime.ParseExact(dateString, format, CultureInfo.InvariantCulture);
-                string formattedDate = date.ToString(newFormat, CultureInfo.InvariantCulture);
-                testDrivesList.Add(formattedDate + " " + entry.text);
+                data.Add(entry.name + " " + entry.text);
             }
 
-            return testDrivesList;
+            return data;
         }
     }
-    
+
     public async UniTask<bool> UpdateData(string url) {
         using (UnityWebRequest uwr = UnityWebRequest.Get(url)) {
             await uwr.SendWebRequest();
