@@ -63,11 +63,11 @@ public class GalleryManager : MonoBehaviour {
     }
 
     void TurnOnGalleryEffects() {
-        galleryEffectsModifier.TurnOnGalleryEffects();
+        galleryEffectsModifier.TurnOnBlurryDarkBackground();
     }
 
     void TurnOffGalleryEffects() {
-        galleryEffectsModifier.TurnOffGalleryEffects();
+        galleryEffectsModifier.TurnOffBlurryDarkBackground();
     }
 
     void OnDestroy() {

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 using System.Linq;
 using Unity.VisualScripting;
 
-public class ImagesProvider : MonoBehaviour {
+public class ImagesProvider {
     string[] imagesNames;
     List<Texture2D> thumbnails = new List<Texture2D>();
 

@@ -27,13 +27,13 @@ public class SceneManager : MonoBehaviour {
 
     void HideUI() {
         foreach (var ui in UIToHide) {
-            ui.Hide();
+            PanelManager.Instance.HidePanel(ui);
         }
     }
 
     void ShowHiddenUI() {
         foreach (var ui in UIToHide) {
-            ui.Show();
+            PanelManager.Instance.ShowPanel(ui);
         }
     }
 

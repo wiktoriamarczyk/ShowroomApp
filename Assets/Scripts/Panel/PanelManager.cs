@@ -12,13 +12,21 @@ public class PanelManager : MonoBehaviour {
     public event Action onPanelClosed;
 
     public void ShowPanel(Panel panel) {
-        if (currentPanel == panel) {
-            return;
+        bool blockingPanel = panel.IsBlockingOthersWhichHaveTrue();
+        if (blockingPanel) {
+            if (currentPanel == panel) {
+                return;
+            }
+            HideCurrentPanel();
+            currentPanel = panel;
         }
-        HideCurrentPanel();
         panel.Show();
-        currentPanel = panel;
         onPanelOpened?.Invoke();
+    }
+
+    public void HidePanel(Panel panel) {
+        panel.Hide();
+        onPanelClosed?.Invoke();
     }
 
     public void HideCurrentPanel() {
@@ -39,7 +47,10 @@ public class PanelManager : MonoBehaviour {
         }
 
         foreach (var panel in panels) {
-            panel.Hide();
+            panel.PanelAwake();
+            if (panel.IsHiddenOnAwake()) {
+                panel.Hide();
+            }
         }
     }
 }

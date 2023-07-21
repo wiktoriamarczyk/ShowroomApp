@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using static TestDriveData;
 
-public class TestDriveLoader : MonoBehaviour {
+public class TestDriveLoader {
     public async UniTask<List<string>> GetData(string url) {
         using (UnityWebRequest uwr = UnityWebRequest.Get(url)) {
             await uwr.SendWebRequest();

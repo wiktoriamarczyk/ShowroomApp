@@ -1,10 +1,16 @@
 using DG.Tweening;
 using UnityEngine;
 
-public class CenterPanel : Panel {
+public class ScalablePanel : Panel {
     [SerializeField] float startAnimDuration = 0.5f;
     [SerializeField] float endAnimDuration = 0.35f;
+    [Header("Is blocking other panles which have true")]
+    [SerializeField] bool blocking = false;
     Tween currentTween;
+
+    public override void PanelAwake() {
+        base.blockingOthers = blocking;
+    }
 
     public override void Hide() {
         base.Hide();

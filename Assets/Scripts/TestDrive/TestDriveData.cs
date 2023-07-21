@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TestDriveData : MonoBehaviour {
+public class TestDriveData {
     [System.Serializable]
     public class Entry {
         public string name;
