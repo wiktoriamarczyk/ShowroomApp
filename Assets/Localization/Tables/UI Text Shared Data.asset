@@ -36,7 +36,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 20314407452672
-    m_Key: Schedule Button
+    m_Key: Send
     m_Metadata:
       m_Items: []
   - m_Id: 20563087736832
@@ -44,7 +44,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 20665323896832
-    m_Key: Test Drives List Button
+    m_Key: Refresh
     m_Metadata:
       m_Items: []
   - m_Id: 21398798614528
@@ -78,15 +78,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1079217730359296
-    m_Key: Conf React Version Text
+    m_Key: React Version Text
     m_Metadata:
       m_Items: []
   - m_Id: 1079467912204288
-    m_Key: Conf Sharp Version Text
+    m_Key: Sharp Version Text
     m_Metadata:
       m_Items: []
   - m_Id: 1079493191274496
-    m_Key: Conf Unity Version Text
+    m_Key: Unity Version Text
     m_Metadata:
       m_Items: []
   - m_Id: 1079859597283328
@@ -94,23 +94,23 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1079937338707968
-    m_Key: Conf Drive T3 manual
+    m_Key: T3 manual
     m_Metadata:
       m_Items: []
   - m_Id: 1080019278630912
-    m_Key: Conf Drive T3 automatic
+    m_Key: T3 automatic
     m_Metadata:
       m_Items: []
   - m_Id: 1080330294661120
-    m_Key: Conf Drive B4 mild hybrid (190KM)
+    m_Key: B4 mild hybrid
     m_Metadata:
       m_Items: []
   - m_Id: 1080399492288512
-    m_Key: Conf Drive B4 AWD mild hybrid (190KM)
+    m_Key: B4 AWD mild hybrid
     m_Metadata:
       m_Items: []
   - m_Id: 1080403179081728
-    m_Key: Conf Drive B5 AWD mild hybrid (250 KM)
+    m_Key: ' B5 AWD mild hybrid'
     m_Metadata:
       m_Items: []
   - m_Id: 1080615326978048
@@ -128,63 +128,63 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1080806633377792
-    m_Key: Conf Color Black Stone
+    m_Key: Black Stone Color
     m_Metadata:
       m_Items: []
   - m_Id: 1080885972832256
-    m_Key: Conf Color Ice White
+    m_Key: Ice White Color
     m_Metadata:
       m_Items: []
   - m_Id: 1080951399780352
-    m_Key: Conf Color Cloud Blue
+    m_Key: Cloud Blue Color
     m_Metadata:
       m_Items: []
   - m_Id: 1081160146096128
-    m_Key: Conf Color Race Red
+    m_Key: Race Red Color
     m_Metadata:
       m_Items: []
   - m_Id: 1082083740225536
-    m_Key: Conf Color Magenta Fusion
+    m_Key: Magenta Fusion Color
     m_Metadata:
       m_Items: []
   - m_Id: 1083261446262784
-    m_Key: Conf Color Its Lime Green
+    m_Key: Its Lime Green Color
     m_Metadata:
       m_Items: []
   - m_Id: 1083336436224000
-    m_Key: Conf Rims Black
+    m_Key: Black Color
     m_Metadata:
       m_Items: []
   - m_Id: 1083416803282944
-    m_Key: Conf Rims Metal
+    m_Key: Metal Color
     m_Metadata:
       m_Items: []
   - m_Id: 1083457488031744
-    m_Key: Conf Rims ColorMatch
+    m_Key: ColorMatch Color
     m_Metadata:
       m_Items: []
   - m_Id: 1083545606164480
-    m_Key: Conf Package Winter
+    m_Key: Winter Package
     m_Metadata:
       m_Items: []
   - m_Id: 1083639042674688
-    m_Key: Conf Package Parking
+    m_Key: Parking Package
     m_Metadata:
       m_Items: []
   - m_Id: 1083693979668480
-    m_Key: Conf Package Technology
+    m_Key: Technology Package
     m_Metadata:
       m_Items: []
   - m_Id: 1083743283712000
-    m_Key: Conf Package Lightning
+    m_Key: Lightning Package
     m_Metadata:
       m_Items: []
   - m_Id: 2973938933305344
-    m_Key: Back Button
+    m_Key: Back
     m_Metadata:
       m_Items: []
   - m_Id: 2974092809736192
-    m_Key: Save Button
+    m_Key: Save
     m_Metadata:
       m_Items: []
   m_Metadata:

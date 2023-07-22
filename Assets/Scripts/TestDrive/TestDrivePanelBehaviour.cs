@@ -26,7 +26,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     const string modifyDataPath = "http://dreamlo.com/lb/-Ur0ruQAokKXyyv8uxxT0wOw8r3LFlWUyISb24jdTvEw/";
     const string dataPath = "http://dreamlo.com/lb/6486be2b8f40bb7d84121bba/json";
     const int earliestDrivingHour = 8;
-    const int lastestDrivingHour = 22;
+    const int latestDrivingHour = 22;
     const int minuteStep = 30;
     const int eventDays = 7;
     const int maxNameLength = 20;
@@ -92,7 +92,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         else {
             earliestTime = DateTime.MinValue.AddHours(earliestDrivingHour);
         }
-        for (DateTime time = earliestTime; time.Hour < lastestDrivingHour; time = time.AddMinutes(minuteStep)) {
+        for (DateTime time = earliestTime; time.Hour < latestDrivingHour; time = time.AddMinutes(minuteStep)) {
             hoursList.Add(time.ToString("HH:mm"));
         }
         driveTime.AddOptions(RemoveOccupiedHours(hoursList));
@@ -190,7 +190,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
 
         List<string> dateList = new List<string>();
         DateTime earliestDate = GetStartEventDate();
-        if (earliestDate.Date == DateTime.Now.Date && earliestDate.Hour >= lastestDrivingHour) {
+        if (earliestDate.Date == DateTime.Now.Date && earliestDate.Hour >= latestDrivingHour) {
             earliestDate = earliestDate.AddDays(1);
         }
 
@@ -298,7 +298,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     }
 
     static DateTime GetEarliestTestDriveTimeFromDate(DateTime time) {
-        if (time.Hour >= lastestDrivingHour) {
+        if (time.Hour >= latestDrivingHour || time.Hour <= earliestDrivingHour) {
             time = time.AddDays(1);
             time = new DateTime(time.Year, time.Month, time.Day, earliestDrivingHour, 00, 00);
             return time;
