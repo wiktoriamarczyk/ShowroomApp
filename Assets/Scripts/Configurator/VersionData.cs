@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class VersionData : ScriptableObject {
+    public abstract string version { get; }
     public abstract string description { get; }
     public abstract IReadOnlyList<string> drives { get; }
     public abstract IReadOnlyList<string> packages { get; }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "SharpVersionData", menuName = "ScriptableObjects/SharpVersionData", order = 2)]
 public class SharpVersionData : VersionData {
+    public override string version => Common.descriptions[Common.eVersion.SHARP];
     public override string description => Common.descriptions[Common.eVersion.SHARP];
 
     public override IReadOnlyList<string> drives { get; } = new[] {

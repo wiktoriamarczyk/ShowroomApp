@@ -4,6 +4,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "ReactVersionData", menuName = "ScriptableObjects/ReactVersionData", order = 1)]
 public class ReactVersionData : VersionData {
+    public override string version => Common.descriptions[Common.eVersion.REACT];
     public override string description => Common.descriptions[Common.eVersion.REACT];
 
     public override IReadOnlyList<string> drives { get; } = new[] {

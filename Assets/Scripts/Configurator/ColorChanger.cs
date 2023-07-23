@@ -10,12 +10,7 @@ public class ColorChanger : MonoBehaviour {
     float progress;
 
     public void ChangeElementsColor(string col) {
-        int intColor = Convert.ToInt32(col, 16); ;
-
-        float R = ((0xFF0000 & intColor) >> 16) / 255.0f;
-        float G = ((0xFF00 & intColor) >> 8) / 255.0f;
-        float B = ((0xFF & intColor) >> 0) / 255.0f;
-        StartCoroutine(ChangeElementsColor(new Color(R, G, B)));
+        StartCoroutine(ChangeElementsColor(Common.ColorFromHex(col)));
     }
 
     IEnumerator ChangeElementsColor(Color color) {

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public static class Common {
     public const string localizationTableName = "UI Text";
@@ -39,6 +41,17 @@ public static class Common {
         public string localizationTableKey;
         public string hex;
     }
+    public struct VersionInfo {
+        eVersion type;
+        string name;
+        string desciprion;
+    }
+
+    public readonly static IReadOnlyDictionary<eVersion, string> versions = new Dictionary<eVersion, string> {
+        { eVersion.REACT, "React" },
+        { eVersion.SHARP, "Sharp" },
+        { eVersion.UNITY, "Unity" },
+    };
     public readonly static IReadOnlyDictionary<eVersion, string> descriptions = new Dictionary<eVersion, string> {
         { eVersion.REACT, "React Version Text" },
         { eVersion.SHARP, "Sharp Version Text" },
@@ -49,7 +62,7 @@ public static class Common {
         { eDrive.T3_AUTOMATIC,          "T3 automatic" },
         { eDrive.B4_MILD_HYBRID,        "B4 mild hybrid" },
         { eDrive.B4_AWD_MILD_HYBRID,    "B4 AWD mild hybrid" },
-        { eDrive.B5_AWD_MILD_HYBRID,    "B5 AWD mild hybrid" },
+        { eDrive.B5_AWD_MILD_HYBRID,    "B5 AWD mild hybrid" }
     };
     public readonly static IReadOnlyDictionary<ePackage, string> packages = new Dictionary<ePackage, string> {
         { ePackage.WINTER,      "Winter Package" },
@@ -58,7 +71,7 @@ public static class Common {
         { ePackage.LIGHTNING,   "Lightning Package" }
     };
     public readonly static IReadOnlyList<Item<eColor>> colors = new List<Item<eColor>> {
-        { new Item<eColor>{ type = eColor.BLACK_STONE,     localizationTableKey = "Black Stone Color",     hex = "0x2C2526" } },
+        { new Item<eColor>{ type = eColor.BLACK_STONE,     localizationTableKey = "Black Stone Color",     hex = "0x000000" } },
         { new Item<eColor>{ type = eColor.ICE_WHITE,       localizationTableKey = "Ice White Color",       hex = "0xFFFFFF" } },
         { new Item<eColor>{ type = eColor.CLOUD_BLUE,      localizationTableKey = "Cloud Blue Color",      hex = "0xA2B6B9" } },
         { new Item<eColor>{ type = eColor.RACE_RED,        localizationTableKey = "Race Red Color",        hex = "0xBD162C" } },
@@ -75,5 +88,14 @@ public static class Common {
     }
     public static Item<eRim> FindRimByType(eRim type) {
         return Common.rims.FirstOrDefault(rim => rim.type == type);
+    }
+
+    public static Color ColorFromHex(string col) {
+        int intColor = Convert.ToInt32(col, 16); ;
+
+        float R = ((0xFF0000 & intColor) >> 16) / 255.0f;
+        float G = ((0xFF00 & intColor) >> 8) / 255.0f;
+        float B = ((0xFF & intColor) >> 0) / 255.0f;
+        return new Color(R, G, B);
     }
 }

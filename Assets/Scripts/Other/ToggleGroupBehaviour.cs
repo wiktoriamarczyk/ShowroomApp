@@ -17,34 +17,32 @@ public class ToggleGroupBehaviour : MonoBehaviour {
         return selectedToggle;
     }
 
-    public int GetSelectedToggleIndex() {
-        for (int i = 0; i < toggles.Count(); ++i) {
-            if (selectedToggle == toggles[i]) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
     public Toggle[] GetToggles() {
         return toggles;
     }
 
-    void SelectDefaultToggle() {
-        defaultToggle.isOn = true;
-    }
-
-    void OnEnable() {
+    public void InitializeToggles() {
         toggles = GetComponentsInChildren<Toggle>();
-        if (toggles == null) {
-            return;
-        }
         foreach (Toggle toggle in toggles) {
             toggle.onValueChanged.AddListener((bool value) => OnToggleValueChanged(toggle, value));
         }
         defaultToggle = toggles[0];
         SelectDefaultToggle();
         onToggleGroupInitialized?.Invoke();
+    }
+
+    void OnEnable() {
+        toggles = GetComponentsInChildren<Toggle>();
+        if (toggles == null || toggles.Length < 1) {
+            return;
+        }
+        else {
+            InitializeToggles();
+        }
+    }
+
+    void SelectDefaultToggle() {
+        defaultToggle.isOn = true;
     }
 
     void OnToggleValueChanged(Toggle toggle, bool value) {
