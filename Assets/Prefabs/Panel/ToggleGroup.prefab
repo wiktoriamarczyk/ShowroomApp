@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1691146868903731724}
   - component: {fileID: 5977500441276356584}
   - component: {fileID: 5497163903187411599}
+  - component: {fileID: 7953371462875316304}
   m_Layer: 5
   m_Name: ToggleGroup
   m_TagString: Untagged
@@ -132,3 +133,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AllowSwitchOff: 1
+--- !u!114 &7953371462875316304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2655971431290727176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e335dbc0a6363ef4aaf413a82c182ada, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toggleOffColor: {r: 1, g: 1, b: 1, a: 1}
+  toggleOnColor: {r: 0.05882353, g: 0.29803923, b: 0.5058824, a: 1}

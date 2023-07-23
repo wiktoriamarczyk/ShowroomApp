@@ -11,6 +11,7 @@ public class ToggleGroupBehaviour : MonoBehaviour {
     Toggle[] toggles;
 
     public event Action onToggleChanged;
+    public event Action onToggleGroupInitialized;
 
     public Toggle GetSelectedToggle() {
         return selectedToggle;
@@ -25,25 +26,33 @@ public class ToggleGroupBehaviour : MonoBehaviour {
         return -1;
     }
 
+    public Toggle[] GetToggles() {
+        return toggles;
+    }
+
     void SelectDefaultToggle() {
         defaultToggle.isOn = true;
     }
 
     void OnEnable() {
         toggles = GetComponentsInChildren<Toggle>();
+        if (toggles == null) {
+            return;
+        }
         foreach (Toggle toggle in toggles) {
             toggle.onValueChanged.AddListener((bool value) => OnToggleValueChanged(toggle, value));
         }
         defaultToggle = toggles[0];
         SelectDefaultToggle();
+        onToggleGroupInitialized?.Invoke();
     }
 
     void OnToggleValueChanged(Toggle toggle, bool value) {
-        selectedToggle = toggle;
         ColorBlock colorBlock;
         colorBlock = toggle.colors;
         Icon icon = toggle.GetComponentInChildren<Icon>();
         if (value) {
+            selectedToggle = toggle;
             onToggleChanged?.Invoke();
             colorBlock.normalColor = toggleOnColor;
             icon?.ChangeToAlternativeColor();

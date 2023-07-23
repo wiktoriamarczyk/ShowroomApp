@@ -47,7 +47,7 @@ public static class Common {
     public readonly static IReadOnlyDictionary<eDrive, string> drives = new Dictionary<eDrive, string> {
         { eDrive.T3_MANUAL,             "T3 manual" },
         { eDrive.T3_AUTOMATIC,          "T3 automatic" },
-        { eDrive.B4_MILD_HYBRID,        "T3 mild hybrid" },
+        { eDrive.B4_MILD_HYBRID,        "B4 mild hybrid" },
         { eDrive.B4_AWD_MILD_HYBRID,    "B4 AWD mild hybrid" },
         { eDrive.B5_AWD_MILD_HYBRID,    "B5 AWD mild hybrid" },
     };
