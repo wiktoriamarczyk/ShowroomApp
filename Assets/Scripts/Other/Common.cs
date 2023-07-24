@@ -71,16 +71,16 @@ public static class Common {
         { ePackage.LIGHTNING,   "Lightning Package" }
     };
     public readonly static IReadOnlyList<Item<eColor>> colors = new List<Item<eColor>> {
-        { new Item<eColor>{ type = eColor.BLACK_STONE,     localizationTableKey = "Black Stone Color",     hex = "0x000000" } },
-        { new Item<eColor>{ type = eColor.ICE_WHITE,       localizationTableKey = "Ice White Color",       hex = "0xFFFFFF" } },
-        { new Item<eColor>{ type = eColor.CLOUD_BLUE,      localizationTableKey = "Cloud Blue Color",      hex = "0xA2B6B9" } },
+        { new Item<eColor>{ type = eColor.BLACK_STONE,     localizationTableKey = "Black Stone Color",     hex = "0x111111" } },
+        { new Item<eColor>{ type = eColor.ICE_WHITE,       localizationTableKey = "Ice White Color",       hex = "0xEEEEEE" } },
+        { new Item<eColor>{ type = eColor.CLOUD_BLUE,      localizationTableKey = "Cloud Blue Color",      hex = "0x55BFD4" } },
         { new Item<eColor>{ type = eColor.RACE_RED,        localizationTableKey = "Race Red Color",        hex = "0xBD162C" } },
         { new Item<eColor>{ type = eColor.MAGENTA_FUSION,  localizationTableKey = "Magenta Fusion Color",  hex = "0xFF00FF" } },
         { new Item<eColor>{ type = eColor.ITS_LIME_GREEN,  localizationTableKey = "Its Lime Green Color",  hex = "0x32CD32" } },
     };
     public readonly static IReadOnlyList<Item<eRim>> rims = new List<Item<eRim>> {
-        { new Item<eRim>{ type = eRim.BLACK,               localizationTableKey = "Black Color",           hex = "0x000000" } },
-        { new Item<eRim>{ type = eRim.METAL,               localizationTableKey = "Metal Color",           hex = "0xFFFFFF" } },
+        { new Item<eRim>{ type = eRim.BLACK,               localizationTableKey = "Black Color",           hex = "0x111111" } },
+        { new Item<eRim>{ type = eRim.METAL,               localizationTableKey = "Metal Color",           hex = "0xEEEEEE" } },
         { new Item<eRim>{ type = eRim.COLORMATCH,          localizationTableKey = "ColorMatch Color",      hex = "0xA2B6B9" } },
     };
     public static Item<eColor> FindColorByType(eColor type) {
@@ -89,7 +89,6 @@ public static class Common {
     public static Item<eRim> FindRimByType(eRim type) {
         return Common.rims.FirstOrDefault(rim => rim.type == type);
     }
-
     public static Color ColorFromHex(string col) {
         int intColor = Convert.ToInt32(col, 16); ;
 

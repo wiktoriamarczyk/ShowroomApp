@@ -33,9 +33,18 @@ public class PanelManager : MonoBehaviour {
         if (currentPanel == null) {
             return;
         }
-        currentPanel.Hide();
+        HidePanel(currentPanel);
         currentPanel = null;
-        onPanelClosed?.Invoke();
+    }
+
+    public bool IsPanelShown(GameObject obj) {
+        if (currentPanel == null) {
+            return false;
+        }
+        else if (obj == currentPanel.gameObject) {
+            return true;
+        }
+        return false;
     }
 
     void Awake() {

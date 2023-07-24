@@ -7,12 +7,17 @@ using UnityEngine.Localization.Settings;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.Localization.Components;
 using System.Collections.Generic;
-using static Common;
 using Unity.VisualScripting;
 using System.Linq;
+using System.Drawing;
+using UnityEngine.Events;
 
 public class ConfiguratorPanelBehaviour : MonoBehaviour {
+    [SerializeField] ColorChanger carColorChanger;
+    [SerializeField] ColorChanger rimsColorChanger;
+
     [SerializeField] RectTransform transformToRefresh;
+    [SerializeField] TextMeshProUGUI versionDescription;
     [SerializeField] ReactVersionData reactVersionData;
     [SerializeField] SharpVersionData sharpVersionData;
     [SerializeField] UnityVersionData unityVersionData;
@@ -21,83 +26,45 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
     [SerializeField] GameObject versionTogglePrefab;
     [SerializeField] GameObject colorTogglePrefab;
 
+    /* one element from these groups must be selected */
     [SerializeField] ToggleGroup versionToggleGroup;
     [SerializeField] ToggleGroup driveToggleGroup;
     [SerializeField] ToggleGroup colorsToggleGroup;
     [SerializeField] ToggleGroup rimsToggleGroup;
-    [SerializeField] GameObject packages;
-    [SerializeField] TextMeshProUGUI versionDescription;
+    /* none or all packages may be selected so they are not grouped into a toggle group */
+    [SerializeField] GameObject  packageList;
 
     ToggleGroupBehaviour versionToggleGroupBehaviour;
     ToggleGroupBehaviour driveToggleGroupBehaviour;
     ToggleGroupBehaviour colorsToggleGroupBehaviour;
     ToggleGroupBehaviour rimsToggleGroupBehaviour;
+    List<Toggle> packages = new List<Toggle>();
 
     VersionData currentVersion;
     Dictionary<GameObject, VersionData> versions = new Dictionary<GameObject, VersionData>();
     bool isCoroutineActive = false;
+    bool isPanelInitialized = false;
 
-    void Start() {
+    void Awake() {
         versionToggleGroupBehaviour = versionToggleGroup.GetComponent<ToggleGroupBehaviour>();
         driveToggleGroupBehaviour = driveToggleGroup.GetComponent<ToggleGroupBehaviour>();
         colorsToggleGroupBehaviour = colorsToggleGroup.GetComponent<ToggleGroupBehaviour>();
         rimsToggleGroupBehaviour = rimsToggleGroup.GetComponent<ToggleGroupBehaviour>();
+    }
 
-        CreateUIElements();
+    void OnEnable() {
+        bool isPanelShown = PanelManager.Instance.IsPanelShown(gameObject);
+        if (!isPanelShown) {
+            return;
+        }
+        if (!isPanelInitialized) {
+            InitializeUIObjects();
+        }
         RefreshData();
+        isPanelInitialized = true;
     }
 
-    GameObject CreateUIElement(string name, MonoBehaviour parent, GameObject prefab) {
-        GameObject ui = Instantiate(prefab);
-        ui.name = name;
-        ui.transform.SetParent(parent.transform);
-        ui.transform.localScale = Vector3.one;
-        var toggleGroup = parent as ToggleGroup;
-        if (toggleGroup != null) {
-            ui.GetComponent<Toggle>().group = toggleGroup;
-        }
-        var localization = ui.GetComponentInChildren<LocalizeStringEvent>();
-        var textMeshPro = ui.GetComponentInChildren<TextMeshProUGUI>();
-        if (localization != null) {
-            localization.OnUpdateString.AddListener((string value) => { textMeshPro.text = value; });
-            localization.StringReference.TableReference = Common.localizationTableName;
-            localization.StringReference.TableEntryReference = name;
-        } else if (textMeshPro != null) {
-            textMeshPro.text = name;
-        }
-        return ui;
-    }
-
-    void CreateUIElements() {
-        foreach (var version in Common.versions) {
-            GameObject versionObject = CreateUIElement(version.Value, versionToggleGroup, versionTogglePrefab);
-            versions.Add(versionObject, GetSOForVersion(version.Key));
-        }
-
-        foreach (var drive in Common.drives) {
-            CreateUIElement(drive.Value, driveToggleGroup, textTogglePrefab);
-        }
-
-        foreach (var color in Common.colors) {
-            var colorToggle = CreateUIElement(color.localizationTableKey, colorsToggleGroup, colorTogglePrefab);
-            colorToggle.GetComponentInChildren<Image>().color = Common.ColorFromHex(color.hex);
-        }
-
-        foreach (var rim in Common.rims) {
-            CreateUIElement(rim.localizationTableKey, rimsToggleGroup, colorTogglePrefab);
-        }
-        versionToggleGroupBehaviour.InitializeToggles();
-        driveToggleGroupBehaviour.InitializeToggles();
-        colorsToggleGroupBehaviour.InitializeToggles();
-        rimsToggleGroupBehaviour.InitializeToggles();
-
-        versionToggleGroupBehaviour.onToggleChanged += RefreshData;
-        LocaleSelector.onLanguageChanged += RefreshData;
-    }
-
-    public void ActivateToggles<T>(ToggleGroupBehaviour toggleGroup, T dataCollection) where T : class {
-        Toggle[] toggles = toggleGroup.GetToggles();
-
+    void ActivateToggles<T>(Toggle[] toggles, T dataCollection) where T : class {
         foreach (Toggle toggle in toggles) {
             string toggleName = toggle.gameObject.name;
 
@@ -110,10 +77,12 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
             toggle.gameObject.SetActive(isActive);
         }
     }
-    void ActivateElements() {
-        ActivateToggles(driveToggleGroupBehaviour, currentVersion.drives);
-        ActivateToggles(colorsToggleGroupBehaviour, currentVersion.colorsData);
-        ActivateToggles(rimsToggleGroupBehaviour, currentVersion.rimsData);
+
+    void ActivateObjects() {
+        ActivateToggles(driveToggleGroupBehaviour.GetToggles(), currentVersion.drives);
+        ActivateToggles(colorsToggleGroupBehaviour.GetToggles(), currentVersion.colorsData);
+        ActivateToggles(rimsToggleGroupBehaviour.GetToggles(), currentVersion.rimsData);
+        ActivateToggles(packages.ToArray(), currentVersion.packages);
     }
 
     void RefreshData() {
@@ -122,8 +91,79 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         }
         SetCurrentVersion(versionToggleGroupBehaviour.GetSelectedToggle().gameObject);
         StartCoroutine(ChangeDescription());
-        ActivateElements();
-        StartCoroutine(RefreshLayout());
+        ActivateObjects();
+        RefreshSelectedToggles();
+    }
+
+    void RefreshSelectedToggles() {
+        driveToggleGroupBehaviour.OnToggleStatusChanged();
+        colorsToggleGroupBehaviour.OnToggleStatusChanged();
+        rimsToggleGroupBehaviour.OnToggleStatusChanged();
+    }
+
+    GameObject CreateUIObject(string name, GameObject parent, GameObject prefab) {
+        GameObject ui = Instantiate(prefab);
+        ui.name = name;
+        ui.transform.SetParent(parent.transform);
+        ui.transform.localScale = Vector3.one;
+        var localization = ui.GetComponentInChildren<LocalizeStringEvent>();
+        var textMeshPro = ui.GetComponentInChildren<TextMeshProUGUI>();
+        if (localization != null) {
+            localization.OnUpdateString.AddListener((string value) => { textMeshPro.text = value; });
+            localization.StringReference.TableReference = Common.localizationTableName;
+            localization.StringReference.TableEntryReference = name;
+        } else if (textMeshPro != null) {
+            textMeshPro.text = name;
+        }
+        return ui;
+    }
+
+
+    void InitializeUIObjects() {
+        foreach (var version in Common.versions) {
+            GameObject versionObject = CreateUIObject(version.Value, versionToggleGroup.gameObject, versionTogglePrefab);
+            versionObject.GetComponent<Toggle>().group = versionToggleGroup;
+            versions.Add(versionObject, GetSOForVersion(version.Key));
+        }
+
+        foreach (var drive in Common.drives) {
+            GameObject driveObject = CreateUIObject(drive.Value, driveToggleGroup.gameObject, textTogglePrefab);
+            driveObject.GetComponent<Toggle>().group = driveToggleGroup;
+        }
+
+        foreach (var color in Common.colors) {
+            var colorObject = CreateUIObject(color.localizationTableKey, colorsToggleGroup.gameObject, colorTogglePrefab);
+            colorObject.GetComponent<Toggle>().group = colorsToggleGroup;
+            colorObject.GetComponentInChildren<Image>().color = Common.ColorFromHex(color.hex);
+            colorObject.GetComponent<Toggle>().onValueChanged.AddListener((value) => OnColorChanged(value, color.hex, carColorChanger));
+        }
+
+        foreach (var rim in Common.rims) {
+            var rimObject = CreateUIObject(rim.localizationTableKey, rimsToggleGroup.gameObject, colorTogglePrefab);
+            rimObject.GetComponent<Toggle>().group = rimsToggleGroup;
+            rimObject.GetComponentInChildren<Image>().color = Common.ColorFromHex(rim.hex);
+            rimObject.GetComponent<Toggle>().onValueChanged.AddListener((value) => OnColorChanged(value, rim.hex, rimsColorChanger));
+        }
+
+        /* let toggle group know that toggles were made dynamically */
+        versionToggleGroupBehaviour.InitializeToggles();
+        driveToggleGroupBehaviour.InitializeToggles();
+        colorsToggleGroupBehaviour.InitializeToggles();
+        rimsToggleGroupBehaviour.InitializeToggles();
+
+        versionToggleGroupBehaviour.onToggleChanged += RefreshData;
+        LocaleSelector.onLanguageChanged += RefreshData;
+
+        foreach (var package in Common.packages) {
+            var packageObject = CreateUIObject(package.Value, packageList, textTogglePrefab);
+            packages.Add(packageObject.GetComponent<Toggle>());
+        }
+    }
+
+    void OnColorChanged(bool value, string colorHex, ColorChanger colorChanger) {
+        if (value) {
+            colorChanger.ChangeElementsColor(colorHex);
+        }
     }
 
     void SetCurrentVersion(GameObject versionToggle) {
@@ -147,7 +187,8 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         isCoroutineActive = true;
         string localizationTableKey = currentVersion.description;
         string description = String.Empty;
-        var operation = LocalizationSettings.StringDatabase.GetLocalizedStringAsync(Common.localizationTableName, localizationTableKey, new object[] { description });
+        var operation = LocalizationSettings.StringDatabase.GetLocalizedStringAsync(Common.localizationTableName,
+                                                            localizationTableKey, new object[] { description });
 
         yield return operation;
 
@@ -159,6 +200,7 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         }
 
         isCoroutineActive = false;
+        StartCoroutine(RefreshLayout());
     }
 
     IEnumerator RefreshLayout() {
@@ -166,6 +208,11 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         yield return new WaitForSeconds(0.01f);
         LayoutRebuilder.ForceRebuildLayoutImmediate(transformToRefresh);
         isCoroutineActive = false;
+    }
+
+    void OnDisable() {
+        carColorChanger.ChangeElementsColorToDefault();
+        rimsColorChanger.ChangeElementsColorToDefault();
     }
 
     void OnDestroy() {

@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,17 +20,35 @@ public class ToggleGroupBehaviour : MonoBehaviour {
         return toggles;
     }
 
+    public void OnToggleStatusChanged() {
+        if (!selectedToggle.gameObject.activeSelf) {
+            selectedToggle.isOn = false;
+            SelectFirstActiveToggle();
+        }
+    }
+
+    void SelectFirstActiveToggle() {
+        foreach (Toggle toggle in toggles) {
+            if (toggle.gameObject.activeSelf) {
+                selectedToggle = toggle;
+                toggle.isOn = true;
+                break;
+            }
+        }
+    }
+
     public void InitializeToggles() {
         toggles = GetComponentsInChildren<Toggle>();
         foreach (Toggle toggle in toggles) {
+            toggle.isOn = false;
             toggle.onValueChanged.AddListener((bool value) => OnToggleValueChanged(toggle, value));
         }
         defaultToggle = toggles[0];
-        SelectDefaultToggle();
+        OnToggleValueChanged(defaultToggle, true);
         onToggleGroupInitialized?.Invoke();
     }
 
-    void OnEnable() {
+    void Start() {
         toggles = GetComponentsInChildren<Toggle>();
         if (toggles == null || toggles.Length < 1) {
             return;
@@ -39,10 +56,6 @@ public class ToggleGroupBehaviour : MonoBehaviour {
         else {
             InitializeToggles();
         }
-    }
-
-    void SelectDefaultToggle() {
-        defaultToggle.isOn = true;
     }
 
     void OnToggleValueChanged(Toggle toggle, bool value) {
@@ -61,5 +74,17 @@ public class ToggleGroupBehaviour : MonoBehaviour {
         }
         toggle.colors = colorBlock;
         toggle.interactable = !value;
+    }
+
+    void OnEnable() {
+        if (selectedToggle != null) {
+            selectedToggle.isOn = true;
+        }
+    }
+
+    void OnDisable() {
+        foreach (Toggle toggle in toggles) {
+            toggle.isOn = false;
+        }
     }
 }
