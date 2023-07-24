@@ -5,6 +5,24 @@ using UnityEngine;
 
 public static class Common {
     public const string localizationTableName = "UI Text";
+    public const string configName = "Config";
+    public const string configCountName = "ConfigurationCount";
+    public static int configurationCount = 0;
+
+    public static int GetConfigurationCount() {
+        return PlayerPrefs.GetInt(configCountName);
+    }
+    public static void SetConfigurationCount(int value) {
+        PlayerPrefs.SetInt(configCountName, value);
+    }
+
+    public enum eConfigurationType {
+        VERSION,
+        DRIVE,
+        COLOR,
+        RIMS,
+        PACKAGE
+    }
     public enum eVersion {
         REACT,
         SHARP,
@@ -25,7 +43,7 @@ public static class Common {
         MAGENTA_FUSION,
         ITS_LIME_GREEN
     };
-    public enum eRim {
+    public enum eRims {
         BLACK,
         METAL,
         COLORMATCH
@@ -78,15 +96,15 @@ public static class Common {
         { new Item<eColor>{ type = eColor.MAGENTA_FUSION,  localizationTableKey = "Magenta Fusion Color",  hex = "0xFF00FF" } },
         { new Item<eColor>{ type = eColor.ITS_LIME_GREEN,  localizationTableKey = "Its Lime Green Color",  hex = "0x32CD32" } },
     };
-    public readonly static IReadOnlyList<Item<eRim>> rims = new List<Item<eRim>> {
-        { new Item<eRim>{ type = eRim.BLACK,               localizationTableKey = "Black Color",           hex = "0x111111" } },
-        { new Item<eRim>{ type = eRim.METAL,               localizationTableKey = "Metal Color",           hex = "0xEEEEEE" } },
-        { new Item<eRim>{ type = eRim.COLORMATCH,          localizationTableKey = "ColorMatch Color",      hex = "0xA2B6B9" } },
+    public readonly static IReadOnlyList<Item<eRims>> rims = new List<Item<eRims>> {
+        { new Item<eRims>{ type = eRims.BLACK,               localizationTableKey = "Black Color",           hex = "0x111111" } },
+        { new Item<eRims>{ type = eRims.METAL,               localizationTableKey = "Metal Color",           hex = "0xEEEEEE" } },
+        { new Item<eRims>{ type = eRims.COLORMATCH,          localizationTableKey = "ColorMatch Color",      hex = "0xA2B6B9" } },
     };
     public static Item<eColor> FindColorByType(eColor type) {
         return Common.colors.FirstOrDefault(color => color.type == type);
     }
-    public static Item<eRim> FindRimByType(eRim type) {
+    public static Item<eRims> FindRimByType(eRims type) {
         return Common.rims.FirstOrDefault(rim => rim.type == type);
     }
     public static Color ColorFromHex(string col) {

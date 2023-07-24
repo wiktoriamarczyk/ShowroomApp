@@ -37,9 +37,9 @@ public class UnityVersionData : VersionData {
         { limeGreen.localizationTableKey, limeGreen.hex }
     };
 
-    static Common.Item<Common.eRim> black = Common.FindRimByType(Common.eRim.BLACK);
-    static Common.Item<Common.eRim> metal = Common.FindRimByType(Common.eRim.METAL);
-    static Common.Item<Common.eRim> colorMatch = Common.FindRimByType(Common.eRim.COLORMATCH);
+    static Common.Item<Common.eRims> black = Common.FindRimByType(Common.eRims.BLACK);
+    static Common.Item<Common.eRims> metal = Common.FindRimByType(Common.eRims.METAL);
+    static Common.Item<Common.eRims> colorMatch = Common.FindRimByType(Common.eRims.COLORMATCH);
 
     public override IReadOnlyDictionary<string, string> rimsData { get; } = new Dictionary<string, string>() {
         { black.localizationTableKey, black.hex },

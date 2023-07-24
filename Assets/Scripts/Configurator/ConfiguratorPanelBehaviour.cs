@@ -9,8 +9,7 @@ using UnityEngine.Localization.Components;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using System.Linq;
-using System.Drawing;
-using UnityEngine.Events;
+using static Common;
 
 public class ConfiguratorPanelBehaviour : MonoBehaviour {
     [SerializeField] ColorChanger carColorChanger;
@@ -44,6 +43,17 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
     Dictionary<GameObject, VersionData> versions = new Dictionary<GameObject, VersionData>();
     bool isCoroutineActive = false;
     bool isPanelInitialized = false;
+
+
+    public List<Toggle> GetSelectedConfigurations() {
+        List<Toggle> selectedToggles = new List<Toggle>();
+        selectedToggles.Add(versionToggleGroupBehaviour.GetSelectedToggle());
+        selectedToggles.Add(driveToggleGroupBehaviour.GetSelectedToggle());
+        selectedToggles.Add(colorsToggleGroupBehaviour.GetSelectedToggle());
+        selectedToggles.Add(rimsToggleGroupBehaviour.GetSelectedToggle());
+        selectedToggles.AddRange(packages.Where(toggle => toggle.isOn));
+        return selectedToggles;
+    }
 
     void Awake() {
         versionToggleGroupBehaviour = versionToggleGroup.GetComponent<ToggleGroupBehaviour>();
@@ -171,13 +181,13 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
     }
 
     VersionData GetSOForVersion(Common.eVersion version) {
-        if (version == Common.eVersion.REACT) {
+        if (version == eVersion.REACT) {
             return reactVersionData;
         }
-        else if (version == Common.eVersion.SHARP) {
+        else if (version == eVersion.SHARP) {
             return sharpVersionData;
         }
-        else if (version == Common.eVersion.UNITY) {
+        else if (version == eVersion.UNITY) {
             return unityVersionData;
         }
         return null;

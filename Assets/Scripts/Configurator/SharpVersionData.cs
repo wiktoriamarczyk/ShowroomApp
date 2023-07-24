@@ -35,8 +35,8 @@ public class SharpVersionData : VersionData {
         { magentaFusion.localizationTableKey, magentaFusion.hex }
     };
 
-    static Common.Item<Common.eRim> black = Common.FindRimByType(Common.eRim.BLACK);
-    static Common.Item<Common.eRim> metal = Common.FindRimByType(Common.eRim.METAL);
+    static Common.Item<Common.eRims> black = Common.FindRimByType(Common.eRims.BLACK);
+    static Common.Item<Common.eRims> metal = Common.FindRimByType(Common.eRims.METAL);
 
     public override IReadOnlyDictionary<string, string> rimsData { get; } = new Dictionary<string, string>() {
         { black.localizationTableKey, black.hex },
