@@ -104,8 +104,14 @@ public static class Common {
     public static Item<eColor> FindColorByType(eColor type) {
         return Common.colors.FirstOrDefault(color => color.type == type);
     }
+    public static Item<eColor> FindColorByName(string colorName) {
+        return Common.colors.FirstOrDefault(color => color.localizationTableKey == colorName);
+    }
     public static Item<eRims> FindRimByType(eRims type) {
-        return Common.rims.FirstOrDefault(rim => rim.type == type);
+        return Common.rims.FirstOrDefault(rims => rims.type == type);
+    }
+    public static Item<eRims> FindRimsByName(string rimName) {
+        return Common.rims.FirstOrDefault(rims => rims.localizationTableKey == rimName);
     }
     public static Color ColorFromHex(string col) {
         int intColor = Convert.ToInt32(col, 16); ;
