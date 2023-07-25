@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
 
 public class ToggleGroupBehaviour : MonoBehaviour {
@@ -8,6 +11,7 @@ public class ToggleGroupBehaviour : MonoBehaviour {
     Toggle defaultToggle;
     Toggle selectedToggle;
     Toggle[] toggles;
+    bool isInitialized = false;
 
     public event Action onToggleChanged;
     public event Action onToggleGroupInitialized;
@@ -16,8 +20,10 @@ public class ToggleGroupBehaviour : MonoBehaviour {
         return selectedToggle;
     }
 
-    public Toggle[] GetToggles() {
-        return toggles;
+    public List<Toggle> GetToggles() {
+        List<Toggle> result = new List<Toggle>();
+        result = toggles.ToList();
+        return result;
     }
 
     public void OnToggleStatusChanged() {
@@ -38,6 +44,10 @@ public class ToggleGroupBehaviour : MonoBehaviour {
     }
 
     public void InitializeToggles() {
+        if (isInitialized) {
+            return;
+        }
+        isInitialized = true;
         toggles = GetComponentsInChildren<Toggle>();
         foreach (Toggle toggle in toggles) {
             toggle.isOn = false;
@@ -48,10 +58,9 @@ public class ToggleGroupBehaviour : MonoBehaviour {
         onToggleGroupInitialized?.Invoke();
     }
 
-    void Start() {
-        toggles = GetComponentsInChildren<Toggle>();
+    void Awake() {
         if (toggles == null || toggles.Length < 1) {
-            return;
+            toggles = GetComponentsInChildren<Toggle>();
         }
         else {
             InitializeToggles();

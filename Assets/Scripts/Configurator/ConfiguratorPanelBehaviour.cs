@@ -44,15 +44,23 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
     bool isCoroutineActive = false;
     bool isPanelInitialized = false;
 
+    
+    public List<string> GetSelectedConfigurations() {
+        var selectedPackages = packages.Where(toggle => toggle.isOn).ToList();
+        int typesCount = Enum.GetNames(typeof(Common.eConfigurationType)).Length;
+        typesCount += selectedPackages.Count();
+        
+        string[] selectedToggles = new string[typesCount];
+        selectedToggles[(int)eConfigurationType.VERSION] = versionToggleGroupBehaviour.GetSelectedToggle().name;
+        selectedToggles[(int)eConfigurationType.DRIVE] = driveToggleGroupBehaviour.GetSelectedToggle().name;
+        selectedToggles[(int)eConfigurationType.COLOR] = colorsToggleGroupBehaviour.GetSelectedToggle().name;
+        selectedToggles[(int)eConfigurationType.RIMS] = rimsToggleGroupBehaviour.GetSelectedToggle().name;
+        
+        for (int i = 0; i < selectedPackages.Count(); i++) {
+            selectedToggles[(int)eConfigurationType.PACKAGE + i] = selectedPackages[i].name;
+        }
 
-    public List<Toggle> GetSelectedConfigurations() {
-        List<Toggle> selectedToggles = new List<Toggle>();
-        selectedToggles.Add(versionToggleGroupBehaviour.GetSelectedToggle());
-        selectedToggles.Add(driveToggleGroupBehaviour.GetSelectedToggle());
-        selectedToggles.Add(colorsToggleGroupBehaviour.GetSelectedToggle());
-        selectedToggles.Add(rimsToggleGroupBehaviour.GetSelectedToggle());
-        selectedToggles.AddRange(packages.Where(toggle => toggle.isOn));
-        return selectedToggles;
+        return selectedToggles.ToList();
     }
 
     void Awake() {
@@ -74,7 +82,7 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         isPanelInitialized = true;
     }
 
-    void ActivateToggles<T>(Toggle[] toggles, T dataCollection) where T : class {
+    void ActivateToggles<T>(List<Toggle> toggles, T dataCollection) where T : class {
         foreach (Toggle toggle in toggles) {
             string toggleName = toggle.gameObject.name;
 
@@ -92,7 +100,7 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         ActivateToggles(driveToggleGroupBehaviour.GetToggles(), currentVersion.drives);
         ActivateToggles(colorsToggleGroupBehaviour.GetToggles(), currentVersion.colorsData);
         ActivateToggles(rimsToggleGroupBehaviour.GetToggles(), currentVersion.rimsData);
-        ActivateToggles(packages.ToArray(), currentVersion.packages);
+        ActivateToggles(packages, currentVersion.packages);
     }
 
     void RefreshData() {

@@ -20,16 +20,23 @@ public class ConfigurationLoader : MonoBehaviour {
 
     List<ConfigData> configurations = new List<ConfigData>();
     List<GameObject> configurationObjects = new List<GameObject>();
+    bool isConfigurationSelected = false;
 
     const string configFileName = "configData.json";
 
     void OnEnable() {
+        isConfigurationSelected = false;
         LoadConfigurations();
         CreateConfigurationObjects();
     }
 
     void LoadConfigurations() {
         string filePath = Path.Combine(Application.persistentDataPath, configFileName);
+
+        if (!File.Exists(filePath)) {
+            return;
+        }
+
         configurations = new List<ConfigData>();
         object configs = JsonConvert.DeserializeObject(File.ReadAllText(filePath));
 
@@ -70,13 +77,7 @@ public class ConfigurationLoader : MonoBehaviour {
     }
 
     void DisplayClickedConfiguration(ConfigData config) {
-        //Common.eColor colorType = (Common.eColor)Enum.Parse(typeof(Common.eColor), config.color);
-        //Item<eColor> color = Common.FindColorByType(colorType);
-        //carColorChanger.ChangeElementsColor(color.hex);
-
-        //Common.eRims rimsType = (Common.eRims)Enum.Parse(typeof(Common.eRims), config.rims);
-        //Item<eRims> rims = Common.FindRimByType(rimsType);
-        //rimsColorChanger.ChangeElementsColor(rims.hex);
+        isConfigurationSelected = true;
 
         Item<eColor> color = Common.FindColorByName(config.color);
         carColorChanger.ChangeElementsColor(color.hex);
@@ -85,8 +86,10 @@ public class ConfigurationLoader : MonoBehaviour {
     }
 
     void OnDisable() {
-        carColorChanger.ChangeElementsColorToDefault();
-        rimsColorChanger.ChangeElementsColorToDefault();
+        if (isConfigurationSelected) {
+            carColorChanger.ChangeElementsColorToDefault();
+            rimsColorChanger.ChangeElementsColorToDefault();
+        }
         DestroyConfigObjects();
     }
 

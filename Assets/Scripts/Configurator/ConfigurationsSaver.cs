@@ -21,18 +21,18 @@ public class ConfigurationsSaver : MonoBehaviour {
     }
 
     void GetAndSaveConfigurations() {
-        List<Toggle> configurations = configuratorPanelBehaviour.GetSelectedConfigurations();
+        List<string> configurations = configuratorPanelBehaviour.GetSelectedConfigurations();
 
-        string version = configurations[(int)eConfigurationType.VERSION].name;
-        string drive = configurations[(int)eConfigurationType.DRIVE].name;
-        string color = configurations[(int)eConfigurationType.COLOR].name;
-        string rims = configurations[(int)eConfigurationType.RIMS].name;
+        string version = configurations[(int)eConfigurationType.VERSION];
+        string drive = configurations[(int)eConfigurationType.DRIVE];
+        string color = configurations[(int)eConfigurationType.COLOR];
+        string rims = configurations[(int)eConfigurationType.RIMS];
         List<string> packages = new List<string>();
 
         int packageFirstIndex = (int)eConfigurationType.PACKAGE;
 
         for (int i = packageFirstIndex; i < configurations.Count; ++i) {
-            packages.Add(configurations[i].name);
+            packages.Add(configurations[i]);
         }
 
         string currentDate = DateTime.Now.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
@@ -56,16 +56,18 @@ public class ConfigurationsSaver : MonoBehaviour {
     void SaveDataOnDisk(ConfigData newConfig) {
         string filePath = Path.Combine(Application.persistentDataPath, configFileName);
         List<ConfigData> configList = new List<ConfigData>();
+        
+        if (File.Exists(filePath)) {
+            object configs = JsonConvert.DeserializeObject(File.ReadAllText(filePath));
 
-        object configs = JsonConvert.DeserializeObject(File.ReadAllText(filePath));
-
-        if (configs is JArray entryArray) {
-            // if it is an array, deserialize it as a list of objects
-            configList = entryArray.ToObject<List<ConfigData>>();
-        }
-        else if (configs is JObject entryObject) {
-            // if it's a single object, deserialize it as a single object and add it to the list
-            configList.Add(entryObject.ToObject<ConfigData>());
+            if (configs is JArray entryArray) {
+                // if it is an array, deserialize it as a list of objects
+                configList = entryArray.ToObject<List<ConfigData>>();
+            }
+            else if (configs is JObject entryObject) {
+                // if it's a single object, deserialize it as a single object and add it to the list
+                configList.Add(entryObject.ToObject<ConfigData>());
+            }
         }
 
         configList.Add(newConfig);

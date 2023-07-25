@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using static TestDriveData;
-using Microsoft.CSharp;
-using System.Dynamic;
 
 public class TestDriveLoader {
     public async UniTask<List<string>> GetData(string url) {
