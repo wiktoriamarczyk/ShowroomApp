@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -55,19 +56,18 @@ public class ConfigurationsSaver : MonoBehaviour {
     void SaveDataOnDisk(ConfigData newConfig) {
         string filePath = Path.Combine(Application.persistentDataPath, configFileName);
         List<ConfigData> configList = new List<ConfigData>();
-        if (File.Exists(filePath)) {
-            string fileContent = File.ReadAllText(filePath);
-            if (!string.IsNullOrWhiteSpace(fileContent)) {
-                string existingData = File.ReadAllText(filePath);
-                if (existingData.StartsWith("[") && existingData.EndsWith("]")) {
-                    configList = JsonConvert.DeserializeObject<List<ConfigData>>(existingData);
-                }
-                else {
-                    ConfigData existingConfig = JsonConvert.DeserializeObject<ConfigData>(existingData);
-                    configList.Add(existingConfig);
-                }
-            }
+
+        object configs = JsonConvert.DeserializeObject(File.ReadAllText(filePath));
+
+        if (configs is JArray entryArray) {
+            // if it is an array, deserialize it as a list of objects
+            configList = entryArray.ToObject<List<ConfigData>>();
         }
+        else if (configs is JObject entryObject) {
+            // if it's a single object, deserialize it as a single object and add it to the list
+            configList.Add(entryObject.ToObject<ConfigData>());
+        }
+
         configList.Add(newConfig);
         string jsonData = JsonConvert.SerializeObject(configList);
         File.WriteAllText(filePath, jsonData);
