@@ -187,6 +187,30 @@ MonoBehaviour:
     m_Key: Save
     m_Metadata:
       m_Items: []
+  - m_Id: 9041853471670272
+    m_Key: Confirm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9041941224898560
+    m_Key: Cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9045074617450496
+    m_Key: Reset Event Date
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9048068348067840
+    m_Key: Delete Warning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9053744113795072
+    m_Key: Warning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9055418026967040
+    m_Key: Incorrect Data Warning
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

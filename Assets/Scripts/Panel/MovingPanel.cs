@@ -5,8 +5,8 @@ using UnityEngine.Events;
 public class MovingPanel : Panel {
     [SerializeField] GameObject hidePositionTarget;
     [SerializeField] bool hiddenOnAwake = true;
-    [Header("Is blocking other panles which have true")]
-    [SerializeField] bool blocking = true;
+    [Header("Is blocking other panels which have true on this var")]
+    [SerializeField] bool exclusiveVisibilityMode = false;
     [SerializeField] float animDuration = 0.5f;
     Tween currentTween;
     RectTransform rectTransform;
@@ -14,7 +14,7 @@ public class MovingPanel : Panel {
     Vector2 hidePosition;
 
     public override void PanelAwake() {
-        base.blockingOthers = blocking;
+        base.exclusiveVisibility = exclusiveVisibilityMode;
         base.isHiddenOnAwake = hiddenOnAwake;
         rectTransform = GetComponent<RectTransform>();
         showPosition = rectTransform.anchoredPosition;

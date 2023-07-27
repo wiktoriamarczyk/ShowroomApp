@@ -4,12 +4,12 @@ using UnityEngine;
 public class ScalablePanel : Panel {
     [SerializeField] float startAnimDuration = 0.5f;
     [SerializeField] float endAnimDuration = 0.35f;
-    [Header("Is blocking other panles which have true")]
-    [SerializeField] bool blocking = false;
+    [Header("Is blocking other panels which have true on this var")]
+    [SerializeField] bool exclusiveVisibilityMode = false;
     Tween currentTween;
 
     public override void PanelAwake() {
-        base.blockingOthers = blocking;
+        base.exclusiveVisibility = exclusiveVisibilityMode;
     }
 
     public override void Hide() {

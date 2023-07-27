@@ -39,7 +39,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 20314407452672
-    m_Localized: SEND
+    m_Localized: Send
     m_Metadata:
       m_Items: []
   - m_Id: 20563087736832
@@ -47,7 +47,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 20665323896832
-    m_Localized: REFRESH
+    m_Localized: Refresh
     m_Metadata:
       m_Items: []
   - m_Id: 21398798614528
@@ -59,7 +59,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 21538498297856
-    m_Localized: CREATE NEW CONFIGURATION
+    m_Localized: Create new configuration
     m_Metadata:
       m_Items: []
   - m_Id: 23785282093056
@@ -182,11 +182,35 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 2973938933305344
-    m_Localized: BACK
+    m_Localized: Back
     m_Metadata:
       m_Items: []
   - m_Id: 2974092809736192
-    m_Localized: SAVE
+    m_Localized: Save
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9041853471670272
+    m_Localized: Confirm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9041941224898560
+    m_Localized: Cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9045074617450496
+    m_Localized: Reset event date
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9048068348067840
+    m_Localized: Are you sure you want to permanently delete this data?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9053744113795072
+    m_Localized: Warning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9055418026967040
+    m_Localized: Enter all required data!
     m_Metadata:
       m_Items: []
   references:

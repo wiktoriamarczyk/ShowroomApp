@@ -39,7 +39,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 20314407452672
-    m_Localized: "WY\u015ALIJ"
+    m_Localized: "Wy\u015Blij"
     m_Metadata:
       m_Items: []
   - m_Id: 20563087736832
@@ -47,7 +47,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 20665323896832
-    m_Localized: "OD\u015AWIE\u017B"
+    m_Localized: "Od\u015Bwie\u017C"
     m_Metadata:
       m_Items: []
   - m_Id: 21398798614528
@@ -59,7 +59,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 21538498297856
-    m_Localized: "STW\xD3RZ KONFIGURACJ\u0118"
+    m_Localized: "Stw\xF3rz konfiguracj\u0119"
     m_Metadata:
       m_Items: []
   - m_Id: 23785282093056
@@ -183,11 +183,36 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 2973938933305344
-    m_Localized: "POWR\xD3T"
+    m_Localized: "Powr\xF3t"
     m_Metadata:
       m_Items: []
   - m_Id: 2974092809736192
-    m_Localized: ZAPISZ
+    m_Localized: Zapisz
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9041853471670272
+    m_Localized: "Potwierd\u017A"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9041941224898560
+    m_Localized: "Odrzu\u0107"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9045074617450496
+    m_Localized: Reset daty wydarzenia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9048068348067840
+    m_Localized: "Czy jeste\u015B pewien \u017Ce chcesz trwale usun\u0105\u0107 t\u0105
+      dan\u0105?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9053744113795072
+    m_Localized: Uwaga
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9055418026967040
+    m_Localized: "Wprowad\u017A wszystkie wymagane dane!"
     m_Metadata:
       m_Items: []
   references:

@@ -57,13 +57,14 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     async void OnEnable() {
         modifier = new TestDriveLoader();
         refresh.onClick.AddListener(async () => await RefreshAndInsertData());
-        submit.onClick.AddListener(OnSubmit);
+        submit.onClick.AddListener(async () => await OnSubmit());
         restart.onClick.AddListener(RestartFirstDayOfEvent);
         driveDate.onValueChanged.AddListener(delegate { ChangeDisplayedTime(); });
         driverName.onValueChanged.AddListener(delegate { OnNameChanged(); });
         registeredDates.onValueChanged.AddListener(delegate { DisplayRegisteredTestDrives(); });
         await RefreshAndInsertData();
         InsertDateAndTimeData();
+
     }
 
     void RestartFirstDayOfEvent() {
@@ -206,14 +207,14 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     }
 
 
-    async void OnSubmit() {
+    async UniTask OnSubmit() {
         string date = driveDate.captionText.text;
         string time = driveTime.captionText.text;
         string name = driverName.text;
 
         if (date == null || date == String.Empty ||
             time == null || time == string.Empty) {
-            Debug.Log("Enter proper data!");
+            await PanelManager.Instance.ShowPopup(Common.localizationIncorectDataWarning);
             return;
         }
 
@@ -236,7 +237,14 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         DisplayRegisteredTestDrives();
     }
 
-    async void OnDelete(GameObject item) {
+    async UniTask ShowDeletePopup(GameObject item) {
+        bool popupConfirm = await PanelManager.Instance.ShowPopup(Common.localizationDeleteWarning);
+        if (popupConfirm) {
+            await OnDelete(item);
+        }
+    }
+
+    async UniTask OnDelete(GameObject item) {
         TextMeshProUGUI textMeshPro = item.GetComponentInChildren<TextMeshProUGUI>();
         string listItem = textMeshPro.text;
         string formattedDate = ConvertInfoFromDisplayedToSaved(listItem);
@@ -254,7 +262,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         TextMeshProUGUI textMeshPro = testDriveItem.GetComponentInChildren<TextMeshProUGUI>();
         textMeshPro.text = testDriveInfo;
         Button deleteButton = testDriveItem.GetComponentInChildren<Button>();
-        deleteButton.onClick.AddListener(() => { OnDelete(testDriveItem); });
+        deleteButton.onClick.AddListener(async () => { await ShowDeletePopup(testDriveItem); });
         testDriveItem.transform.SetParent(testDriveList.transform);
         testDriveItem.transform.localScale = Vector3.one;
         testDriveObjects.Add(testDriveItem);

@@ -13,9 +13,9 @@ public class SceneManager : MonoBehaviour {
         PanelManager.Instance.onPanelClosed += cameraController.EnableRotation;
         cameraController.onCameraMovement += ShowHiddenUI;
         cameraController.onScreenSaver += HideUI;
+        return;
         gallery.onGalleryLoaded += DisableSplashScreen;
 
-        return;
         splashScreen.SetActive(true);
         cameraController.enabled = false;
     }

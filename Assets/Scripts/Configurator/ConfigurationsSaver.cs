@@ -40,7 +40,7 @@ public class ConfigurationsSaver : MonoBehaviour {
         int configNumber = Common.GetConfigurationCount();
 
         ConfigData configData = new ConfigData {
-            configName = Common.configName,
+            configName = Common.defaultConfigName,
             configNumber = configNumber,
             configDate = currentDate,
             version = version,

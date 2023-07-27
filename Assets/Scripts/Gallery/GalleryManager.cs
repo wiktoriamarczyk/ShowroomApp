@@ -8,7 +8,6 @@ public class GalleryManager : MonoBehaviour {
     [SerializeField] Panel galleryPanel;
     [SerializeField] GameObject imagesContainer;
     [SerializeField] Image centerImage;
-    [SerializeField] PostProcessingEffectsModifier galleryEffectsModifier;
 
     ImagesProvider imgProvider;
     ImagesSetter imgSetter;
@@ -47,8 +46,8 @@ public class GalleryManager : MonoBehaviour {
         imgSetter.centerImageProperty = centerImage;
         imgSetter.LoadTexture = GetFullSizeFromThumbnail;
 
-        galleryPanel.onPanelOpened += TurnOnGalleryEffects;
-        galleryPanel.onPanelClosed += TurnOffGalleryEffects;
+        galleryPanel.onPanelOpened += PanelManager.Instance.TurnOnBackgroundEffects;
+        galleryPanel.onPanelClosed += PanelManager.Instance.TurnOffBackgroundEffects;
 
         try {
             await imgProvider.LoadTexturesFromManifest(cancelToken, siteURL, new Vector2Int(385, 250));
@@ -62,18 +61,10 @@ public class GalleryManager : MonoBehaviour {
         onGalleryLoaded?.Invoke();
     }
 
-    void TurnOnGalleryEffects() {
-        galleryEffectsModifier.TurnOnBlurryDarkBackground();
-    }
-
-    void TurnOffGalleryEffects() {
-        galleryEffectsModifier.TurnOffBlurryDarkBackground();
-    }
-
     void OnDestroy() {
         cancelTokenSrc.Cancel();
         cancelTokenSrc.Dispose();
-        galleryPanel.onPanelOpened -= TurnOnGalleryEffects;
-        galleryPanel.onPanelClosed -= TurnOffGalleryEffects;
+        galleryPanel.onPanelOpened -= PanelManager.Instance.TurnOnBackgroundEffects;
+        galleryPanel.onPanelClosed -= PanelManager.Instance.TurnOffBackgroundEffects;
     }
 }

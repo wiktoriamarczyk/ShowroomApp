@@ -61,8 +61,6 @@ public class ToggleGroupBehaviour : MonoBehaviour {
     void Awake() {
         if (toggles == null || toggles.Length < 1) {
             toggles = GetComponentsInChildren<Toggle>();
-        }
-        else {
             InitializeToggles();
         }
     }

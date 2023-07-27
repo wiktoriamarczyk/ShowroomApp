@@ -44,18 +44,18 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
     bool isCoroutineActive = false;
     bool isPanelInitialized = false;
 
-    
+
     public List<string> GetSelectedConfigurations() {
         var selectedPackages = packages.Where(toggle => toggle.isOn).ToList();
         int typesCount = Enum.GetNames(typeof(Common.eConfigurationType)).Length;
         typesCount += selectedPackages.Count();
-        
+
         string[] selectedToggles = new string[typesCount];
         selectedToggles[(int)eConfigurationType.VERSION] = versionToggleGroupBehaviour.GetSelectedToggle().name;
         selectedToggles[(int)eConfigurationType.DRIVE] = driveToggleGroupBehaviour.GetSelectedToggle().name;
         selectedToggles[(int)eConfigurationType.COLOR] = colorsToggleGroupBehaviour.GetSelectedToggle().name;
         selectedToggles[(int)eConfigurationType.RIMS] = rimsToggleGroupBehaviour.GetSelectedToggle().name;
-        
+
         for (int i = 0; i < selectedPackages.Count(); i++) {
             selectedToggles[(int)eConfigurationType.PACKAGE + i] = selectedPackages[i].name;
         }
