@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static Common;
@@ -45,8 +46,6 @@ public class ConfigurationsSaver : MonoBehaviour {
         }
 
         string currentDate = DateTime.Now.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
-        Common.SetConfigurationCount(Common.GetConfigurationCount() + 1);
-        int configNumber = Common.GetConfigurationCount();
 
         ConfigData configData = new ConfigData {
             configName = configName,
@@ -58,29 +57,52 @@ public class ConfigurationsSaver : MonoBehaviour {
             packages = packages
         };
 
-        SaveDataOnDisk(configData);
+        await SaveDataOnDisk(configData);
     }
 
-    void SaveDataOnDisk(ConfigData newConfig) {
+    async UniTask SaveDataOnDisk(ConfigData newConfig) {
         string filePath = Path.Combine(Application.persistentDataPath, configFileName);
-        List<ConfigData> configList = new List<ConfigData>();
+        List<ConfigData> configList = LoadConfigList(filePath);
+        bool dataOverwrite = false;
 
-        if (File.Exists(filePath)) {
-            object configs = JsonConvert.DeserializeObject(File.ReadAllText(filePath));
-
-            if (configs is JArray entryArray) {
-                // if it is an array, deserialize it as a list of objects
-                configList = entryArray.ToObject<List<ConfigData>>();
-            }
-            else if (configs is JObject entryObject) {
-                // if it's a single object, deserialize it as a single object and add it to the list
-                configList.Add(entryObject.ToObject<ConfigData>());
+        if (configList != null) {
+            dataOverwrite = TryOverwriteConfig(newConfig, configList);
+            if (dataOverwrite) {
+                bool result = await PanelManager.Instance.ShowPopup(Common.ePopupType.DEFAULT, Common.localizationOverrideDataWarning);
+                if (!result) {
+                    return;
+                }
             }
         }
+        else {
+            configList = new List<ConfigData>();
+        }
 
-        configList.Add(newConfig);
+        if (!dataOverwrite) {
+            configList.Add(newConfig);
+        }
         string jsonData = JsonConvert.SerializeObject(configList);
         File.WriteAllText(filePath, jsonData);
-        Debug.Log(filePath);
+        Debug.Log("Config saved to: " + filePath);
+    }
+
+    List<ConfigData> LoadConfigList(string filePath) {
+        if (File.Exists(filePath)) {
+            string fileContent = File.ReadAllText(filePath);
+            if (!string.IsNullOrWhiteSpace(fileContent)) {
+                return JsonConvert.DeserializeObject<List<ConfigData>>(fileContent);
+            }
+        }
+        return null;
+    }
+
+    bool TryOverwriteConfig(ConfigData newConfig, List<ConfigData> configList) {
+        for (int i = 0; i < configList.Count; ++i) {
+            if (configList[i].configName == newConfig.configName) {
+                configList[i] = newConfig;
+                return true;
+            }
+        }
+        return false;
     }
 }

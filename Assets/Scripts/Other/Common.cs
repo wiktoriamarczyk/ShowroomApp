@@ -4,10 +4,13 @@ using System.Linq;
 using UnityEngine;
 
 public static class Common {
+    /* localization keys */
     public const string localizationTableName = "UI Text";
-    public const string localizationDeleteWarning = "Delete Warning";
+    public const string localizationDeleteWarning = "Data Deletion Warning";
     public const string localizationIncorectDataWarning = "Incorrect Data Warning";
+    public const string localizationOverrideDataWarning = "Override Data Warning";
     public const string localizationConfigNameInfo= "Enter Config Name";
+
     public const string defaultConfigName = "Config";
     public const string playerPrefsConfigCountName = "ConfigurationCount";
 
