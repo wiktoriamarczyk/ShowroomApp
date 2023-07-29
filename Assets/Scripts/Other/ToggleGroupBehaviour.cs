@@ -26,6 +26,11 @@ public class ToggleGroupBehaviour : MonoBehaviour {
         return result;
     }
 
+    public void SelectToggle(Toggle toggle) {
+        selectedToggle = toggle;
+        toggle.isOn = true;
+    }
+
     public void OnToggleStatusChanged() {
         if (!selectedToggle.gameObject.activeSelf) {
             selectedToggle.isOn = false;
@@ -36,8 +41,7 @@ public class ToggleGroupBehaviour : MonoBehaviour {
     void SelectFirstActiveToggle() {
         foreach (Toggle toggle in toggles) {
             if (toggle.gameObject.activeSelf) {
-                selectedToggle = toggle;
-                toggle.isOn = true;
+                SelectToggle(toggle);
                 break;
             }
         }

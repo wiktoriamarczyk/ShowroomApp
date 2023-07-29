@@ -44,6 +44,27 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
     bool isCoroutineActive = false;
     bool isPanelInitialized = false;
 
+    public void SelectConfigurations(ConfigData config) {
+        SelectToggles(versionToggleGroupBehaviour, config.version);
+        SetCurrentVersion(versionToggleGroupBehaviour.GetSelectedToggle().gameObject);
+
+        RefreshData();
+
+        SelectToggles(driveToggleGroupBehaviour, config.drive);
+        SelectToggles(colorsToggleGroupBehaviour, config.color);
+        SelectToggles(rimsToggleGroupBehaviour, config.rims);
+    }
+
+    void SelectToggles(ToggleGroupBehaviour toggleGroup, string nameToSelect) {
+        var toggles = toggleGroup.GetToggles();
+
+        foreach (var toggle in toggles) {
+            if (toggle.name == nameToSelect) {
+                toggleGroup.SelectToggle(toggle);
+                break;
+            }
+        }
+    }
 
     public List<string> GetSelectedConfigurations() {
         var selectedPackages = packages.Where(toggle => toggle.isOn).ToList();
@@ -106,7 +127,7 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
 
     void RefreshData() {
         if (isCoroutineActive) {
-            return;
+            StopAllCoroutines();
         }
         SetCurrentVersion(versionToggleGroupBehaviour.GetSelectedToggle().gameObject);
         StartCoroutine(ChangeDescription());

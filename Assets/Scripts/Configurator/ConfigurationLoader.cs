@@ -11,21 +11,26 @@ using System;
 using static Common;
 using System.Linq;
 using System.Drawing;
+using Unity.VisualScripting;
 
 public class ConfigurationLoader : MonoBehaviour {
    [SerializeField] GameObject configList;
    [SerializeField] GameObject configPrefab;
+   [SerializeField] Panel configPanel;
    [SerializeField] ColorChanger carColorChanger;
    [SerializeField] ColorChanger rimsColorChanger;
 
     List<ConfigData> configurations = new List<ConfigData>();
     List<GameObject> configurationObjects = new List<GameObject>();
-    bool isConfigurationSelected = false;
+    ConfiguratorPanelBehaviour configBehaviour;
 
     const string configFileName = "configData.json";
 
+    private void Awake() {
+        configBehaviour = configPanel.GetComponent<ConfiguratorPanelBehaviour>();
+    }
+
     void OnEnable() {
-        isConfigurationSelected = false;
         LoadConfigurations();
         CreateConfigurationObjects();
     }
@@ -37,17 +42,7 @@ public class ConfigurationLoader : MonoBehaviour {
             return;
         }
 
-        configurations = new List<ConfigData>();
-        object configs = JsonConvert.DeserializeObject(File.ReadAllText(filePath));
-
-        if (configs is JArray entryArray) {
-            // if it is an array, deserialize it as a list of objects
-            configurations = entryArray.ToObject<List<ConfigData>>();
-        }
-        else if (configs is JObject entryObject) {
-            // if it's a single object, deserialize it as a single object and add it to the list
-            configurations.Add(entryObject.ToObject<ConfigData>());
-        }
+        configurations = JsonConvert.DeserializeObject<List<ConfigData>>(File.ReadAllText(filePath));
     }
 
     void CreateConfigurationObject(ConfigData config) {
@@ -77,19 +72,11 @@ public class ConfigurationLoader : MonoBehaviour {
     }
 
     void DisplayClickedConfiguration(ConfigData config) {
-        isConfigurationSelected = true;
-
-        Item<eColor> color = Common.FindColorByName(config.color);
-        carColorChanger.ChangeElementsColor(color.hex);
-        Item<eRims> rims = Common.FindRimsByName(config.rims);
-        rimsColorChanger.ChangeElementsColor(rims.hex);
+        PanelManager.Instance.ShowPanel(configPanel);
+        configBehaviour.SelectConfigurations(config);
     }
 
     void OnDisable() {
-        if (isConfigurationSelected) {
-            carColorChanger.ChangeElementsColorToDefault();
-            rimsColorChanger.ChangeElementsColorToDefault();
-        }
         DestroyConfigObjects();
     }
 
