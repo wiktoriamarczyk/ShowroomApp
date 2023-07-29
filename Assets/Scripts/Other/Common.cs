@@ -7,15 +7,20 @@ public static class Common {
     public const string localizationTableName = "UI Text";
     public const string localizationDeleteWarning = "Delete Warning";
     public const string localizationIncorectDataWarning = "Incorrect Data Warning";
+    public const string localizationConfigNameInfo= "Enter Config Name";
     public const string defaultConfigName = "Config";
     public const string playerPrefsConfigCountName = "ConfigurationCount";
-    public static int configurationCount = 0;
 
     public static int GetConfigurationCount() {
         return PlayerPrefs.GetInt(playerPrefsConfigCountName);
     }
     public static void SetConfigurationCount(int value) {
         PlayerPrefs.SetInt(playerPrefsConfigCountName, value);
+    }
+
+    public enum ePopupType {
+        DEFAULT,
+        INPUT_FIELD
     }
 
     public enum eConfigurationType {

@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -17,18 +18,26 @@ public class ConfigurationsSaver : MonoBehaviour {
 
     void Awake() {
         configuratorPanelBehaviour = GetComponent<ConfiguratorPanelBehaviour>();
-        saveButton.onClick.AddListener(GetAndSaveConfigurations);
+        saveButton.onClick.AddListener(async () =>  await GetAndSaveConfiguration() );
     }
 
-    void GetAndSaveConfigurations() {
-        List<string> configurations = configuratorPanelBehaviour.GetSelectedConfigurations();
+    async UniTask GetAndSaveConfiguration() {
+        PanelManager.Instance.SetPopupDefaultInput(Common.defaultConfigName + " " + Common.GetConfigurationCount());
+        Common.SetConfigurationCount(Common.GetConfigurationCount() + 1);
 
+        bool result = await PanelManager.Instance.ShowPopup(Common.ePopupType.INPUT_FIELD, Common.localizationConfigNameInfo);
+        if (!result) {
+            return;
+        }
+
+        string configName = PanelManager.Instance.GetUserPopupInput();
+
+        List<string> configurations = configuratorPanelBehaviour.GetSelectedConfigurations();
         string version = configurations[(int)eConfigurationType.VERSION];
         string drive = configurations[(int)eConfigurationType.DRIVE];
         string color = configurations[(int)eConfigurationType.COLOR];
         string rims = configurations[(int)eConfigurationType.RIMS];
         List<string> packages = new List<string>();
-
         int packageFirstIndex = (int)eConfigurationType.PACKAGE;
 
         for (int i = packageFirstIndex; i < configurations.Count; ++i) {
@@ -40,8 +49,7 @@ public class ConfigurationsSaver : MonoBehaviour {
         int configNumber = Common.GetConfigurationCount();
 
         ConfigData configData = new ConfigData {
-            configName = Common.defaultConfigName,
-            configNumber = configNumber,
+            configName = configName,
             configDate = currentDate,
             version = version,
             drive = drive,
@@ -56,7 +64,7 @@ public class ConfigurationsSaver : MonoBehaviour {
     void SaveDataOnDisk(ConfigData newConfig) {
         string filePath = Path.Combine(Application.persistentDataPath, configFileName);
         List<ConfigData> configList = new List<ConfigData>();
-        
+
         if (File.Exists(filePath)) {
             object configs = JsonConvert.DeserializeObject(File.ReadAllText(filePath));
 

@@ -16,7 +16,13 @@ public class PopupController : MonoBehaviour {
     Panel panel;
     UniTaskCompletionSource<bool> popupTask;
     LocalizeStringEvent localization;
+    TMP_InputField inputField;
 
+    public void OnEnable() {
+        if (inputField != null) {
+            inputField.text = inputField.placeholder.GetComponent<TextMeshProUGUI>().text;
+        }
+    }
 
     public void Show() {
         panel.Show();
@@ -39,9 +45,16 @@ public class PopupController : MonoBehaviour {
         }
     }
 
+    public void SetInputFieldPlaceholder(string text) {
+        TextMeshProUGUI placeholder = inputField.placeholder.GetComponent<TextMeshProUGUI>();
+        if (placeholder == null) {
+            return;
+        }
+        placeholder.text = text;
+    }
+
     public string GetUserInput() {
         string result = string.Empty;
-        var inputField = GetComponent<TMP_InputField>();
         if (inputField != null) {
             result = inputField.text;
         }
@@ -53,7 +66,14 @@ public class PopupController : MonoBehaviour {
         mainButton.onClick.AddListener(() => OnButtonClick(true));
         altButton.onClick.AddListener(() => OnButtonClick(false));
         localization = textToDisplay.GetComponent<LocalizeStringEvent>();
-        Hide();
+        inputField = GetComponentInChildren<TMP_InputField>();
+        inputField?.onValueChanged.AddListener(OnInputFieldUpdate);
+    }
+
+    void OnInputFieldUpdate(string text) {
+        if (text == String.Empty) {
+            inputField.text = inputField.placeholder.GetComponent<TextMeshProUGUI>().text;
+        }
     }
 
     void OnButtonClick(bool value) {

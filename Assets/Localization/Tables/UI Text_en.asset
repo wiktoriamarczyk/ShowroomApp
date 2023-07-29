@@ -213,6 +213,10 @@ MonoBehaviour:
     m_Localized: Enter all required data!
     m_Metadata:
       m_Items: []
+  - m_Id: 9075787387518976
+    m_Localized: 'Enter configuration name:'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

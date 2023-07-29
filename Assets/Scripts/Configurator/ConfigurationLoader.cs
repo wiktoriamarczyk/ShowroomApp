@@ -52,7 +52,7 @@ public class ConfigurationLoader : MonoBehaviour {
 
     void CreateConfigurationObject(ConfigData config) {
         GameObject configObject = Instantiate(configPrefab);
-        configObject.name = config.configName + " " + config.configNumber;
+        configObject.name = config.configName;
         configObject.transform.SetParent(configList.transform);
         configObject.transform.localScale = Vector3.one;
 

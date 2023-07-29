@@ -47,7 +47,8 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
 
     public List<string> GetSelectedConfigurations() {
         var selectedPackages = packages.Where(toggle => toggle.isOn).ToList();
-        int typesCount = Enum.GetNames(typeof(Common.eConfigurationType)).Length;
+        //  int typesCount = Enum.GetNames(typeof(Common.eConfigurationType)).Length ;
+        int typesCount = (int)Common.eConfigurationType.PACKAGE;
         typesCount += selectedPackages.Count();
 
         string[] selectedToggles = new string[typesCount];
@@ -135,7 +136,6 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         }
         return ui;
     }
-
 
     void InitializeUIObjects() {
         foreach (var version in Common.versions) {

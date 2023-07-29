@@ -3,7 +3,6 @@ using System.Collections.Generic;
 [System.Serializable]
 public class ConfigData {
     public string configName;
-    public int configNumber;
     public string configDate;
     public string version;
     public string drive;

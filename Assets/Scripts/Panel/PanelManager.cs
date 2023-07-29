@@ -3,6 +3,7 @@ using UnityEngine;
 using System;
 using TMPro;
 using Cysharp.Threading.Tasks;
+using static Common;
 
 public class PanelManager : MonoBehaviour {
     static public PanelManager Instance;
@@ -38,21 +39,34 @@ public class PanelManager : MonoBehaviour {
         onPanelClosed?.Invoke();
     }
 
-    public async UniTask<bool> ShowPopup(string text) {
-        popupController.InitializePopup();
+    public async UniTask<bool> ShowPopup(ePopupType popupType, string text) {
+        PopupController popup;
+        if (popupType == ePopupType.INPUT_FIELD) {
+            popup = inputFieldPopupController;
+        } else {
+            popup = popupController;
+        }
         TurnOnBackgroundEffects();
         interactionController.Block();
-        popupController.Show();
-        popupController.SetTextToDisplay(text);
-        bool mainPopupClicked = await popupController.WaitForCloseAsync();
-        HidePopup();
+        popup.Show();
+        popup.SetTextToDisplay(text);
+        bool mainPopupClicked = await popup.WaitForCloseAsync();
+        HidePopup(popup);
         return mainPopupClicked;
     }
 
-    public void HidePopup() {
+    public void SetPopupDefaultInput(string text) {
+        inputFieldPopupController.SetInputFieldPlaceholder(text);
+    }
+
+    public string GetUserPopupInput() {
+        return inputFieldPopupController.GetUserInput();
+    }
+
+    public void HidePopup(PopupController popup) {
         TurnOffBackgroundEffects();
         interactionController.Enable();
-        popupController.Hide();
+        popup.Hide();
     }
 
 
@@ -91,7 +105,9 @@ public class PanelManager : MonoBehaviour {
         }
 
         popupController = popup.GetComponent<PopupController>();
+        popupController.InitializePopup();
         inputFieldPopupController = inputFieldPopup.GetComponent<PopupController>();
+        inputFieldPopupController.InitializePopup();
 
         foreach (var panel in panels) {
             panel.PanelAwake();

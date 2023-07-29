@@ -214,7 +214,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
 
         if (date == null || date == String.Empty ||
             time == null || time == string.Empty) {
-            await PanelManager.Instance.ShowPopup(Common.localizationIncorectDataWarning);
+            await PanelManager.Instance.ShowPopup(Common.ePopupType.DEFAULT, Common.localizationIncorectDataWarning);
             return;
         }
 
@@ -238,7 +238,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     }
 
     async UniTask ShowDeletePopup(GameObject item) {
-        bool popupConfirm = await PanelManager.Instance.ShowPopup(Common.localizationDeleteWarning);
+        bool popupConfirm = await PanelManager.Instance.ShowPopup(Common.ePopupType.DEFAULT, Common.localizationDeleteWarning);
         if (popupConfirm) {
             await OnDelete(item);
         }
