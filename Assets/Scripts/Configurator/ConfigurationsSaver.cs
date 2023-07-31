@@ -1,12 +1,9 @@
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static Common;
@@ -23,8 +20,7 @@ public class ConfigurationsSaver : MonoBehaviour {
     }
 
     async UniTask GetAndSaveConfiguration() {
-        PanelManager.Instance.SetPopupDefaultInput(Common.defaultConfigName + " " + Common.GetConfigurationCount());
-        Common.SetConfigurationCount(Common.GetConfigurationCount() + 1);
+        PanelManager.Instance.SetPopupDefaultInput(Common.GetDefaultConfigName());
 
         bool result = await PanelManager.Instance.ShowPopup(Common.ePopupType.INPUT_FIELD, Common.localizationConfigNameInfo);
         if (!result) {
@@ -32,6 +28,9 @@ public class ConfigurationsSaver : MonoBehaviour {
         }
 
         string configName = PanelManager.Instance.GetUserPopupInput();
+        if (configName == String.Empty) {
+            configName = GetDefaultConfigName();
+        }
 
         List<string> configurations = configuratorPanelBehaviour.GetSelectedConfigurations();
         string version = configurations[(int)eConfigurationType.VERSION];
@@ -83,6 +82,11 @@ public class ConfigurationsSaver : MonoBehaviour {
         }
         string jsonData = JsonConvert.SerializeObject(configList);
         File.WriteAllText(filePath, jsonData);
+
+        if (newConfig.configName == Common.GetDefaultConfigName()) {
+            Common.SetConfigurationCount(Common.GetConfigurationCount() + 1);
+        }
+
         Debug.Log("Config saved to: " + filePath);
     }
 

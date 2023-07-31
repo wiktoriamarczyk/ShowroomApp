@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using TMPro;
 using Cysharp.Threading.Tasks;
 using static Common;
 
@@ -68,7 +67,6 @@ public class PanelManager : MonoBehaviour {
         interactionController.Enable();
         popup.Hide();
     }
-
 
     public void HideCurrentPanel() {
         if (currentPanel == null) {

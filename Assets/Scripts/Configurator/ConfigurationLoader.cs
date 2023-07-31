@@ -1,17 +1,10 @@
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using TMPro;
-using UnityEngine.Localization.Components;
 using UnityEngine.UI;
-using System;
 using static Common;
-using System.Linq;
-using System.Drawing;
-using Unity.VisualScripting;
 
 public class ConfigurationLoader : MonoBehaviour {
    [SerializeField] GameObject configList;

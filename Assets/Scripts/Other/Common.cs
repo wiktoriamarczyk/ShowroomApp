@@ -14,18 +14,10 @@ public static class Common {
     public const string defaultConfigName = "Config";
     public const string playerPrefsConfigCountName = "ConfigurationCount";
 
-    public static int GetConfigurationCount() {
-        return PlayerPrefs.GetInt(playerPrefsConfigCountName);
-    }
-    public static void SetConfigurationCount(int value) {
-        PlayerPrefs.SetInt(playerPrefsConfigCountName, value);
-    }
-
     public enum ePopupType {
         DEFAULT,
         INPUT_FIELD
     }
-
     public enum eConfigurationType {
         VERSION,
         DRIVE,
@@ -64,10 +56,14 @@ public static class Common {
         TECHNOLOGY,
         LIGHTNING
     }
-    public struct Item<T> {
+    public class Item<T> {
         public T type;
         public string localizationTableKey;
         public string hex;
+
+        public void UpdateHex(string newHex) {
+            this.hex = newHex;
+        }
     }
     public struct VersionInfo {
         eVersion type;
@@ -109,10 +105,13 @@ public static class Common {
     public readonly static IReadOnlyList<Item<eRims>> rims = new List<Item<eRims>> {
         { new Item<eRims>{ type = eRims.BLACK,               localizationTableKey = "Black Color",           hex = "0x111111" } },
         { new Item<eRims>{ type = eRims.METAL,               localizationTableKey = "Metal Color",           hex = "0xEEEEEE" } },
-        { new Item<eRims>{ type = eRims.COLORMATCH,          localizationTableKey = "ColorMatch Color",      hex = "0xA2B6B9" } },
+        { new Item<eRims>{ type = eRims.COLORMATCH,          localizationTableKey = "ColorMatch Color",      hex = "0x000000" } },
     };
     public static Item<eColor> FindColorByType(eColor type) {
         return Common.colors.FirstOrDefault(color => color.type == type);
+    }
+    public static Item<eColor> FindColorByName(string name) {
+        return Common.colors.FirstOrDefault(color => color.localizationTableKey == name);
     }
     public static Item<eRims> FindRimByType(eRims type) {
         return Common.rims.FirstOrDefault(rims => rims.type == type);
@@ -125,4 +124,16 @@ public static class Common {
         float B = ((0xFF & intColor) >> 0) / 255.0f;
         return new Color(R, G, B);
     }
+    public static string GetDefaultConfigName() {
+        return defaultConfigName + " " + GetConfigurationCount();
+    }
+
+    public static int GetConfigurationCount() {
+        return PlayerPrefs.GetInt(playerPrefsConfigCountName);
+    }
+    public static void SetConfigurationCount(int value) {
+        PlayerPrefs.SetInt(playerPrefsConfigCountName, value);
+    }
+
+
 }

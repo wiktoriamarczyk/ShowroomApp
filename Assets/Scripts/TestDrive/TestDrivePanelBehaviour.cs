@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -91,6 +92,9 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         driveTime.ClearOptions();
         List<string> hoursList = new List<string>();
         DateTime earliestTime = DateTime.Now;
+        if (earliestTime.Hour >= latestDrivingHour || earliestTime.Hour <= earliestDrivingHour) {
+            EraseDropdownOptionAtIndex(driveDate, (int)eDate.TODAY);
+        }
         if (driveDate.value == (int)eDate.TODAY) {
             earliestTime = GetEarliestTestDriveTimeFromDate(DateTime.Now);
         }
@@ -206,14 +210,11 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         ChangeDisplayedTime();
     }
 
-
     async UniTask OnSubmit() {
         string date = driveDate.captionText.text;
         string time = driveTime.captionText.text;
         string name = driverName.text;
-
-        if (date == null || date == String.Empty ||
-            time == null || time == string.Empty) {
+        if (string.IsNullOrEmpty(date) || string.IsNullOrEmpty(time)) {
             await PanelManager.Instance.ShowPopup(Common.ePopupType.DEFAULT, Common.localizationIncorectDataWarning);
             return;
         }

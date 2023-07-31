@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using System.Linq;
 using static Common;
+using System.Reflection;
 
 public class ConfiguratorPanelBehaviour : MonoBehaviour {
     [SerializeField] ColorChanger carColorChanger;
@@ -37,10 +38,10 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
     ToggleGroupBehaviour driveToggleGroupBehaviour;
     ToggleGroupBehaviour colorsToggleGroupBehaviour;
     ToggleGroupBehaviour rimsToggleGroupBehaviour;
-    List<Toggle> packages = new List<Toggle>();
-
-    VersionData currentVersion;
     Dictionary<GameObject, VersionData> versions = new Dictionary<GameObject, VersionData>();
+    List<Toggle> packages = new List<Toggle>();
+    VersionData currentVersion;
+    List<GameObject> configObjects = new List<GameObject>();
     bool isCoroutineActive = false;
     bool isPanelInitialized = false;
 
@@ -53,17 +54,6 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         SelectToggles(driveToggleGroupBehaviour, config.drive);
         SelectToggles(colorsToggleGroupBehaviour, config.color);
         SelectToggles(rimsToggleGroupBehaviour, config.rims);
-    }
-
-    void SelectToggles(ToggleGroupBehaviour toggleGroup, string nameToSelect) {
-        var toggles = toggleGroup.GetToggles();
-
-        foreach (var toggle in toggles) {
-            if (toggle.name == nameToSelect) {
-                toggleGroup.SelectToggle(toggle);
-                break;
-            }
-        }
     }
 
     public List<string> GetSelectedConfigurations() {
@@ -104,6 +94,17 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         isPanelInitialized = true;
     }
 
+    void SelectToggles(ToggleGroupBehaviour toggleGroup, string nameToSelect) {
+        var toggles = toggleGroup.GetToggles();
+
+        foreach (var toggle in toggles) {
+            if (toggle.name == nameToSelect) {
+                toggleGroup.SelectToggle(toggle);
+                break;
+            }
+        }
+    }
+
     void ActivateToggles<T>(List<Toggle> toggles, T dataCollection) where T : class {
         foreach (Toggle toggle in toggles) {
             string toggleName = toggle.gameObject.name;
@@ -123,6 +124,8 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         ActivateToggles(colorsToggleGroupBehaviour.GetToggles(), currentVersion.colorsData);
         ActivateToggles(rimsToggleGroupBehaviour.GetToggles(), currentVersion.rimsData);
         ActivateToggles(packages, currentVersion.packages);
+
+
     }
 
     void RefreshData() {
@@ -155,6 +158,7 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         } else if (textMeshPro != null) {
             textMeshPro.text = name;
         }
+        configObjects.Add(ui);
         return ui;
     }
 
@@ -174,14 +178,14 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
             var colorObject = CreateUIObject(color.localizationTableKey, colorsToggleGroup.gameObject, colorTogglePrefab);
             colorObject.GetComponent<Toggle>().group = colorsToggleGroup;
             colorObject.GetComponentInChildren<Image>().color = Common.ColorFromHex(color.hex);
-            colorObject.GetComponent<Toggle>().onValueChanged.AddListener((value) => OnColorChanged(value, color.hex, carColorChanger));
+            colorObject.GetComponent<Toggle>().onValueChanged.AddListener((value) => OnCarColorChanged(value, color.hex));
         }
 
         foreach (var rim in Common.rims) {
             var rimObject = CreateUIObject(rim.localizationTableKey, rimsToggleGroup.gameObject, colorTogglePrefab);
             rimObject.GetComponent<Toggle>().group = rimsToggleGroup;
             rimObject.GetComponentInChildren<Image>().color = Common.ColorFromHex(rim.hex);
-            rimObject.GetComponent<Toggle>().onValueChanged.AddListener((value) => OnColorChanged(value, rim.hex, rimsColorChanger));
+            rimObject.GetComponent<Toggle>().onValueChanged.AddListener((value) => OnRimsColorChanged(value, rim.hex));
         }
 
         /* let toggle group know that toggles were made dynamically */
@@ -199,9 +203,29 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         }
     }
 
-    void OnColorChanged(bool value, string colorHex, ColorChanger colorChanger) {
+    void OnCarColorChanged(bool value, string colorHex) {
         if (value) {
-            colorChanger.ChangeElementsColor(colorHex);
+            carColorChanger.ChangeElementsColor(colorHex);
+            UpdateColorMatch(colorHex);
+            if (rimsToggleGroupBehaviour.GetSelectedToggle().name == FindRimByType(eRims.COLORMATCH).localizationTableKey) {
+                OnRimsColorChanged(true, colorHex);
+            }
+        }
+    }
+
+    void UpdateColorMatch(string colorHex) {
+        Item<eRims> colorMatchRims = FindRimByType(eRims.COLORMATCH);
+        colorMatchRims.UpdateHex(colorHex);
+
+        GameObject foundObject = configObjects.Find(obj => obj.name == FindRimByType(eRims.COLORMATCH).localizationTableKey);
+        if (foundObject != null) {
+            foundObject.GetComponentInChildren<Image>().color = Common.ColorFromHex(colorHex);
+        }
+    }
+
+    void OnRimsColorChanged(bool value, string colorHex) {
+        if (value) {
+            rimsColorChanger.ChangeElementsColor(colorHex);
         }
     }
 
@@ -257,5 +281,9 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
     void OnDestroy() {
         versionToggleGroupBehaviour.onToggleChanged -= RefreshData;
         LocaleSelector.onLanguageChanged -= RefreshData;
+
+        foreach(var obj in configObjects) {
+            Destroy(obj);
+        }
     }
 }

@@ -1,9 +1,5 @@
 using Cysharp.Threading.Tasks;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Localization.Editor;
 using UnityEngine;
 using UnityEngine.Localization.Components;
 using UnityEngine.UI;
@@ -17,11 +13,10 @@ public class PopupController : MonoBehaviour {
     UniTaskCompletionSource<bool> popupTask;
     LocalizeStringEvent localization;
     TMP_InputField inputField;
+    string placeholderText;
 
     public void OnEnable() {
-        if (inputField != null) {
-            inputField.text = inputField.placeholder.GetComponent<TextMeshProUGUI>().text;
-        }
+        SetInputFieldPlaceholder(placeholderText);
     }
 
     public void Show() {
@@ -46,11 +41,12 @@ public class PopupController : MonoBehaviour {
     }
 
     public void SetInputFieldPlaceholder(string text) {
-        TextMeshProUGUI placeholder = inputField.placeholder.GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI placeholder = inputField?.placeholder.GetComponent<TextMeshProUGUI>();
         if (placeholder == null) {
             return;
         }
         placeholder.text = text;
+        placeholderText = text;
     }
 
     public string GetUserInput() {
@@ -67,14 +63,8 @@ public class PopupController : MonoBehaviour {
         altButton.onClick.AddListener(() => OnButtonClick(false));
         localization = textToDisplay.GetComponent<LocalizeStringEvent>();
         inputField = GetComponentInChildren<TMP_InputField>();
-        inputField?.onValueChanged.AddListener(OnInputFieldUpdate);
     }
 
-    void OnInputFieldUpdate(string text) {
-        if (text == String.Empty) {
-            inputField.text = inputField.placeholder.GetComponent<TextMeshProUGUI>().text;
-        }
-    }
 
     void OnButtonClick(bool value) {
         popupTask.TrySetResult(value);
