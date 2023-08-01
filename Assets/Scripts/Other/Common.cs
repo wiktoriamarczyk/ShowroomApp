@@ -60,6 +60,7 @@ public static class Common {
         public T type;
         public string localizationTableKey;
         public string hex;
+        public bool optional;
 
         public void UpdateHex(string newHex) {
             this.hex = newHex;
@@ -95,17 +96,17 @@ public static class Common {
         { ePackage.LIGHTNING,   "Lightning Package" }
     };
     public readonly static IReadOnlyList<Item<eColor>> colors = new List<Item<eColor>> {
-        { new Item<eColor>{ type = eColor.BLACK_STONE,     localizationTableKey = "Black Stone Color",     hex = "0x111111" } },
-        { new Item<eColor>{ type = eColor.ICE_WHITE,       localizationTableKey = "Ice White Color",       hex = "0xEEEEEE" } },
-        { new Item<eColor>{ type = eColor.CLOUD_BLUE,      localizationTableKey = "Cloud Blue Color",      hex = "0x55BFD4" } },
-        { new Item<eColor>{ type = eColor.RACE_RED,        localizationTableKey = "Race Red Color",        hex = "0xBD162C" } },
-        { new Item<eColor>{ type = eColor.MAGENTA_FUSION,  localizationTableKey = "Magenta Fusion Color",  hex = "0xFF00FF" } },
-        { new Item<eColor>{ type = eColor.ITS_LIME_GREEN,  localizationTableKey = "Its Lime Green Color",  hex = "0x32CD32" } },
+        { new Item<eColor>{ type = eColor.BLACK_STONE,     localizationTableKey = "Black Stone Color",     hex = "0x111111",   optional = false } },
+        { new Item<eColor>{ type = eColor.ICE_WHITE,       localizationTableKey = "Ice White Color",       hex = "0xEEEEEE",   optional = false } },
+        { new Item<eColor>{ type = eColor.CLOUD_BLUE,      localizationTableKey = "Cloud Blue Color",      hex = "0x55BFD4",   optional = true } },
+        { new Item<eColor>{ type = eColor.RACE_RED,        localizationTableKey = "Race Red Color",        hex = "0xBD162C",   optional = true } },
+        { new Item<eColor>{ type = eColor.MAGENTA_FUSION,  localizationTableKey = "Magenta Fusion Color",  hex = "0xFF00FF",   optional = true } },
+        { new Item<eColor>{ type = eColor.ITS_LIME_GREEN,  localizationTableKey = "Its Lime Green Color",  hex = "0x32CD32",   optional = true } },
     };
     public readonly static IReadOnlyList<Item<eRims>> rims = new List<Item<eRims>> {
-        { new Item<eRims>{ type = eRims.BLACK,               localizationTableKey = "Black Color",           hex = "0x111111" } },
-        { new Item<eRims>{ type = eRims.METAL,               localizationTableKey = "Metal Color",           hex = "0xEEEEEE" } },
-        { new Item<eRims>{ type = eRims.COLORMATCH,          localizationTableKey = "ColorMatch Color",      hex = "0x000000" } },
+        { new Item<eRims>{ type = eRims.BLACK,               localizationTableKey = "Black Color",           hex = "0x111111", optional = false } },
+        { new Item<eRims>{ type = eRims.METAL,               localizationTableKey = "Metal Color",           hex = "0xEEEEEE", optional = false } },
+        { new Item<eRims>{ type = eRims.COLORMATCH,          localizationTableKey = "ColorMatch Color",      hex = "0x000000", optional = false } },
     };
     public static Item<eColor> FindColorByType(eColor type) {
         return Common.colors.FirstOrDefault(color => color.type == type);

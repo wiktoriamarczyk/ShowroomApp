@@ -155,7 +155,8 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
             localization.OnUpdateString.AddListener((string value) => { textMeshPro.text = value; });
             localization.StringReference.TableReference = Common.localizationTableName;
             localization.StringReference.TableEntryReference = name;
-        } else if (textMeshPro != null) {
+        }
+        else if (textMeshPro != null && string.IsNullOrEmpty(textMeshPro.text)) {
             textMeshPro.text = name;
         }
         configObjects.Add(ui);
@@ -179,6 +180,7 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
             colorObject.GetComponent<Toggle>().group = colorsToggleGroup;
             colorObject.GetComponentInChildren<Image>().color = Common.ColorFromHex(color.hex);
             colorObject.GetComponent<Toggle>().onValueChanged.AddListener((value) => OnCarColorChanged(value, color.hex));
+            colorObject.GetComponentInChildren<ToggleOverlayController>().SetOptionalIndicatorVisibility(color.optional);
         }
 
         foreach (var rim in Common.rims) {
@@ -186,6 +188,7 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
             rimObject.GetComponent<Toggle>().group = rimsToggleGroup;
             rimObject.GetComponentInChildren<Image>().color = Common.ColorFromHex(rim.hex);
             rimObject.GetComponent<Toggle>().onValueChanged.AddListener((value) => OnRimsColorChanged(value, rim.hex));
+            rimObject.GetComponentInChildren<ToggleOverlayController>().SetOptionalIndicatorVisibility(rim.optional);
         }
 
         /* let toggle group know that toggles were made dynamically */
