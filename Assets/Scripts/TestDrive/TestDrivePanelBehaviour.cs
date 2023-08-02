@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
 
 
@@ -20,6 +21,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     [SerializeField] Button restart;
     [SerializeField] GameObject testDriveItemPrefab;
     [SerializeField] GameObject testDriveList;
+    [SerializeField] GameObject loaderObject;
 
     TestDriveLoader modifier;
     List<GameObject> testDriveObjects = new List<GameObject>();
@@ -111,7 +113,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
 
     List<string> RemoveOccupiedHours(List<string> hours) {
         int selectedDateIndex = driveDate.value;
-        if (selectedDateIndex < 1) {
+        if (selectedDateIndex < 0) {
             return hours;
         }
         string selectedDate = driveDate.options[selectedDateIndex].text;
@@ -228,7 +230,10 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
 
         string formattedDate = ConvertInfoFromDisplayedToSaved(date + " " + time);
         string finalUrl = Path.Combine(modifyDataPath, "add/" + formattedDate + urlAddition);
+
+        ActivateLoader();
         await modifier.UpdateData(finalUrl);
+        DeactivateLoader();
 
         AddTestDrive(date + " " + time + " " + name);
 
@@ -253,7 +258,9 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         string itemDateAndTime = textMeshPro.text;
         string formattedDate = ConvertInfoFromDisplayedToSaved(itemDateAndTime);
         string url = Path.Combine(modifyDataPath, "delete/" + formattedDate);
+        ActivateLoader();
         await modifier.UpdateData(url);
+        DeactivateLoader();
         testDriveObjects.Remove(item);
         Destroy(item);
         await RefreshAndInsertRegisteredData();
@@ -279,7 +286,11 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
             }
             testDriveObjects.Clear();
         }
+
+        ActivateLoader();
         List<string> data = await modifier.GetData(dataPath);
+        DeactivateLoader();
+
         data.Sort();
         for (int i = 0; i < data.Count; ++i) {
             data[i] = ConvertInfoFromSavedToDisplayed(data[i]);
@@ -293,6 +304,16 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         foreach (var obj in testDriveObjects) {
             Destroy(obj);
         }
+    }
+
+    void ActivateLoader() {
+        loaderObject.SetActive(true);
+        loaderObject.GetComponent<Loader>().StartLoader();
+    }
+
+    void DeactivateLoader() {
+        loaderObject.GetComponent<Loader>().StopLoader();
+        loaderObject.SetActive(false);
     }
 
     static void EraseDropdownOptionAtIndex(TMP_Dropdown dropdown, int index) {

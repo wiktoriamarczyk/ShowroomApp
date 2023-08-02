@@ -4,6 +4,7 @@ using System;
 public abstract class Panel : MonoBehaviour {
     public event Action onPanelOpened;
     public event Action onPanelClosed;
+    protected bool isPanelShown = false;
     protected bool exclusiveVisibility = false;
     protected bool isHiddenOnAwake = true;
     public bool ExclusiveVisibility() {
@@ -12,7 +13,16 @@ public abstract class Panel : MonoBehaviour {
     public bool IsHiddenOnAwake() {
         return isHiddenOnAwake;
     }
+    public bool IsPanelShown() {
+        return isPanelShown;
+    }
     public abstract void PanelAwake();
-    public virtual void Show() { onPanelOpened?.Invoke(); }
-    public virtual void Hide() { onPanelClosed?.Invoke(); }
+    public virtual void Show() { 
+        onPanelOpened?.Invoke(); 
+        isPanelShown = true;
+    }
+    public virtual void Hide() { 
+        onPanelClosed?.Invoke();
+        isPanelShown = false;
+    }
 }

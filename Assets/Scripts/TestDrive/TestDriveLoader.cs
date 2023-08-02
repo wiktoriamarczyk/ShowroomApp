@@ -1,13 +1,17 @@
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using static TestDriveData;
 
-public class TestDriveLoader {
+public class TestDriveLoader { 
     public async UniTask<List<string>> GetData(string url) {
+#if DEBUG
+        await Delay();
+#endif
         using (UnityWebRequest uwr = UnityWebRequest.Get(url)) {
             await uwr.SendWebRequest();
 
@@ -44,6 +48,9 @@ public class TestDriveLoader {
     }
 
     public async UniTask<bool> UpdateData(string url) {
+#if DEBUG
+        await Delay();
+#endif
         using (UnityWebRequest uwr = UnityWebRequest.Get(url)) {
             await uwr.SendWebRequest();
             if (uwr.result != UnityWebRequest.Result.Success) {
@@ -52,5 +59,9 @@ public class TestDriveLoader {
             }
             return true;
         }
+    }
+    
+    static async UniTask Delay() {
+        await UniTask.Delay(TimeSpan.FromSeconds(Common.dreamloDebugDelay), ignoreTimeScale: false);
     }
 }

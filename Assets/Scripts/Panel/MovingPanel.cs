@@ -26,6 +26,8 @@ public class MovingPanel : Panel {
         currentTween?.Kill();
         currentTween = rectTransform.DOAnchorPos(hidePosition, animDuration);
         currentTween.onComplete = () => gameObject.SetActive(false);
+        if (gameObject.name == "Test Drive Panel")
+            Debug.Log(gameObject.name + "|||CLOSED|||");
     }
 
     public override void Show() {
@@ -33,6 +35,8 @@ public class MovingPanel : Panel {
         currentTween?.Kill();
         gameObject.SetActive(true);
         currentTween = rectTransform.DOAnchorPos(showPosition, animDuration);
+        if (gameObject.name == "Test Drive Panel")
+        Debug.Log(gameObject.name + "---OPENED---");
     }
 
     void OnEnable() {

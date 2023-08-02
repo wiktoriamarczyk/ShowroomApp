@@ -14,6 +14,8 @@ public static class Common {
     public const string defaultConfigName = "Config";
     public const string playerPrefsConfigCountName = "ConfigurationCount";
 
+    public static readonly float dreamloDebugDelay = 3f;
+
     public enum ePopupType {
         DEFAULT,
         INPUT_FIELD

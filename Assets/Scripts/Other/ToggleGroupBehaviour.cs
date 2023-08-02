@@ -69,32 +69,30 @@ public class ToggleGroupBehaviour : MonoBehaviour {
     }
 
     void OnToggleValueChanged(Toggle toggle, bool value) {
-        ColorBlock colorBlock;
-        colorBlock = toggle.colors;
+        Image toggleImg = toggle.gameObject.GetComponentInChildren<Image>();
         Icon icon = toggle.GetComponentInChildren<Icon>();
         if (value) {
             selectedToggle = toggle;
             onToggleChanged?.Invoke();
-            colorBlock.normalColor = toggleOnColor;
+            toggleImg.color = toggleOnColor;
             icon?.ChangeToAlternativeColor();
         }
         else {
-            colorBlock.normalColor = toggleOffColor;
+            toggleImg.color = toggleOffColor;
             icon?.ChangeToDefaultColor();
         }
-        toggle.colors = colorBlock;
         toggle.interactable = !value;
     }
 
-    void OnEnable() {
-        if (selectedToggle != null) {
-            selectedToggle.isOn = true;
-        }
-    }
+    //void OnEnable() {
+    //    if (selectedToggle != null) {
+    //        selectedToggle.isOn = true;
+    //    }
+    //}
 
-    void OnDisable() {
-        foreach (Toggle toggle in toggles) {
-            toggle.isOn = false;
-        }
-    }
+    //void OnDisable() {
+    //    foreach (Toggle toggle in toggles) {
+    //        toggle.isOn = false;
+    //    }
+    //}
 }

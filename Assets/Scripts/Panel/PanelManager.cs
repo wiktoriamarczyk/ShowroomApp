@@ -20,10 +20,27 @@ public class PanelManager : MonoBehaviour {
     public event Action onPanelOpened;
     public event Action onPanelClosed;
 
+    List<Panel> prevOpenedPanels = new List<Panel>();
+
+    public void HideAllPanels() {
+        foreach (Panel panel in panels) {
+            if (IsPanelShown(panel.gameObject)) {
+                prevOpenedPanels.Add(panel);
+                HidePanel(panel);
+            }
+        }
+    }
+
+    public void ShowAllPrevOpenedPanels() {
+        foreach (Panel panel in prevOpenedPanels) {
+            ShowPanel(panel);
+        }
+    }
+    
     public void ShowPanel(Panel panel) {
         bool exclusiveVisibility = panel.ExclusiveVisibility();
         if (exclusiveVisibility) {
-            if (currentPanel == panel) {
+            if (currentPanel == panel && IsPanelShown(panel.gameObject)) {
                 return;
             }
             HideCurrentPanel();
@@ -36,6 +53,14 @@ public class PanelManager : MonoBehaviour {
     public void HidePanel(Panel panel) {
         panel.Hide();
         onPanelClosed?.Invoke();
+    }
+
+    public void HideCurrentPanel() {
+        if (currentPanel == null) {
+            return;
+        }
+        HidePanel(currentPanel);
+        currentPanel = null;
     }
 
     public async UniTask<bool> ShowPopup(ePopupType popupType, string text) {
@@ -67,21 +92,11 @@ public class PanelManager : MonoBehaviour {
         interactionController.Enable();
         popup.Hide();
     }
-
-    public void HideCurrentPanel() {
-        if (currentPanel == null) {
-            return;
-        }
-        HidePanel(currentPanel);
-        currentPanel = null;
-    }
-
+    
     public bool IsPanelShown(GameObject obj) {
-        if (currentPanel == null) {
-            return false;
-        }
-        else if (obj == currentPanel.gameObject) {
-            return true;
+        Panel panel = obj.GetComponent<Panel>();
+        if (panel != null) {
+            return panel.IsPanelShown();
         }
         return false;
     }
@@ -111,6 +126,8 @@ public class PanelManager : MonoBehaviour {
             panel.PanelAwake();
             if (panel.IsHiddenOnAwake()) {
                 panel.Hide();
+            } else {
+                panel.Show();
             }
         }
     }
