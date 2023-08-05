@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 4191432121101710535}
   - component: {fileID: 5251858620119146709}
   m_Layer: 5
-  m_Name: Ellipse
+  m_Name: Indicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -307,7 +307,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4141736780343296497
 RectTransform:
   m_ObjectHideFlags: 0
@@ -349,7 +349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.05882353, g: 0.29803923, b: 0.5058824, a: 0.4627451}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -379,6 +379,7 @@ GameObject:
   - component: {fileID: 8155397281046653737}
   - component: {fileID: 1034796458068706677}
   - component: {fileID: 2134546964832436689}
+  - component: {fileID: 2981163629976209545}
   m_Layer: 5
   m_Name: ColorToggle
   m_TagString: Untagged
@@ -464,7 +465,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -491,19 +492,7 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2134546964832436689}
-        m_TargetAssemblyTypeName: ToggleOverlayController, Assembly-CSharp
-        m_MethodName: SetOverlayVisibility
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_IsOn: 0
 --- !u!114 &2134546964832436689
 MonoBehaviour:
@@ -517,5 +506,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 185e34a3627dbb9409bc2b1bd3ec3e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overlay: {fileID: 4258326493945822717}
   optionalIndicator: {fileID: 1715273633406318001}
+--- !u!114 &2981163629976209545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8171094084875332214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f5071692df97814fa726803922bf7c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imageColorOn: {r: 0.05882353, g: 0.29803923, b: 0.5058824, a: 0.48235294}
+  frameColorOn: {r: 0, g: 0, b: 0, a: 0}
+  image: {fileID: 3948081909189717877}
+  frameImage: {fileID: 0}
+  onToggleOn:
+    m_PersistentCalls:
+      m_Calls: []

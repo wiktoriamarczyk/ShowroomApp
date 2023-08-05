@@ -1,7 +1,10 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public static class Common {
     /* localization keys */
@@ -9,12 +12,15 @@ public static class Common {
     public const string localizationDeleteWarning = "Data Deletion Warning";
     public const string localizationIncorectDataWarning = "Incorrect Data Warning";
     public const string localizationOverrideDataWarning = "Override Data Warning";
+    public const string localizationOperationFailedWarning = "Operation Failed Warning";
     public const string localizationConfigNameInfo= "Enter Config Name";
+    public const string localizationAll = "All";
+    public const string localizationToday = "Today";
 
     public const string defaultConfigName = "Config";
     public const string playerPrefsConfigCountName = "ConfigurationCount";
 
-    public static readonly float dreamloDebugDelay = 3f;
+    public static readonly float dreamloDebugDelay = 2f;
 
     public enum ePopupType {
         DEFAULT,
@@ -137,6 +143,20 @@ public static class Common {
     public static void SetConfigurationCount(int value) {
         PlayerPrefs.SetInt(playerPrefsConfigCountName, value);
     }
+    public static async UniTask<string> GetLocalizationEntry(string localizationKey) {
+        string localizationTableKey = localizationKey;
+        string text = String.Empty;
+        var operation = LocalizationSettings.StringDatabase.GetLocalizedStringAsync(Common.localizationTableName, localizationTableKey, new object[] { text });
 
+        await operation;
+
+        if (operation.Status == AsyncOperationStatus.Succeeded) {
+            return operation.Result;
+        }
+        else {
+            Debug.Log("Failed to get localization entry!");
+            return String.Empty;
+        }
+    }
 
 }

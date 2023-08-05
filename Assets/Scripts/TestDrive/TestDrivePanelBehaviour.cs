@@ -1,15 +1,18 @@
 using Cysharp.Threading.Tasks;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
-
+using UnityEngine.Video;
 
 public class TestDrivePanelBehaviour : MonoBehaviour {
     [SerializeField] TMP_Dropdown driveDate;
@@ -25,6 +28,8 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
 
     TestDriveLoader modifier;
     List<GameObject> testDriveObjects = new List<GameObject>();
+    CancellationTokenSource cancelTokenSrc;
+    CancellationToken cancelToken;
 
     const string modifyDataPath = "http://dreamlo.com/lb/-Ur0ruQAokKXyyv8uxxT0wOw8r3LFlWUyISb24jdTvEw/";
     const string dataPath = "http://dreamlo.com/lb/6486be2b8f40bb7d84121bba/json";
@@ -59,6 +64,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
 
     void Awake() {
         modifier = new TestDriveLoader();
+        LocaleSelector.onLanguageChanged += UpdateLocalization;
         refresh.onClick.AddListener(async () => await RefreshAndInsertRegisteredData());
         submit.onClick.AddListener(async () => await OnSubmit());
         restart.onClick.AddListener(RestartFirstDayOfEvent);
@@ -68,6 +74,8 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     }
 
     async void OnEnable() {
+        cancelTokenSrc = new CancellationTokenSource();
+        cancelToken = cancelTokenSrc.Token;
         await RefreshAndInsertRegisteredData();
         InsertDateAndTimeData();
     }
@@ -149,11 +157,14 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         return testDrivesDates;
     }
 
-    void InsertRegisteredTestDrivesDatesToDropdown() {
+    async void InsertRegisteredTestDrivesDatesToDropdown() {
         registeredDates.ClearOptions();
         List<string> dropdownInfo = new List<string>();
-        dropdownInfo.Add("All");
-        dropdownInfo.Add("Today");
+        string dropdownAllOption = await Common.GetLocalizationEntry(Common.localizationAll);
+        string dropdownTodayOption = await Common.GetLocalizationEntry(Common.localizationToday);
+        dropdownInfo.Add(dropdownAllOption);
+        dropdownInfo.Add(dropdownTodayOption);
+
         List<string> testDrives = GetRegisteredTestDrivesDates();
         List<string> uniqueTestDrives = testDrives.Union(testDrives).ToList();
 
@@ -169,6 +180,15 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
 
         dropdownInfo.AddRange(uniqueTestDrives);
         registeredDates.AddOptions(dropdownInfo);
+    }
+
+    async void UpdateLocalization() {
+        await UpdateLocalizationAsync();
+    }
+
+    async UniTask UpdateLocalizationAsync() {
+        registeredDates.options[0].text = await Common.GetLocalizationEntry(Common.localizationAll);
+        registeredDates.options[1].text = await Common.GetLocalizationEntry(Common.localizationToday);
     }
 
     void DisplayRegisteredTestDrives() {
@@ -231,9 +251,11 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         string formattedDate = ConvertInfoFromDisplayedToSaved(date + " " + time);
         string finalUrl = Path.Combine(modifyDataPath, "add/" + formattedDate + urlAddition);
 
-        ActivateLoader();
-        await modifier.UpdateData(finalUrl);
-        DeactivateLoader();
+        bool webOperationResult = await SendDataToWeb(finalUrl);
+        if (!webOperationResult) {
+            await PanelManager.Instance.ShowPopup(Common.ePopupType.DEFAULT, Common.localizationOperationFailedWarning);
+            return;
+        }
 
         AddTestDrive(date + " " + time + " " + name);
 
@@ -258,9 +280,11 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         string itemDateAndTime = textMeshPro.text;
         string formattedDate = ConvertInfoFromDisplayedToSaved(itemDateAndTime);
         string url = Path.Combine(modifyDataPath, "delete/" + formattedDate);
-        ActivateLoader();
-        await modifier.UpdateData(url);
-        DeactivateLoader();
+        bool webOperationResult = await SendDataToWeb(url);
+        if (!webOperationResult) {
+            await PanelManager.Instance.ShowPopup(Common.ePopupType.DEFAULT, Common.localizationOperationFailedWarning);
+            return;
+        }
         testDriveObjects.Remove(item);
         Destroy(item);
         await RefreshAndInsertRegisteredData();
@@ -280,17 +304,9 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     }
 
     async UniTask RefreshAndInsertRegisteredData() {
-        if (testDriveObjects.Count > 0) {
-            foreach (var item in testDriveObjects) {
-                Destroy(item);
-            }
-            testDriveObjects.Clear();
-        }
+        DestroyObjects();
 
-        ActivateLoader();
-        List<string> data = await modifier.GetData(dataPath);
-        DeactivateLoader();
-
+        List<string> data = await GetWebData(dataPath);
         data.Sort();
         for (int i = 0; i < data.Count; ++i) {
             data[i] = ConvertInfoFromSavedToDisplayed(data[i]);
@@ -300,10 +316,11 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         DisplayRegisteredTestDrives();
     }
 
-    void OnDestroy() {
+    void DestroyObjects() {
         foreach (var obj in testDriveObjects) {
             Destroy(obj);
         }
+        testDriveObjects.Clear();
     }
 
     void ActivateLoader() {
@@ -314,6 +331,38 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     void DeactivateLoader() {
         loaderObject.GetComponent<Loader>().StopLoader();
         loaderObject.SetActive(false);
+    }
+
+    async UniTask<List<string>> GetWebData(string url) {
+        ActivateLoader();
+        List<string> data = new List<string>();
+        try {
+            data = await modifier.GetData(dataPath, cancelToken);
+        }
+         catch (System.OperationCanceledException) {
+            Debug.Log("Test drive operation canceled");
+        }
+        DeactivateLoader();
+        return data;
+    }
+
+    async UniTask<bool> SendDataToWeb(string url) {
+        ActivateLoader();
+        bool result = false;
+        try {
+            result = await modifier.UpdateData(url, cancelToken);
+        }
+        catch (System.OperationCanceledException) {
+            Debug.Log("Test drive operation canceled");
+        }
+        DeactivateLoader();
+        return result;
+    }
+
+    void OnDisable() {
+        cancelTokenSrc.Cancel();
+        cancelTokenSrc.Dispose();
+        DestroyObjects();
     }
 
     static void EraseDropdownOptionAtIndex(TMP_Dropdown dropdown, int index) {

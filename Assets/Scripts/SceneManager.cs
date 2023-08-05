@@ -8,8 +8,8 @@ public class SceneManager : MonoBehaviour {
     [SerializeField] GalleryManager gallery;
 
     void Awake() {
-       // cameraController.onScreenSaver += PanelManager.Instance.HideAllPanels;
-        //cameraController.onCameraMovement += PanelManager.Instance.ShowAllPrevOpenedPanels;
+        cameraController.onScreenSaver += PanelManager.Instance.HideAllPanels;
+        cameraController.onCameraMovement += PanelManager.Instance.ShowAllPrevOpenedPanels;
 
         return;
         gallery.onGalleryLoaded += DisableSplashScreen;

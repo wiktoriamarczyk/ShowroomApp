@@ -17,11 +17,11 @@ public abstract class Panel : MonoBehaviour {
         return isPanelShown;
     }
     public abstract void PanelAwake();
-    public virtual void Show() { 
-        onPanelOpened?.Invoke(); 
+    public virtual void Show() {
+        onPanelOpened?.Invoke();
         isPanelShown = true;
     }
-    public virtual void Hide() { 
+    public virtual void Hide() {
         onPanelClosed?.Invoke();
         isPanelShown = false;
     }

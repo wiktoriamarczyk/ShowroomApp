@@ -96,9 +96,13 @@ PrefabInstance:
       value: ClickableListItem
       objectReference: {fileID: 0}
     - target: {fileID: 8537361171011469506, guid: 0b3ca6f461a9a3443b981b1edba1b648, type: 3}
+      propertyPath: m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8537361171011469506, guid: 0b3ca6f461a9a3443b981b1edba1b648, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 0694ad4a9d948d74ba9c245c755cba0d, type: 3}
+      objectReference: {fileID: 21300000, guid: 32e6a5a0f64562e4eb70fdee35db9c54, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b3ca6f461a9a3443b981b1edba1b648, type: 3}
 --- !u!114 &333734720239019177 stripped
@@ -136,7 +140,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}

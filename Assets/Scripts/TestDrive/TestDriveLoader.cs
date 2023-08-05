@@ -3,16 +3,18 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Networking;
 using static TestDriveData;
 
-public class TestDriveLoader { 
-    public async UniTask<List<string>> GetData(string url) {
+public class TestDriveLoader {
+    public async UniTask<List<string>> GetData(string url, CancellationToken cancellationToken) {
 #if DEBUG
         await Delay();
 #endif
         using (UnityWebRequest uwr = UnityWebRequest.Get(url)) {
+            cancellationToken.ThrowIfCancellationRequested();
             await uwr.SendWebRequest();
 
             if (uwr.result != UnityWebRequest.Result.Success) {
@@ -47,11 +49,12 @@ public class TestDriveLoader {
         }
     }
 
-    public async UniTask<bool> UpdateData(string url) {
+    public async UniTask<bool> UpdateData(string url, CancellationToken cancellationToken) {
 #if DEBUG
         await Delay();
 #endif
         using (UnityWebRequest uwr = UnityWebRequest.Get(url)) {
+            cancellationToken.ThrowIfCancellationRequested();
             await uwr.SendWebRequest();
             if (uwr.result != UnityWebRequest.Result.Success) {
                 Debug.Log(uwr.error);
@@ -60,7 +63,7 @@ public class TestDriveLoader {
             return true;
         }
     }
-    
+
     static async UniTask Delay() {
         await UniTask.Delay(TimeSpan.FromSeconds(Common.dreamloDebugDelay), ignoreTimeScale: false);
     }

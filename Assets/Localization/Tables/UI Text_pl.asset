@@ -224,6 +224,18 @@ MonoBehaviour:
       pewien \u017Ce chcesz j\u0105 nadpisa\u0107?"
     m_Metadata:
       m_Items: []
+  - m_Id: 11562763990745088
+    m_Localized: "Operacja si\u0119 nie powiod\u0142a"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11567812280205312
+    m_Localized: Wszystkie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11567839287328768
+    m_Localized: "Dzi\u015B"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

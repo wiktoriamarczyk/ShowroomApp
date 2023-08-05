@@ -5,8 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ToggleGroupBehaviour : MonoBehaviour {
-    [SerializeField] Color toggleOffColor;
-    [SerializeField] Color toggleOnColor;
     Toggle defaultToggle;
     Toggle selectedToggle;
     Toggle[] toggles;
@@ -20,14 +18,15 @@ public class ToggleGroupBehaviour : MonoBehaviour {
     }
 
     public List<Toggle> GetToggles() {
-        List<Toggle> result = new List<Toggle>();
-        result = toggles.ToList();
-        return result;
+        return toggles.ToList();
     }
 
     public void SelectToggle(Toggle toggle) {
+        if (selectedToggle != null) {
+            selectedToggle.isOn = false;
+        }
         selectedToggle = toggle;
-        toggle.isOn = true;
+        selectedToggle.isOn = true;
     }
 
     public void OnToggleStatusChanged() {
@@ -52,6 +51,9 @@ public class ToggleGroupBehaviour : MonoBehaviour {
         }
         isInitialized = true;
         toggles = GetComponentsInChildren<Toggle>();
+        if (toggles == null || toggles.Length < 1) {
+            return;
+        }
         foreach (Toggle toggle in toggles) {
             toggle.isOn = false;
             toggle.onValueChanged.AddListener((bool value) => OnToggleValueChanged(toggle, value));
@@ -62,37 +64,39 @@ public class ToggleGroupBehaviour : MonoBehaviour {
     }
 
     void Awake() {
-        if (toggles == null || toggles.Length < 1) {
-            toggles = GetComponentsInChildren<Toggle>();
+        /* Call initialize only when at least one toggle exists.
+         * This occurs when toggles are defined statically. */
+        Toggle[] currentToggles = GetComponentsInChildren<Toggle>();
+        if (currentToggles != null && currentToggles.Length >= 1) {
             InitializeToggles();
         }
     }
 
     void OnToggleValueChanged(Toggle toggle, bool value) {
-        Image toggleImg = toggle.gameObject.GetComponentInChildren<Image>();
+        ColorBlock colorBlock = toggle.colors;
+        ToggleBehaviour toggleBehaviour = toggle.gameObject.GetComponent<ToggleBehaviour>();
         Icon icon = toggle.GetComponentInChildren<Icon>();
         if (value) {
             selectedToggle = toggle;
             onToggleChanged?.Invoke();
-            toggleImg.color = toggleOnColor;
+           // toggleBehaviour?.ToggleOn();
             icon?.ChangeToAlternativeColor();
         }
         else {
-            toggleImg.color = toggleOffColor;
+            //toggleBehaviour?.ToggleOff();
             icon?.ChangeToDefaultColor();
         }
-        toggle.interactable = !value;
     }
 
-    //void OnEnable() {
-    //    if (selectedToggle != null) {
-    //        selectedToggle.isOn = true;
-    //    }
-    //}
+    void OnEnable() {
+        if (selectedToggle != null) {
+            selectedToggle.isOn = true;
+        }
+    }
 
-    //void OnDisable() {
-    //    foreach (Toggle toggle in toggles) {
-    //        toggle.isOn = false;
-    //    }
-    //}
+    void OnDisable() {
+        foreach (Toggle toggle in toggles) {
+            toggle.isOn = false;
+        }
+    }
 }

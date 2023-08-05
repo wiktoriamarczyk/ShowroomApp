@@ -9,13 +9,10 @@ public class PanelManager : MonoBehaviour {
 
     [SerializeField] InteractionController interactionController;
     [SerializeField] List<Panel> panels;
-    [SerializeField] GameObject popup;
-    [SerializeField] GameObject inputFieldPopup;
+    [SerializeField] List<PopupController> popups;
     [SerializeField] PostProcessingEffectsModifier backgroundEffects;
 
     Panel currentPanel;
-    PopupController popupController;
-    PopupController inputFieldPopupController;
 
     public event Action onPanelOpened;
     public event Action onPanelClosed;
@@ -23,6 +20,7 @@ public class PanelManager : MonoBehaviour {
     List<Panel> prevOpenedPanels = new List<Panel>();
 
     public void HideAllPanels() {
+        prevOpenedPanels.Clear();
         foreach (Panel panel in panels) {
             if (IsPanelShown(panel.gameObject)) {
                 prevOpenedPanels.Add(panel);
@@ -36,7 +34,7 @@ public class PanelManager : MonoBehaviour {
             ShowPanel(panel);
         }
     }
-    
+
     public void ShowPanel(Panel panel) {
         bool exclusiveVisibility = panel.ExclusiveVisibility();
         if (exclusiveVisibility) {
@@ -63,28 +61,35 @@ public class PanelManager : MonoBehaviour {
         currentPanel = null;
     }
 
+    T GetPopupByType<T>(ePopupType popupType) where T : class {
+        foreach (var popup in popups) {
+            if (popup.GetPopupType() == popupType) {
+                return popup as T;
+            }
+        }
+        return null;
+    }
+
     public async UniTask<bool> ShowPopup(ePopupType popupType, string text) {
-        PopupController popup;
-        if (popupType == ePopupType.INPUT_FIELD) {
-            popup = inputFieldPopupController;
-        } else {
-            popup = popupController;
+        PopupController selectedPopupController = GetPopupByType <PopupController>(popupType);
+        if (selectedPopupController == null) {
+            return false;
         }
         TurnOnBackgroundEffects();
         interactionController.Block();
-        popup.Show();
-        popup.SetTextToDisplay(text);
-        bool mainPopupClicked = await popup.WaitForCloseAsync();
-        HidePopup(popup);
+        selectedPopupController.Show();
+        selectedPopupController.SetTextToDisplay(text);
+        bool mainPopupClicked = await selectedPopupController.WaitForCloseAsync();
+        HidePopup(selectedPopupController);
         return mainPopupClicked;
     }
 
     public void SetPopupDefaultInput(string text) {
-        inputFieldPopupController.SetInputFieldPlaceholder(text);
+        GetPopupByType<PopupController>(Common.ePopupType.INPUT_FIELD)?.SetInputFieldPlaceholder(text);
     }
 
     public string GetUserPopupInput() {
-        return inputFieldPopupController.GetUserInput();
+        return GetPopupByType<PopupController>(Common.ePopupType.INPUT_FIELD)?.GetUserInput();
     }
 
     public void HidePopup(PopupController popup) {
@@ -92,7 +97,7 @@ public class PanelManager : MonoBehaviour {
         interactionController.Enable();
         popup.Hide();
     }
-    
+
     public bool IsPanelShown(GameObject obj) {
         Panel panel = obj.GetComponent<Panel>();
         if (panel != null) {
@@ -117,10 +122,9 @@ public class PanelManager : MonoBehaviour {
             Instance = this;
         }
 
-        popupController = popup.GetComponent<PopupController>();
-        popupController.InitializePopup();
-        inputFieldPopupController = inputFieldPopup.GetComponent<PopupController>();
-        inputFieldPopupController.InitializePopup();
+        foreach (var popup in popups) {
+            popup.PopupAwake();
+        }
 
         foreach (var panel in panels) {
             panel.PanelAwake();

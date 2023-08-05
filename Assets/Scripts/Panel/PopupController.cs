@@ -8,6 +8,7 @@ public class PopupController : MonoBehaviour {
     [SerializeField] Button mainButton;
     [SerializeField] Button altButton;
     [SerializeField] TextMeshProUGUI textToDisplay;
+    [SerializeField] Common.ePopupType type;
 
     Panel panel;
     UniTaskCompletionSource<bool> popupTask;
@@ -25,6 +26,10 @@ public class PopupController : MonoBehaviour {
 
     public void Hide() {
         panel.Hide();
+    }
+
+    public Common.ePopupType GetPopupType() {
+        return type;
     }
 
     public UniTask<bool> WaitForCloseAsync() {
@@ -57,7 +62,7 @@ public class PopupController : MonoBehaviour {
         return result;
     }
 
-   public void InitializePopup() {
+   public void PopupAwake() {
         panel = GetComponent<Panel>();
         mainButton.onClick.AddListener(() => OnButtonClick(true));
         altButton.onClick.AddListener(() => OnButtonClick(false));

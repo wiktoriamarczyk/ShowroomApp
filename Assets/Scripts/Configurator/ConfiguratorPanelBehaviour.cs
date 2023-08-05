@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using System.Linq;
 using static Common;
-using System.Reflection;
+using UnityEngine.Events;
 
 public class ConfiguratorPanelBehaviour : MonoBehaviour {
     [SerializeField] ColorChanger carColorChanger;
@@ -54,6 +54,11 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         SelectToggles(driveToggleGroupBehaviour, config.drive);
         SelectToggles(colorsToggleGroupBehaviour, config.color);
         SelectToggles(rimsToggleGroupBehaviour, config.rims);
+
+        foreach (var package in packages) {
+            package.isOn = config.packages.Contains(package.name);
+        }
+
     }
 
     public List<string> GetSelectedConfigurations() {
@@ -90,8 +95,8 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         if (!isPanelInitialized) {
             InitializeUIObjects();
         }
-        RefreshData();
         isPanelInitialized = true;
+        RefreshData();
     }
 
     void SelectToggles(ToggleGroupBehaviour toggleGroup, string nameToSelect) {
@@ -124,18 +129,18 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         ActivateToggles(colorsToggleGroupBehaviour.GetToggles(), currentVersion.colorsData);
         ActivateToggles(rimsToggleGroupBehaviour.GetToggles(), currentVersion.rimsData);
         ActivateToggles(packages, currentVersion.packages);
-
-
     }
 
-    void RefreshData() {
+    async void RefreshData() {
         if (isCoroutineActive) {
             StopAllCoroutines();
         }
         SetCurrentVersion(versionToggleGroupBehaviour.GetSelectedToggle().gameObject);
-        StartCoroutine(ChangeDescription());
+        versionDescription.text = await Common.GetLocalizationEntry(currentVersion.description);
+        //StartCoroutine(ChangeDescription());
         ActivateObjects();
         RefreshSelectedToggles();
+        StartCoroutine(RefreshLayout());
     }
 
     void RefreshSelectedToggles() {
@@ -163,6 +168,18 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         return ui;
     }
 
+    void InitializeColorToggles<T>(IReadOnlyList<Item<T>> list, ToggleGroup toggleGroup, GameObject togglePrefab, UnityAction<bool,string> callback) {
+        foreach (var element in list) {
+            var colorObject = CreateUIObject(element.localizationTableKey, toggleGroup.gameObject, togglePrefab);
+            Toggle toggleComponent = colorObject.GetComponent<Toggle>();
+            Image image = colorObject.GetComponentInChildren<Image>();
+            toggleComponent.group = toggleGroup;
+            image.color = Common.ColorFromHex(element.hex);
+            toggleComponent.onValueChanged.AddListener((value) => callback(value, element.hex) );
+            colorObject.GetComponentInChildren<OptionalIndicatorController>().SetOptionalIndicatorVisibility(element.optional);
+        }
+    }
+
     void InitializeUIObjects() {
         foreach (var version in Common.versions) {
             GameObject versionObject = CreateUIObject(version.Value, versionToggleGroup.gameObject, versionTogglePrefab);
@@ -175,21 +192,9 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
             driveObject.GetComponent<Toggle>().group = driveToggleGroup;
         }
 
-        foreach (var color in Common.colors) {
-            var colorObject = CreateUIObject(color.localizationTableKey, colorsToggleGroup.gameObject, colorTogglePrefab);
-            colorObject.GetComponent<Toggle>().group = colorsToggleGroup;
-            colorObject.GetComponentInChildren<Image>().color = Common.ColorFromHex(color.hex);
-            colorObject.GetComponent<Toggle>().onValueChanged.AddListener((value) => OnCarColorChanged(value, color.hex));
-            colorObject.GetComponentInChildren<ToggleOverlayController>().SetOptionalIndicatorVisibility(color.optional);
-        }
+        InitializeColorToggles<eColor>(Common.colors, colorsToggleGroup, colorTogglePrefab, OnCarColorChanged );
+        InitializeColorToggles<eRims>(Common.rims, rimsToggleGroup, colorTogglePrefab, OnRimsColorChanged);
 
-        foreach (var rim in Common.rims) {
-            var rimObject = CreateUIObject(rim.localizationTableKey, rimsToggleGroup.gameObject, colorTogglePrefab);
-            rimObject.GetComponent<Toggle>().group = rimsToggleGroup;
-            rimObject.GetComponentInChildren<Image>().color = Common.ColorFromHex(rim.hex);
-            rimObject.GetComponent<Toggle>().onValueChanged.AddListener((value) => OnRimsColorChanged(value, rim.hex));
-            rimObject.GetComponentInChildren<ToggleOverlayController>().SetOptionalIndicatorVisibility(rim.optional);
-        }
 
         /* let toggle group know that toggles were made dynamically */
         versionToggleGroupBehaviour.InitializeToggles();
@@ -249,6 +254,13 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         return null;
     }
 
+    IEnumerator RefreshLayout() {
+        isCoroutineActive = true;
+        yield return new WaitForSeconds(0.01f);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(transformToRefresh);
+        isCoroutineActive = false;
+    }
+
     IEnumerator ChangeDescription() {
         isCoroutineActive = true;
         string localizationTableKey = currentVersion.description;
@@ -269,16 +281,13 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         StartCoroutine(RefreshLayout());
     }
 
-    IEnumerator RefreshLayout() {
-        isCoroutineActive = true;
-        yield return new WaitForSeconds(0.01f);
-        LayoutRebuilder.ForceRebuildLayoutImmediate(transformToRefresh);
-        isCoroutineActive = false;
-    }
-
     void OnDisable() {
         carColorChanger.ChangeElementsColorToDefault();
         rimsColorChanger.ChangeElementsColorToDefault();
+
+        foreach (var package in packages) {
+            package.isOn = false;
+        }
     }
 
     void OnDestroy() {
