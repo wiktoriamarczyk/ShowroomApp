@@ -1,7 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 struct CatmulRomSegment {
     public Vector3[] points;
@@ -13,31 +13,37 @@ public class MoveTowardsTarget : MonoBehaviour {
     [SerializeField] GameObject positionTarget;
     [SerializeField] GameObject leftWindowCP;
     [SerializeField] GameObject rightWindowCP;
-    [SerializeField] Toggle activator;
     [SerializeField] float cameraSpeed = 3f;
 
     Vector3 lastPosition = new Vector3();
     List<CatmulRomSegment> currentCameraPath;
+    public event Action<eAnimType> onAnimStart;
+    public event Action<eAnimType> onAnimEnd;
     bool isCoroutineActive = false;
+    public enum eAnimType {
+        ENTER_CAR,
+        EXIT_CAR
+    }
+    
+    public bool hasCameraReachedDestination {
+        get { return isCoroutineActive; }
+    }
 
     const float offsetFromWindow = 1f;
     const float offsetFromTarget = 0.66f;
-
-    private void Awake() {
-        activator.onValueChanged.AddListener(ChangePosition);
-    }
 
     public void ChangePosition(bool forward) {
         if (isCoroutineActive) {
             return;
         }
+        eAnimType type = forward ? eAnimType.ENTER_CAR : eAnimType.EXIT_CAR;
 
         if (forward) {
             lastPosition = transform.position;
-        } 
+        }
 
         currentCameraPath = GenerateCatmulRomSegments(lastPosition, cameraSpeed, forward);
-        StartCoroutine(SetNewPosition());
+        StartCoroutine(SetNewPosition(type));
     }
 
     List<CatmulRomSegment> GenerateCatmulRomSegments(Vector3 camPos, float speed, bool forward) {
@@ -119,9 +125,9 @@ public class MoveTowardsTarget : MonoBehaviour {
         return CatmullRom(segment.points[0], segment.points[1], segment.points[2], segment.points[3], t);
     }
 
-    IEnumerator SetNewPosition() {
+    IEnumerator SetNewPosition(eAnimType type) {
         isCoroutineActive = true;
-        activator.interactable = false;
+        onAnimStart?.Invoke(type);
         while (currentCameraPath.Count > 0) {
             CatmulRomSegment currentSegment = currentCameraPath[0];
             currentCameraPath.RemoveAt(0);
@@ -135,7 +141,7 @@ public class MoveTowardsTarget : MonoBehaviour {
             }
         }
         isCoroutineActive = false;
-        activator.interactable = true;
+        onAnimEnd?.Invoke(type);
     }
 
 }

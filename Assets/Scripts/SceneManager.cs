@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SceneManager : MonoBehaviour {
     [SerializeField] GameObject splashScreen;
-    [SerializeField] CameraController cameraController;
+    [SerializeField] OutsideCameraMovement cameraController;
     [SerializeField] GalleryManager gallery;
 
     void Awake() {
