@@ -113,10 +113,10 @@ public class CameraController : MonoBehaviour {
     void HandlePlayerInput() {
         /* Whenever the left mouse button is pressed, the mouse cursor's position
          and current time is remembered */
-        bool IsTouchActive = Input.touchCount > 0;
+        bool isTouchActive = Input.touchCount > 0;
 
-        if ( (!IsTouchActive && Input.GetMouseButtonDown(0)) ||
-             (IsTouchActive && Input.GetTouch(0).phase == TouchPhase.Began)) {
+        if ( (!isTouchActive && Input.GetMouseButtonDown(0)) ||
+             (isTouchActive && Input.GetTouch(0).phase == TouchPhase.Began)) {
             lastTime = Time.time;
             swipeStartPos = lastPosition = ScreenToWorldPosition(Input.mousePosition);
             directMovementControl = true;
@@ -126,8 +126,8 @@ public class CameraController : MonoBehaviour {
             speed = (lastPosition - ScreenToWorldPosition(Input.mousePosition)) / Time.deltaTime * movementSpeed * distanceToSpeedMultiplier;
         }
         // when user releases left mouse button, gesture is ended
-        if ( (!IsTouchActive && Input.GetMouseButtonUp(0)) ||
-             (IsTouchActive && Input.GetTouch(0).phase == TouchPhase.Ended) ) {
+        if ( (!isTouchActive && Input.GetMouseButtonUp(0)) ||
+             (isTouchActive && Input.GetTouch(0).phase == TouchPhase.Ended) ) {
             directMovementControl = false;
             // calculate time from gesture start to now
             float time = Time.time - lastTime;

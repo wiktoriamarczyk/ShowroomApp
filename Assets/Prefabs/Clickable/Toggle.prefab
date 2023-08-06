@@ -145,3 +145,6 @@ MonoBehaviour:
   onToggleOn:
     m_PersistentCalls:
       m_Calls: []
+  onToggleOff:
+    m_PersistentCalls:
+      m_Calls: []

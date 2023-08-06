@@ -1,9 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 struct CatmulRomSegment {
     public Vector3[] points;
@@ -15,42 +13,34 @@ public class MoveTowardsTarget : MonoBehaviour {
     [SerializeField] GameObject positionTarget;
     [SerializeField] GameObject leftWindowCP;
     [SerializeField] GameObject rightWindowCP;
+    [SerializeField] Toggle activator;
     [SerializeField] float cameraSpeed = 3f;
 
     Vector3 lastPosition = new Vector3();
     List<CatmulRomSegment> currentCameraPath;
-    List<CatmulRomSegment> returnCameraPath = new List<CatmulRomSegment>();
     bool isCoroutineActive = false;
 
     const float offsetFromWindow = 1f;
     const float offsetFromTarget = 0.66f;
 
-    public void ChangePosition() {
+    private void Awake() {
+        activator.onValueChanged.AddListener(ChangePosition);
+    }
+
+    public void ChangePosition(bool forward) {
         if (isCoroutineActive) {
             return;
         }
 
-        Vector3 targetPosition = positionTarget.transform.position;
-        if (transform.position == positionTarget.transform.position) {
-            targetPosition = lastPosition;
-        }
-        else {
+        if (forward) {
             lastPosition = transform.position;
-            targetPosition = positionTarget.transform.position;
-        }
+        } 
 
-        currentCameraPath = GenerateCatmulRomSegments(cameraSpeed);
-        for (int i = currentCameraPath.Count - 1; i >= 0; --i) {
-            CatmulRomSegment segment = new CatmulRomSegment();
-            segment.speedMultiplier = currentCameraPath[i].speedMultiplier;
-            segment.points = new Vector3[4] { currentCameraPath[i].points[3], currentCameraPath[i].points[2], currentCameraPath[i].points[1], currentCameraPath[i].points[0] };
-            returnCameraPath.Add(segment);
-        }
+        currentCameraPath = GenerateCatmulRomSegments(lastPosition, cameraSpeed, forward);
         StartCoroutine(SetNewPosition());
     }
 
-    List<CatmulRomSegment> GenerateCatmulRomSegments(float speed) {
-        Vector3 camPos = transform.position;
+    List<CatmulRomSegment> GenerateCatmulRomSegments(Vector3 camPos, float speed, bool forward) {
         Vector3 leftWindowPos = leftWindowCP.transform.position;
         Vector3 rightWindowPos = rightWindowCP.transform.position;
         Vector3 seatPos = positionTarget.transform.position;
@@ -98,6 +88,10 @@ public class MoveTowardsTarget : MonoBehaviour {
             end
         };
 
+        if (!forward) {
+            points.Reverse();
+        }
+
         List<CatmulRomSegment> segments = new List<CatmulRomSegment>();
 
         for (int i = 3; i < points.Count; ++i) {
@@ -127,6 +121,7 @@ public class MoveTowardsTarget : MonoBehaviour {
 
     IEnumerator SetNewPosition() {
         isCoroutineActive = true;
+        activator.interactable = false;
         while (currentCameraPath.Count > 0) {
             CatmulRomSegment currentSegment = currentCameraPath[0];
             currentCameraPath.RemoveAt(0);
@@ -140,6 +135,7 @@ public class MoveTowardsTarget : MonoBehaviour {
             }
         }
         isCoroutineActive = false;
+        activator.interactable = true;
     }
 
 }
