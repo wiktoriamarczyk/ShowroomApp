@@ -132,12 +132,14 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
     }
 
     async void RefreshData() {
+        if (!gameObject.activeSelf) {
+            return;
+        }
         if (isCoroutineActive) {
             StopAllCoroutines();
         }
         SetCurrentVersion(versionToggleGroupBehaviour.GetSelectedToggle().gameObject);
         versionDescription.text = await Common.GetLocalizationEntry(currentVersion.description);
-        //StartCoroutine(ChangeDescription());
         ActivateObjects();
         RefreshSelectedToggles();
         StartCoroutine(RefreshLayout());
@@ -259,26 +261,6 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         yield return new WaitForSeconds(0.01f);
         LayoutRebuilder.ForceRebuildLayoutImmediate(transformToRefresh);
         isCoroutineActive = false;
-    }
-
-    IEnumerator ChangeDescription() {
-        isCoroutineActive = true;
-        string localizationTableKey = currentVersion.description;
-        string description = String.Empty;
-        var operation = LocalizationSettings.StringDatabase.GetLocalizedStringAsync(Common.localizationTableName,
-                                                            localizationTableKey, new object[] { description });
-
-        yield return operation;
-
-        if (operation.Status == AsyncOperationStatus.Succeeded) {
-            versionDescription.text = operation.Result;
-        }
-        else {
-            Debug.Log("Failed to get localized description!");
-        }
-
-        isCoroutineActive = false;
-        StartCoroutine(RefreshLayout());
     }
 
     void OnDisable() {

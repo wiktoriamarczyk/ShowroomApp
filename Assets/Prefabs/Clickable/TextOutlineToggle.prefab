@@ -37,11 +37,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7337508553592315359, guid: 6c04ecb3b1b4a7649a50a7697e96201a, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7337508553592315359, guid: 6c04ecb3b1b4a7649a50a7697e96201a, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7337508553592315359, guid: 6c04ecb3b1b4a7649a50a7697e96201a, type: 3}
       propertyPath: m_SizeDelta.x
@@ -53,7 +53,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7337508553592315359, guid: 6c04ecb3b1b4a7649a50a7697e96201a, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7337508553592315359, guid: 6c04ecb3b1b4a7649a50a7697e96201a, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -244,6 +244,9 @@ MonoBehaviour:
   image: {fileID: 0}
   frameImage: {fileID: 3936890709231692793}
   onToggleOn:
+    m_PersistentCalls:
+      m_Calls: []
+  onToggleOff:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &9088172836753625760 stripped

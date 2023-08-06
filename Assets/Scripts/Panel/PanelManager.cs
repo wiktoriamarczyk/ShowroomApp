@@ -3,12 +3,13 @@ using UnityEngine;
 using System;
 using Cysharp.Threading.Tasks;
 using static Common;
+using System.Linq;
 
 public class PanelManager : MonoBehaviour {
     static public PanelManager Instance;
-
-    [SerializeField] InteractionController interactionController;
-    [SerializeField] List<Panel> panels;
+    [SerializeField] GameObject panelContainer;
+    InteractionController interactionController;
+    List<Panel> panels;
     [SerializeField] List<PopupController> popups;
     [SerializeField] PostProcessingEffectsModifier backgroundEffects;
 
@@ -121,6 +122,9 @@ public class PanelManager : MonoBehaviour {
         else {
             Instance = this;
         }
+
+        interactionController = panelContainer.GetComponent<InteractionController>();
+        panels = panelContainer.GetComponentsInChildren<Panel>(true).ToList();
 
         foreach (var popup in popups) {
             popup.PopupAwake();

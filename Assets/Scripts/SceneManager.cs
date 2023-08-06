@@ -15,13 +15,11 @@ public class SceneManager : MonoBehaviour {
         gallery.onGalleryLoaded += DisableSplashScreen;
 
         splashScreen.SetActive(true);
-        //cameraController.enabled = false;
         cameraController.DisableRotation();
     }
 
     void DisableSplashScreen() {
         splashScreen.SetActive(false);
-        //cameraController.enabled = true;
         cameraController.EnableRotation();
     }
 

@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4608121979784044427, guid: 1c9d033313c27584a8b71c30c266aae4, type: 3}
       propertyPath: m_Name
-      value: Subtitle
+      value: Subheader
       objectReference: {fileID: 0}
     - target: {fileID: 4608121979784044468, guid: 1c9d033313c27584a8b71c30c266aae4, type: 3}
       propertyPath: m_Pivot.x
@@ -113,7 +113,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4608121979784044469, guid: 1c9d033313c27584a8b71c30c266aae4, type: 3}
       propertyPath: m_fontSize
-      value: 24
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 4608121979784044469, guid: 1c9d033313c27584a8b71c30c266aae4, type: 3}
       propertyPath: m_fontAsset
@@ -121,7 +121,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 29ad9c03a0dbae747a505c101b88b5c3, type: 2}
     - target: {fileID: 4608121979784044469, guid: 1c9d033313c27584a8b71c30c266aae4, type: 3}
       propertyPath: m_fontSizeBase
-      value: 24
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 4608121979784044469, guid: 1c9d033313c27584a8b71c30c266aae4, type: 3}
       propertyPath: m_sharedMaterial

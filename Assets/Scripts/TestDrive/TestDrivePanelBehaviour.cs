@@ -30,8 +30,13 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     List<GameObject> testDriveObjects = new List<GameObject>();
     CancellationTokenSource cancelTokenSrc;
     CancellationToken cancelToken;
+    eDisplayedDrives currDisplayedDrives = eDisplayedDrives.ALL;
+    Dictionary<eDisplayedDrives, string> displayedDrivesLocalization = new Dictionary<eDisplayedDrives, string>() {
+        { eDisplayedDrives.ALL, Common.localizationAll },
+        { eDisplayedDrives.TODAY, Common.localizationToday },
+    };
 
-    const string modifyDataPath = "http://dreamlo.com/lb/-Ur0ruQAokKXyyv8uxxT0wOw8r3LFlWUyISb24jdTvEw/";
+const string modifyDataPath = "http://dreamlo.com/lb/-Ur0ruQAokKXyyv8uxxT0wOw8r3LFlWUyISb24jdTvEw/";
     const string dataPath = "http://dreamlo.com/lb/6486be2b8f40bb7d84121bba/json";
     const int earliestDrivingHour = 8;
     const int latestDrivingHour = 22;
@@ -187,8 +192,13 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     }
 
     async UniTask UpdateLocalizationAsync() {
-        registeredDates.options[0].text = await Common.GetLocalizationEntry(Common.localizationAll);
-        registeredDates.options[1].text = await Common.GetLocalizationEntry(Common.localizationToday);
+        registeredDates.options[(int)eDisplayedDrives.ALL].text =
+            await Common.GetLocalizationEntry(displayedDrivesLocalization[eDisplayedDrives.ALL]);
+        registeredDates.options[(int)eDisplayedDrives.TODAY].text =
+            await Common.GetLocalizationEntry(displayedDrivesLocalization[eDisplayedDrives.TODAY]);
+        string selectedText = registeredDates.options[registeredDates.value].text;
+        string localizationVersion = await Common.GetLocalizationEntry(displayedDrivesLocalization[currDisplayedDrives]);
+        registeredDates.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = localizationVersion;
     }
 
     void DisplayRegisteredTestDrives() {
@@ -202,6 +212,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         for (int i = 0; i < dates.Count; ++i) {
             if (selectedDateIndex == (int)eDisplayedDrives.ALL) {
                 testDriveObjects[i].SetActive(true);
+                currDisplayedDrives = eDisplayedDrives.ALL;
             }
             else if (selectedDateIndex == (int)eDisplayedDrives.TODAY) {
                 DateTime driveDateTime;
@@ -209,6 +220,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
                 if (driveDateTime == DateTime.Now.Date) {
                     testDriveObjects[i].SetActive(true);
                 }
+                currDisplayedDrives = eDisplayedDrives.TODAY;
             }
             else if (selectedDate == dates[i]) {
                 testDriveObjects[i].SetActive(true);

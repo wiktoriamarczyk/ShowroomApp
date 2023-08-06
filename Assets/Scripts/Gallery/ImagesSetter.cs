@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ImagesSetter : MonoBehaviour {
+public class ImagesSetter {
     public Image centerImageProperty {
         get {
             return centerImageContainer;
@@ -74,7 +74,7 @@ public class ImagesSetter : MonoBehaviour {
     }
 
     void DisposeCenterImage() {
-        Destroy(centerImageContainer.sprite);
+        GameObject.Destroy(centerImageContainer.sprite);
     }
 
     Sprite GetSprite(Texture2D tex) {
@@ -94,7 +94,7 @@ public class ImagesSetter : MonoBehaviour {
 
     void OnDestroy() {
         foreach (var image in thumbnails) {
-            Destroy(image.sprite);
+            GameObject.Destroy(image.sprite);
         }
     }
 }

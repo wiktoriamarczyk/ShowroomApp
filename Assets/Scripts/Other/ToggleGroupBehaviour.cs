@@ -55,6 +55,7 @@ public class ToggleGroupBehaviour : MonoBehaviour {
             return;
         }
         foreach (Toggle toggle in toggles) {
+            toggle.GetComponent<ToggleBehaviour>().ToggleAwake();
             toggle.isOn = false;
             toggle.onValueChanged.AddListener((bool value) => OnToggleValueChanged(toggle, value));
         }
@@ -73,7 +74,6 @@ public class ToggleGroupBehaviour : MonoBehaviour {
     }
 
     void OnToggleValueChanged(Toggle toggle, bool value) {
-        ColorBlock colorBlock = toggle.colors;
         ToggleBehaviour toggleBehaviour = toggle.gameObject.GetComponent<ToggleBehaviour>();
         Icon icon = toggle.GetComponentInChildren<Icon>();
         if (value) {

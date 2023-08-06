@@ -8,6 +8,7 @@ public class ToggleBehaviour : MonoBehaviour {
     [SerializeField] Image image;
     [SerializeField] Image frameImage;
     [SerializeField] UnityEvent onToggleOn;
+    [SerializeField] UnityEvent onToggleOff;
     Color imageDefaultColor;
     Color frameDefaultColor;
     bool isOn = false;
@@ -18,15 +19,9 @@ public class ToggleBehaviour : MonoBehaviour {
             ToggleOn();
         }
         else {
+            onToggleOff?.Invoke();
             ToggleOff();
         }
-    }
-
-    void SetColors(Color imgColor, Color frameColor) {
-        if (image != null)
-            image.color = imgColor;
-        if (frameImage != null)
-            frameImage.color = frameColor;
     }
 
     public void ToggleOn() {
@@ -53,7 +48,14 @@ public class ToggleBehaviour : MonoBehaviour {
         }
     }
 
-    void Awake() {
+    void SetColors(Color imgColor, Color frameColor) {
+        if (image != null)
+            image.color = imgColor;
+        if (frameImage != null)
+            frameImage.color = frameColor;
+    }
+
+    public void ToggleAwake() {
         if (image == null) {
             image = GetComponent<Image>();
         }
@@ -64,11 +66,13 @@ public class ToggleBehaviour : MonoBehaviour {
             frameDefaultColor = frameImage.color;
         }
         Toggle toggle = GetComponent<Toggle>();
-        if (toggle)
+        if (toggle) {
             toggle.onValueChanged.AddListener(OnToggleValueChanged);
-        else {
-            int i = 0;
         }
+    }
+
+    void Awake() {
+        ToggleAwake();
     }
 
 }
