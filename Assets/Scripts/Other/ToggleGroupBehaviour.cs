@@ -55,7 +55,6 @@ public class ToggleGroupBehaviour : MonoBehaviour {
             return;
         }
         foreach (Toggle toggle in toggles) {
-            toggle.GetComponent<ToggleBehaviour>().ToggleAwake();
             toggle.isOn = false;
             toggle.onValueChanged.AddListener((bool value) => OnToggleValueChanged(toggle, value));
         }
@@ -64,7 +63,7 @@ public class ToggleGroupBehaviour : MonoBehaviour {
         onToggleGroupInitialized?.Invoke();
     }
 
-    void Awake() {
+    void Start() {
         /* Call initialize only when at least one toggle exists.
          * This occurs when toggles are defined statically. */
         Toggle[] currentToggles = GetComponentsInChildren<Toggle>();
@@ -74,17 +73,9 @@ public class ToggleGroupBehaviour : MonoBehaviour {
     }
 
     void OnToggleValueChanged(Toggle toggle, bool value) {
-        ToggleBehaviour toggleBehaviour = toggle.gameObject.GetComponent<ToggleBehaviour>();
-        Icon icon = toggle.GetComponentInChildren<Icon>();
         if (value) {
             selectedToggle = toggle;
             onToggleChanged?.Invoke();
-           // toggleBehaviour?.ToggleOn();
-            icon?.ChangeToAlternativeColor();
-        }
-        else {
-            //toggleBehaviour?.ToggleOff();
-            icon?.ChangeToDefaultColor();
         }
     }
 

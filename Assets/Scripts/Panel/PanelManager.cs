@@ -8,17 +8,16 @@ using System.Linq;
 public class PanelManager : MonoBehaviour {
     static public PanelManager Instance;
     [SerializeField] GameObject panelContainer;
-    InteractionController interactionController;
-    List<Panel> panels;
     [SerializeField] List<PopupController> popups;
     [SerializeField] PostProcessingEffectsModifier backgroundEffects;
 
+    InteractionController interactionController;
+    List<Panel> panels;
+    List<Panel> prevOpenedPanels = new List<Panel>();
     Panel currentPanel;
-
+    
     public event Action onPanelOpened;
     public event Action onPanelClosed;
-
-    List<Panel> prevOpenedPanels = new List<Panel>();
 
     public void HideAllPanels() {
         prevOpenedPanels.Clear();
@@ -80,17 +79,17 @@ public class PanelManager : MonoBehaviour {
         interactionController.Block();
         selectedPopupController.Show();
         selectedPopupController.SetTextToDisplay(text);
-        bool mainPopupClicked = await selectedPopupController.WaitForCloseAsync();
+        bool result = await selectedPopupController.WaitForCloseAsync();
         HidePopup(selectedPopupController);
-        return mainPopupClicked;
+        return result;
     }
 
     public void SetPopupDefaultInput(string text) {
-        GetPopupByType<PopupController>(Common.ePopupType.INPUT_FIELD)?.SetInputFieldPlaceholder(text);
+        GetPopupByType<InputFieldPopupController>(Common.ePopupType.INPUT_FIELD)?.SetInputFieldPlaceholder(text);
     }
 
-    public string GetUserPopupInput() {
-        return GetPopupByType<PopupController>(Common.ePopupType.INPUT_FIELD)?.GetUserInput();
+    public string GetPopupInput() {
+        return GetPopupByType<InputFieldPopupController>(Common.ePopupType.INPUT_FIELD)?.GetUserInput();
     }
 
     public void HidePopup(PopupController popup) {

@@ -27,7 +27,7 @@ public class ConfigurationsSaver : MonoBehaviour {
             return;
         }
 
-        string configName = PanelManager.Instance.GetUserPopupInput();
+        string configName = PanelManager.Instance.GetPopupInput();
         if (configName == String.Empty) {
             configName = GetDefaultConfigName();
         }

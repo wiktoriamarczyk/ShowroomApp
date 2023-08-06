@@ -49,16 +49,12 @@ public class ColorChanger : MonoBehaviour {
 
     IEnumerator ChangeElementsColor(Color color) {
         isCoroutineActive = true;
-       // Renderer renderer = objects[1].GetComponent<Renderer>();
-        //lastColor = renderer.material.color;
         progress = 0f;
         while (progress < 1){
             progress += Time.deltaTime * 1 / duration;
-            //foreach (var obj in objects) {
                for (int i = 0; i < objectMaterials.Count; ++i) {
                 lastColor = objectMaterials[i].color;
                 objectMaterials[i].color = Color.Lerp(lastColor, color, progress);
-               // obj.GetComponent<Renderer>().material.color = Color.Lerp(lastColor, color, progress);
             }
             yield return null;
         }

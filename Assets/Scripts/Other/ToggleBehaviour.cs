@@ -12,6 +12,7 @@ public class ToggleBehaviour : MonoBehaviour {
     Color imageDefaultColor;
     Color frameDefaultColor;
     bool isOn = false;
+    Icon icon;
 
     public void OnToggleValueChanged(bool value) {
         if (value) {
@@ -28,6 +29,7 @@ public class ToggleBehaviour : MonoBehaviour {
         if (isOn) {
             return;
         }
+        icon?.ChangeToAlternativeColor();
         SetColors(imageColorOn, frameColorOn);
         isOn = true;
     }
@@ -37,25 +39,29 @@ public class ToggleBehaviour : MonoBehaviour {
             return;
         }
         SetColors(imageDefaultColor, frameDefaultColor);
+        icon?.ChangeToDefaultColor();
         isOn = false;
     }
 
     public void SetDefaultColor(Color color) {
         imageDefaultColor = color;
-        frameDefaultColor = color;
+        frameDefaultColor = color;      
         if (!isOn) {
             SetColors(imageDefaultColor, frameDefaultColor);
         }
     }
 
     void SetColors(Color imgColor, Color frameColor) {
-        if (image != null)
+        if (image != null) {
             image.color = imgColor;
-        if (frameImage != null)
+        }
+
+        if (frameImage != null) {
             frameImage.color = frameColor;
+        }
     }
 
-    public void ToggleAwake() {
+    void Awake() {
         if (image == null) {
             image = GetComponent<Image>();
         }
@@ -69,10 +75,7 @@ public class ToggleBehaviour : MonoBehaviour {
         if (toggle) {
             toggle.onValueChanged.AddListener(OnToggleValueChanged);
         }
-    }
-
-    void Awake() {
-        ToggleAwake();
+        icon = GetComponentInChildren<Icon>();
     }
 
 }

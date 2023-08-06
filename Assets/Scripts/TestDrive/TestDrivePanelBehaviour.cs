@@ -1,18 +1,13 @@
 using Cysharp.Threading.Tasks;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Threading;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Localization.Settings;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
-using UnityEngine.Video;
 
 public class TestDrivePanelBehaviour : MonoBehaviour {
     [SerializeField] TMP_Dropdown driveDate;
@@ -36,13 +31,13 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         { eDisplayedDrives.TODAY, Common.localizationToday },
     };
 
-const string modifyDataPath = "http://dreamlo.com/lb/-Ur0ruQAokKXyyv8uxxT0wOw8r3LFlWUyISb24jdTvEw/";
+    const string modifyDataPath = "http://dreamlo.com/lb/-Ur0ruQAokKXyyv8uxxT0wOw8r3LFlWUyISb24jdTvEw/";
     const string dataPath = "http://dreamlo.com/lb/6486be2b8f40bb7d84121bba/json";
     const int earliestDrivingHour = 8;
     const int latestDrivingHour = 22;
     const int minuteStep = 30;
     const int eventDays = 7;
-    const int maxNameLength = 20;
+
 
     const string startEventDay = "startEventDay";
     const string startEventMonth = "startEventMonth";
@@ -100,7 +95,7 @@ const string modifyDataPath = "http://dreamlo.com/lb/-Ur0ruQAokKXyyv8uxxT0wOw8r3
 
     void OnNameChanged() {
         driverName.text = driverName.text.Trim();
-        if (driverName.text.Length > maxNameLength) {
+        if (driverName.text.Length > Common.maxInputLength) {
             return;
         }
     }

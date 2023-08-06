@@ -7,7 +7,7 @@ using UnityEngine.Localization.Settings;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 public static class Common {
-    /* localization keys */
+    /* ----------COMMON CONST---------- */
     public const string localizationTableName = "UI Text";
     public const string localizationDeleteWarning = "Data Deletion Warning";
     public const string localizationIncorectDataWarning = "Incorrect Data Warning";
@@ -20,8 +20,10 @@ public static class Common {
     public const string defaultConfigName = "Config";
     public const string playerPrefsConfigCountName = "ConfigurationCount";
 
-    public static readonly float dreamloDebugDelay = 2f;
+    public const float dreamloDebugDelay = 2f;
+    public const int maxInputLength = 20;
 
+    /* ----------COMMON TYPES---------- */
     public enum ePopupType {
         DEFAULT,
         INPUT_FIELD
@@ -116,6 +118,8 @@ public static class Common {
         { new Item<eRims>{ type = eRims.METAL,               localizationTableKey = "Metal Color",           hex = "0xEEEEEE", optional = false } },
         { new Item<eRims>{ type = eRims.COLORMATCH,          localizationTableKey = "ColorMatch Color",      hex = "0x000000", optional = false } },
     };
+
+    /* ----------COMMON FUNCTIONS---------- */
     public static Item<eColor> FindColorByType(eColor type) {
         return Common.colors.FirstOrDefault(color => color.type == type);
     }
