@@ -19,6 +19,7 @@ public class MoveTowardsTarget : MonoBehaviour {
 
     Vector3 lastPosition = new Vector3();
     List<CatmulRomSegment> currentCameraPath;
+    List<CatmulRomSegment> returnCameraPath = new List<CatmulRomSegment>();
     bool isCoroutineActive = false;
 
     const float offsetFromWindow = 1f;
@@ -39,6 +40,12 @@ public class MoveTowardsTarget : MonoBehaviour {
         }
 
         currentCameraPath = GenerateCatmulRomSegments(cameraSpeed);
+        for (int i = currentCameraPath.Count - 1; i >= 0; --i) {
+            CatmulRomSegment segment = new CatmulRomSegment();
+            segment.speedMultiplier = currentCameraPath[i].speedMultiplier;
+            segment.points = new Vector3[4] { currentCameraPath[i].points[3], currentCameraPath[i].points[2], currentCameraPath[i].points[1], currentCameraPath[i].points[0] };
+            returnCameraPath.Add(segment);
+        }
         StartCoroutine(SetNewPosition());
     }
 
