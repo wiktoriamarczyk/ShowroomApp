@@ -14,6 +14,8 @@ public class OutsideCameraMovement : MonoBehaviour {
     const float screenSaverSpeed = 0.75f;
     const float timeToScreenSaver = 500f;
     const float distanceToSpeedMultiplier = 0.01f;
+    const float scrollToZoomMultiplier = 0.3f;
+    const float touchToZoomMultiplier = 0.01f;
 
     float lastTime;
     float timer = timeToScreenSaver;
@@ -112,10 +114,34 @@ public class OutsideCameraMovement : MonoBehaviour {
         }
     }
 
+    void HandleZooming() {
+        float deltaDistance = 0;
+        if (Input.touchSupported && Input.touchCount == 2) {
+
+            // get current touch positions
+            Touch tZero = Input.GetTouch(0);
+            Touch tOne = Input.GetTouch(1);
+            // get touch position from the previous frame
+            Vector2 tZeroPrevious = tZero.position - tZero.deltaPosition;
+            Vector2 tOnePrevious = tOne.position - tOne.deltaPosition;
+
+            float oldTouchDistance = Vector2.Distance(tZeroPrevious, tOnePrevious);
+            float currentTouchDistance = Vector2.Distance(tZero.position, tOne.position);
+
+            // get offset value
+            deltaDistance = (oldTouchDistance - currentTouchDistance) * touchToZoomMultiplier;
+        }
+        else {
+            deltaDistance = Input.mouseScrollDelta.y * scrollToZoomMultiplier;
+        }
+        
+        sphereCoord.x = Mathf.Clamp(sphereCoord.x + deltaDistance, 3.5f, 6);
+    }
+
     void HandlePlayerInput() {
         /* Whenever the left mouse button is pressed, the mouse cursor's position
          and current time is remembered */
-        bool isTouchActive = Input.touchCount > 0;
+        bool isTouchActive = Input.touchCount == 1;
 
         if ( (!isTouchActive && Input.GetMouseButtonDown(0)) ||
              (isTouchActive && Input.GetTouch(0).phase == TouchPhase.Began)) {
@@ -148,6 +174,7 @@ public class OutsideCameraMovement : MonoBehaviour {
     }
 
     void CameraMovement() {
+        HandleZooming();
         if (speed.magnitude > 0) {
             // get the deltas that describe how much the mouse cursor got moved between frames
             float dx = speed.x;
@@ -170,13 +197,13 @@ public class OutsideCameraMovement : MonoBehaviour {
                 // and prevent it from turning upside down (1.5f = approx. Pi / 2)
                 sphereCoord.z = Mathf.Clamp(sphereCoord.z - dy * Time.deltaTime, 0.01f, 1.5f);
 
-                // calculate the cartesian coordinates for Unity
-                transform.position = CoordinatesConverter.GetCartesianCoordinates(sphereCoord) + target.transform.position;
-
-                // make the camera look at the target
-                transform.LookAt(target.transform.position);
             }
         }
+        // calculate the cartesian coordinates for Unity
+        transform.position = CoordinatesConverter.GetCartesianCoordinates(sphereCoord) + target.transform.position;
+
+        // make the camera look at the target
+        transform.LookAt(target.transform.position);
     }
 
     /* This function calculates damping multiplier as logarithmic function (1/x)

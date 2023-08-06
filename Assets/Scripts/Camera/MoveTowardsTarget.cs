@@ -29,7 +29,7 @@ public class MoveTowardsTarget : MonoBehaviour {
         get { return isCoroutineActive; }
     }
 
-    const float offsetFromWindow = 1f;
+    const float offsetFromWindow = 1.5f;
     const float offsetFromTarget = 0.66f;
 
     public void ChangePosition(bool forward) {
