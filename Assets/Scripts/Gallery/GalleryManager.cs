@@ -46,8 +46,8 @@ public class GalleryManager : MonoBehaviour {
         imgSetter.centerImageProperty = centerImage;
         imgSetter.LoadTexture = GetFullSizeFromThumbnail;
 
-        galleryPanel.onPanelOpened += PanelManager.Instance.TurnOnBackgroundEffects;
-        galleryPanel.onPanelClosed += PanelManager.Instance.TurnOffBackgroundEffects;
+        galleryPanel.onPanelOpened += PanelManager.instance.TurnOnBackgroundEffects;
+        galleryPanel.onPanelClosed += PanelManager.instance.TurnOffBackgroundEffects;
         try {
             await imgProvider.LoadTexturesFromManifest(cancelToken, siteURL, new Vector2Int(385, 250));
         }
@@ -63,7 +63,7 @@ public class GalleryManager : MonoBehaviour {
     void OnDestroy() {
         cancelTokenSrc.Cancel();
         cancelTokenSrc.Dispose();
-        galleryPanel.onPanelOpened -= PanelManager.Instance.TurnOnBackgroundEffects;
-        galleryPanel.onPanelClosed -= PanelManager.Instance.TurnOffBackgroundEffects;
+        galleryPanel.onPanelOpened -= PanelManager.instance.TurnOnBackgroundEffects;
+        galleryPanel.onPanelClosed -= PanelManager.instance.TurnOffBackgroundEffects;
     }
 }

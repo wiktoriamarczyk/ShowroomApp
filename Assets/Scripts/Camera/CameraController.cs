@@ -2,10 +2,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class CameraController : MonoBehaviour {
+    [SerializeField] Toggle interiorCameraActivator;
     InteriorCameraMovement interiorCamera;
     OutsideCameraMovement outsideCamera;
     MoveTowardsTarget moveTowardsTarget;
-    [SerializeField] Toggle interiorCameraActivator;
 
     void Awake() {
         interiorCamera = GetComponent<InteriorCameraMovement>();

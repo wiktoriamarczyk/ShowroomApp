@@ -134,7 +134,7 @@ public class OutsideCameraMovement : MonoBehaviour {
         else {
             deltaDistance = Input.mouseScrollDelta.y * scrollToZoomMultiplier;
         }
-        
+
         sphereCoord.x = Mathf.Clamp(sphereCoord.x + deltaDistance, 3.5f, 6);
     }
 

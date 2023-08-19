@@ -81,7 +81,7 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
     }
 
     void OnEnable() {
-        bool isPanelShown = PanelManager.Instance.IsPanelShown(gameObject);
+        bool isPanelShown = PanelManager.instance.IsPanelShown(gameObject);
         if (!isPanelShown) {
             return;
         }
@@ -262,9 +262,6 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
     }
 
     void OnDisable() {
-        //carColorChanger.ChangeElementsColorToDefault();
-        //rimsColorChanger.ChangeElementsColorToDefault();
-
         foreach (var package in packages) {
             package.isOn = false;
         }

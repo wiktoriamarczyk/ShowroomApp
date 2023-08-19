@@ -65,7 +65,7 @@ public class ConfigurationLoader : MonoBehaviour {
     }
 
     void DisplayClickedConfiguration(ConfigData config) {
-        PanelManager.Instance.ShowPanel(configPanel);
+        PanelManager.instance.ShowPanel(configPanel);
         configBehaviour.SelectConfigurations(config);
     }
 

@@ -6,7 +6,7 @@ using static Common;
 using System.Linq;
 
 public class PanelManager : MonoBehaviour {
-    static public PanelManager Instance;
+    static public PanelManager instance { get; private set; }
     [SerializeField] GameObject panelContainer;
     [SerializeField] List<PopupController> popups;
     [SerializeField] PostProcessingEffectsModifier backgroundEffects;
@@ -15,7 +15,7 @@ public class PanelManager : MonoBehaviour {
     List<Panel> panels;
     List<Panel> prevOpenedPanels = new List<Panel>();
     Panel currentPanel;
-    
+
     public event Action onPanelOpened;
     public event Action onPanelClosed;
 
@@ -115,11 +115,8 @@ public class PanelManager : MonoBehaviour {
     }
 
     void Awake() {
-        if (Instance != null && Instance != this) {
-            Destroy(gameObject);
-        }
-        else {
-            Instance = this;
+        if (instance == null) {
+            instance = this;
         }
 
         interactionController = panelContainer.GetComponent<InteractionController>();
@@ -136,6 +133,12 @@ public class PanelManager : MonoBehaviour {
             } else {
                 panel.Show();
             }
+        }
+    }
+
+    void OnDestroy() {
+        if (instance == this) {
+            instance = null;
         }
     }
 }
