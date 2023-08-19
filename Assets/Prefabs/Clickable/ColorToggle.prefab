@@ -455,7 +455,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8171094084875332214}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Script: {fileID: 11500000, guid: eb6f60d0229eb914e9dae31178cf9781, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -494,6 +494,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 0
+  context: {fileID: 0}
 --- !u!114 &2134546964832436689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -524,5 +525,8 @@ MonoBehaviour:
   image: {fileID: 3948081909189717877}
   frameImage: {fileID: 0}
   onToggleOn:
+    m_PersistentCalls:
+      m_Calls: []
+  onToggleOff:
     m_PersistentCalls:
       m_Calls: []

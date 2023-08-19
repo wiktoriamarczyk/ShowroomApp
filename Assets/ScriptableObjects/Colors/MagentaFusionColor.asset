@@ -9,12 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91a06b29ee76dfe499b96b5e73f5d762, type: 3}
+  m_Script: {fileID: 11500000, guid: bcf8f8c1729bb1d41b7b8e550c23a68b, type: 3}
   m_Name: MagentaFusionColor
   m_EditorClassIdentifier: 
-  colorType: 4
   localizationTableKey: Magenta Fusion Color
+  colorUsage: 1
+  colorType: 4
   color: {r: 0.89411765, g: 0, b: 0.48235294, a: 1}
   metallic: 0
   smoothness: 1
   optional: 1
+  seamsColor: {fileID: 11400000, guid: c735e61c844a7fe4aadca3c780f5de40, type: 2}

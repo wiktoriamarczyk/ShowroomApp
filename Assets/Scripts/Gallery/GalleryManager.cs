@@ -36,27 +36,28 @@ public class GalleryManager : MonoBehaviour {
     }
 
     async void Awake() {
-        //cancelTokenSrc = new CancellationTokenSource();
-        //cancelToken = cancelTokenSrc.Token;
+        return;
+        cancelTokenSrc = new CancellationTokenSource();
+        cancelToken = cancelTokenSrc.Token;
 
-        //imgProvider = new ImagesProvider();
-        //imgSetter = new ImagesSetter();
-        //centerImage.gameObject.SetActive(false);
-        //imgSetter.centerImageProperty = centerImage;
-        //imgSetter.LoadTexture = GetFullSizeFromThumbnail;
+        imgProvider = new ImagesProvider();
+        imgSetter = new ImagesSetter();
+        centerImage.gameObject.SetActive(false);
+        imgSetter.centerImageProperty = centerImage;
+        imgSetter.LoadTexture = GetFullSizeFromThumbnail;
 
-        //galleryPanel.onPanelOpened += PanelManager.Instance.TurnOnBackgroundEffects;
-        //galleryPanel.onPanelClosed += PanelManager.Instance.TurnOffBackgroundEffects;
-        //try {
-        //    await imgProvider.LoadTexturesFromManifest(cancelToken, siteURL, new Vector2Int(385, 250));
-        //}
-        //catch (System.OperationCanceledException) {
-        //    Debug.Log("Image loading canceled");
-        //    return;
-        //}
+        galleryPanel.onPanelOpened += PanelManager.Instance.TurnOnBackgroundEffects;
+        galleryPanel.onPanelClosed += PanelManager.Instance.TurnOffBackgroundEffects;
+        try {
+            await imgProvider.LoadTexturesFromManifest(cancelToken, siteURL, new Vector2Int(385, 250));
+        }
+        catch (System.OperationCanceledException) {
+            Debug.Log("Image loading canceled");
+            return;
+        }
 
-        //imgSetter.DisplayThumbnails(imgProvider.LoadThumbnails(), imagesContainer.transform);
-        //onGalleryLoaded?.Invoke();
+        imgSetter.DisplayThumbnails(imgProvider.LoadThumbnails(), imagesContainer.transform);
+        onGalleryLoaded?.Invoke();
     }
 
     void OnDestroy() {

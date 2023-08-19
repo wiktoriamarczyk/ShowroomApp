@@ -1,6 +1,5 @@
 using UnityEngine;
 using DG.Tweening;
-using UnityEngine.Events;
 
 public class MovingPanel : Panel {
     [SerializeField] GameObject hidePositionTarget;

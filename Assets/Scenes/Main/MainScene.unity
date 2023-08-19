@@ -6333,11 +6333,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   carColorChanger: {fileID: 1255311055}
   rimsColorChanger: {fileID: 1255311056}
+  seamsColorChanger: {fileID: 1255311057}
   transformToRefresh: {fileID: 926387289}
   versionDescription: {fileID: 1261701911}
-  reactVersionData: {fileID: 11400000, guid: fa3c0ee137b00d341a5fa944657b2861, type: 2}
-  sharpVersionData: {fileID: 11400000, guid: 9dd6dd4cc6da21548964162bae2a2ffe, type: 2}
-  unityVersionData: {fileID: 11400000, guid: 84b6b8eaede01da4c8cef6c50aa78878, type: 2}
   textTogglePrefab: {fileID: 1455428678409430063, guid: 8f9f644dce933a443881f78074f5f2ce, type: 3}
   versionTogglePrefab: {fileID: 4465548082536102851, guid: 61a4768ae2e70b940a9dd89b4117c6c3, type: 3}
   colorTogglePrefab: {fileID: 8171094084875332214, guid: 65fd2e5ba53666f4b8446ed0b443118e, type: 3}
@@ -6968,7 +6966,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objects:
   - {fileID: 1977927195}
-  - {fileID: 285795885}
 --- !u!114 &1255311056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6990,6 +6987,20 @@ MonoBehaviour:
   - {fileID: 853186551}
   - {fileID: 98160834}
   - {fileID: 1180323158}
+--- !u!114 &1255311057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1255311053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41f423399dc6bd84385383a29dfd84dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objects:
+  - {fileID: 285795885}
 --- !u!114 &1261701911 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2876080342642905185, guid: ce653b2d957962b43a922df5f93622eb, type: 3}

@@ -36,15 +36,6 @@ public class ToggleGroupBehaviour : MonoBehaviour {
         }
     }
 
-    void SelectFirstActiveToggle() {
-        foreach (Toggle toggle in toggles) {
-            if (toggle.gameObject.activeSelf) {
-                SelectToggle(toggle);
-                break;
-            }
-        }
-    }
-
     public void InitializeToggles() {
         if (isInitialized) {
             return;
@@ -63,19 +54,28 @@ public class ToggleGroupBehaviour : MonoBehaviour {
         onToggleGroupInitialized?.Invoke();
     }
 
+    void OnToggleValueChanged(Toggle toggle, bool value) {
+        if (value) {
+            selectedToggle = toggle;
+            onToggleChanged?.Invoke();
+        }
+    }
+
+    void SelectFirstActiveToggle() {
+        foreach (Toggle toggle in toggles) {
+            if (toggle.gameObject.activeSelf) {
+                SelectToggle(toggle);
+                break;
+            }
+        }
+    }
+
     void Start() {
         /* Call initialize only when at least one toggle exists.
          * This occurs when toggles are defined statically. */
         Toggle[] currentToggles = GetComponentsInChildren<Toggle>();
         if (currentToggles != null && currentToggles.Length >= 1) {
             InitializeToggles();
-        }
-    }
-
-    void OnToggleValueChanged(Toggle toggle, bool value) {
-        if (value) {
-            selectedToggle = toggle;
-            onToggleChanged?.Invoke();
         }
     }
 

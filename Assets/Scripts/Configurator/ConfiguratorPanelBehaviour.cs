@@ -2,12 +2,8 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using System;
-using UnityEngine.Localization.Settings;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.Localization.Components;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using System.Linq;
 using static Common;
 using UnityEngine.Events;
@@ -15,6 +11,7 @@ using UnityEngine.Events;
 public class ConfiguratorPanelBehaviour : MonoBehaviour {
     [SerializeField] ColorChanger carColorChanger;
     [SerializeField] ColorChanger rimsColorChanger;
+    [SerializeField] ColorChanger seamsColorChanger;
 
     [SerializeField] RectTransform transformToRefresh;
     [SerializeField] TextMeshProUGUI versionDescription;
@@ -30,6 +27,7 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
     [SerializeField] ToggleGroup rimsToggleGroup;
     /* none or all packages may be selected so they are not grouped into a toggle group */
     [SerializeField] GameObject  packageList;
+
 
     ToggleGroupBehaviour versionToggleGroupBehaviour;
     ToggleGroupBehaviour driveToggleGroupBehaviour;
@@ -55,12 +53,10 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         foreach (var package in packages) {
             package.isOn = config.packages.Contains(package.name);
         }
-
     }
 
     public List<string> GetSelectedConfigurations() {
         var selectedPackages = packages.Where(toggle => toggle.isOn).ToList();
-        //  int typesCount = Enum.GetNames(typeof(Common.eConfigurationType)).Length ;
         int typesCount = (int)Common.eConfigurationType.PACKAGE;
         typesCount += selectedPackages.Count();
 
@@ -111,7 +107,11 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         foreach (Toggle toggle in toggles) {
             string toggleName = toggle.gameObject.name;
 
-            bool isActive = dataCollection.Find(data => data.localizationTableKeyProperty == toggleName) != null;
+            bool isActive = false; // dataCollection.Find(data => data.localizationTableKeyProperty == toggleName) != null;
+            ToggleWithContext toggleWithContext = toggle as ToggleWithContext;
+            if (toggleWithContext != null) {
+                isActive = dataCollection.Find(data => data == toggleWithContext.context) != null;
+            }
 
             toggle.gameObject.SetActive(isActive);
         }
@@ -144,11 +144,15 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         rimsToggleGroupBehaviour.OnToggleStatusChanged();
     }
 
-    GameObject CreateUIObject(string name, GameObject parent, GameObject prefab) {
+    GameObject CreateUIObject(string name, GameObject parent, GameObject prefab, Object context) {
         GameObject ui = Instantiate(prefab);
         ui.name = name;
         ui.transform.SetParent(parent.transform);
         ui.transform.localScale = Vector3.one;
+        ToggleWithContext toggleWithContext = ui.GetComponent<ToggleWithContext>();
+        if (toggleWithContext != null) {
+            toggleWithContext.context = context;
+        }
         var localization = ui.GetComponentInChildren<LocalizeStringEvent>();
         var textMeshPro = ui.GetComponentInChildren<TextMeshProUGUI>();
         if (localization != null) {
@@ -163,32 +167,32 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         return ui;
     }
 
-    void InitializeColorToggles(IReadOnlyList<PaintColorData> list, ToggleGroup toggleGroup, GameObject togglePrefab, UnityAction<bool,Color> callback) {
+    void InitializeColorToggles(IReadOnlyList<PaintColorData> list, ToggleGroup toggleGroup, GameObject togglePrefab, UnityAction<bool,PaintColorData> callback) {
         foreach (var element in list) {
-            var colorObject = CreateUIObject(element.localizationTableKeyProperty, toggleGroup.gameObject, togglePrefab);
+            var colorObject = CreateUIObject(element.localizationTableKeyProperty, toggleGroup.gameObject, togglePrefab, element);
             Toggle toggleComponent = colorObject.GetComponent<Toggle>();
             Image image = colorObject.GetComponentInChildren<Image>();
             toggleComponent.group = toggleGroup;
             image.color = element.colorProperty;
-            toggleComponent.onValueChanged.AddListener((value) => callback(value, element.colorProperty) );
+            toggleComponent.onValueChanged.AddListener((value) => callback(value, element) );
             colorObject.GetComponentInChildren<OptionalIndicatorController>().SetOptionalIndicatorVisibility(element.optionalProperty);
         }
     }
 
     void InitializeUIObjects() {
         foreach (var version in Common.versionsData) {
-            GameObject versionObject = CreateUIObject(version.localizationTableKeyProperty, versionToggleGroup.gameObject, versionTogglePrefab);
+            GameObject versionObject = CreateUIObject(version.localizationTableKeyProperty, versionToggleGroup.gameObject, versionTogglePrefab, version);
             versionObject.GetComponent<Toggle>().group = versionToggleGroup;
             versions.Add(versionObject, GetSOForVersion(version.versionType));
         }
 
         foreach (var drive in Common.drivesData) {
-            GameObject driveObject = CreateUIObject(drive.localizationTableKeyProperty, driveToggleGroup.gameObject, textTogglePrefab);
+            GameObject driveObject = CreateUIObject(drive.localizationTableKeyProperty, driveToggleGroup.gameObject, textTogglePrefab, drive);
             driveObject.GetComponent<Toggle>().group = driveToggleGroup;
         }
 
-        InitializeColorToggles(Common.paintColorsData, colorsToggleGroup, colorTogglePrefab, OnCarColorChanged );
-        InitializeColorToggles(Common.paintColorsData, rimsToggleGroup, colorTogglePrefab, OnRimsColorChanged);
+        InitializeColorToggles(Common.bodyPaintColorsData, colorsToggleGroup, colorTogglePrefab, OnCarColorChanged );
+        InitializeColorToggles(Common.rimsPaintColorsData, rimsToggleGroup, colorTogglePrefab, OnRimsColorChanged);
 
 
         /* let toggle group know that toggles were made dynamically */
@@ -201,32 +205,37 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         LocaleSelector.onLanguageChanged += RefreshData;
 
         foreach (var package in Common.packagesData) {
-            var packageObject = CreateUIObject(package.localizationTableKeyProperty, packageList, textTogglePrefab);
+            var packageObject = CreateUIObject(package.localizationTableKeyProperty, packageList, textTogglePrefab, package);
             packages.Add(packageObject.GetComponent<Toggle>());
         }
     }
 
-    void OnCarColorChanged(bool value, Color color) {
+    void OnCarColorChanged(bool value, PaintColorData color) {
         if (value) {
             carColorChanger.ChangeElementsColor(color);
-            UpdateColorMatch(color);
-            if (rimsToggleGroupBehaviour.GetSelectedToggle().name == FindColorByType(eColor.COLORMATCH).localizationTableKeyProperty) {
+            BodyPaintColorData bodyPaint = color as BodyPaintColorData;
+            if (bodyPaint != null && bodyPaint.seamsColorProperty != null) {
+                seamsColorChanger.ChangeElementsColor(bodyPaint.seamsColorProperty);
+            }
+
+            UpdateColorMatch(color.colorProperty);
+            if (rimsToggleGroupBehaviour.GetSelectedToggle().name == FindRimsColorByType(eColor.COLORMATCH)?.localizationTableKeyProperty) {
                 OnRimsColorChanged(true, color);
             }
         }
     }
 
     void UpdateColorMatch(Color color) {
-        PaintColorData colorMatchRims = FindColorByType(eColor.COLORMATCH);
-        colorMatchRims.SetColor(color);
+        PaintColorData colorMatchRims = FindRimsColorByType(eColor.COLORMATCH);
+        colorMatchRims?.SetColor(color);
 
-        GameObject foundObject = configObjects.Find(obj => obj.name == FindColorByType(eColor.COLORMATCH).localizationTableKeyProperty);
+        GameObject foundObject = configObjects.Find(obj => obj.name == FindRimsColorByType(eColor.COLORMATCH)?.localizationTableKeyProperty);
         if (foundObject != null) {
             foundObject.GetComponentInChildren<Image>().color = color;
         }
     }
 
-    void OnRimsColorChanged(bool value, Color color) {
+    void OnRimsColorChanged(bool value, PaintColorData color) {
         if (value) {
             rimsColorChanger.ChangeElementsColor(color);
         }
@@ -253,8 +262,8 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
     }
 
     void OnDisable() {
-        carColorChanger.ChangeElementsColorToDefault();
-        rimsColorChanger.ChangeElementsColorToDefault();
+        //carColorChanger.ChangeElementsColorToDefault();
+        //rimsColorChanger.ChangeElementsColorToDefault();
 
         foreach (var package in packages) {
             package.isOn = false;

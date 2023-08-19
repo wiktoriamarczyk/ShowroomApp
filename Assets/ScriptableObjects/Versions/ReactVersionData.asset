@@ -22,9 +22,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0f2b32cf3af98f147adcc60421a3ceb1, type: 2}
   - {fileID: 11400000, guid: cfd6b6122b7792546a6a70da0ce13b3a, type: 2}
   colorsData:
-  - {fileID: 11400000, guid: 0618665d4fb327b4493e036c7dc9bd25, type: 2}
   - {fileID: 11400000, guid: f404a820980a1f94f81d4d0f3d4325cb, type: 2}
   - {fileID: 11400000, guid: 1cab3d42793cfb345ba8f9def3a4f415, type: 2}
+  - {fileID: 11400000, guid: 0618665d4fb327b4493e036c7dc9bd25, type: 2}
   rimsData:
   - {fileID: 11400000, guid: cd0a54a1be15aa3438f4a5c2517ae2b9, type: 2}
   - {fileID: 11400000, guid: d9c544fef67cee247bf3d9322d70c1e6, type: 2}

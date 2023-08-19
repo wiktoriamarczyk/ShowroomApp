@@ -9,12 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91a06b29ee76dfe499b96b5e73f5d762, type: 3}
+  m_Script: {fileID: 11500000, guid: bcf8f8c1729bb1d41b7b8e550c23a68b, type: 3}
   m_Name: RaceRedColor
   m_EditorClassIdentifier: 
-  colorType: 3
   localizationTableKey: Race Red Color
+  colorUsage: 1
+  colorType: 3
   color: {r: 0.7176471, g: 0, b: 0.019607844, a: 1}
   metallic: 0
   smoothness: 1
   optional: 1
+  seamsColor: {fileID: 11400000, guid: 8e14b48ae2bf00443b1f2a22cbb01ee0, type: 2}

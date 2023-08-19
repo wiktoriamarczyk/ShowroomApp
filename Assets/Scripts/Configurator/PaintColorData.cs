@@ -1,11 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using static Common;
 
-
 [CreateAssetMenu(fileName = "PaintColorData", menuName = "ScriptableObjects/PaintColorData", order = 3)]
 public class PaintColorData : LocalizableData {
+
+    [SerializeField]
+    Common.eColorUsage colorUsage = eColorUsage.UNDEFINED;
+
+    public Common.eColorUsage colorUsageProperty => colorUsage;
+
     [SerializeField]
     Common.eColor colorType = eColor.BLACK_STONE;
 

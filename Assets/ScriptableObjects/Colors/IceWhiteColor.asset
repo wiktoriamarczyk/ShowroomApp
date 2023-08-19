@@ -9,12 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91a06b29ee76dfe499b96b5e73f5d762, type: 3}
+  m_Script: {fileID: 11500000, guid: bcf8f8c1729bb1d41b7b8e550c23a68b, type: 3}
   m_Name: IceWhiteColor
   m_EditorClassIdentifier: 
-  colorType: 1
   localizationTableKey: Ice White Color
+  colorUsage: 1
+  colorType: 1
   color: {r: 1, g: 1, b: 1, a: 1}
   metallic: 0
   smoothness: 1
   optional: 0
+  seamsColor: {fileID: 11400000, guid: 5ff194236d1c7344e83c6942a90f9d88, type: 2}

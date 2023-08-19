@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91a06b29ee76dfe499b96b5e73f5d762, type: 3}
   m_Name: MetalColor
   m_EditorClassIdentifier: 
-  colorType: 7
   localizationTableKey: Metal Color
+  colorUsage: 2
+  colorType: 7
   color: {r: 0.65882355, g: 0.65882355, b: 0.65882355, a: 1}
   metallic: 1
   smoothness: 0.35

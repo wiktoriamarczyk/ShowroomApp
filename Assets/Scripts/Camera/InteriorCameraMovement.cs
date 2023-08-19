@@ -19,7 +19,6 @@ public class InteriorCameraMovement : MonoBehaviour {
         if (rot.y > 180) {
             rot.y -= 360;
         }
-
         rot.x = Mathf.Clamp(rot.x, minCameraAngle, maxCameraAngle);
         rot.y = Mathf.Clamp(rot.y, minCameraAngle, maxCameraAngle);
         transform.eulerAngles = rot;

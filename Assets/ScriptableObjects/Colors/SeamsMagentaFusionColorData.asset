@@ -10,12 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91a06b29ee76dfe499b96b5e73f5d762, type: 3}
-  m_Name: BlackColor
+  m_Name: SeamsMagentaFusionColorData
   m_EditorClassIdentifier: 
-  localizationTableKey: Black Color
-  colorUsage: 2
-  colorType: 6
-  color: {r: 0, g: 0, b: 0, a: 1}
-  metallic: 1
-  smoothness: 0.35
+  localizationTableKey: Seams Magenta Fusion Color
+  colorType: 0
+  color: {r: 0.50980395, g: 0, b: 0.27450982, a: 1}
+  metallic: 0
+  smoothness: 1
   optional: 0

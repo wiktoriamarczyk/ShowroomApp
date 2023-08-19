@@ -45,7 +45,7 @@ public class ToggleBehaviour : MonoBehaviour {
 
     public void SetDefaultColor(Color color) {
         imageDefaultColor = color;
-        frameDefaultColor = color;      
+        frameDefaultColor = color;
         if (!isOn) {
             SetColors(imageDefaultColor, frameDefaultColor);
         }

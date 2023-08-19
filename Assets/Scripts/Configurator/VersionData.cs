@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 [CreateAssetMenu(fileName = "VersionData", menuName = "ScriptableObjects/VersionData", order = 1)]
 public class VersionData : LocalizableData {
