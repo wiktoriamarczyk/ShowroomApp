@@ -9,6 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d81140b2538e06644901db86b8ab89be, type: 3}
-  m_Name: SharpVersionData
+  m_Script: {fileID: 11500000, guid: e29e132f18676324197849cddae2ad4e, type: 3}
+  m_Name: B5AWDMildHybridDriveData
   m_EditorClassIdentifier: 
+  localizationTableKey: B5 AWD mild hybrid
+  driveType: 4
+  optional: 0

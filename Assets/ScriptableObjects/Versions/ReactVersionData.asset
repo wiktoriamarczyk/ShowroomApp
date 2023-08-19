@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e705e1d99473204baf2fbab1f49025c, type: 3}
+  m_Name: ReactVersionData
+  m_EditorClassIdentifier: 
+  localizationTableKey: React
+  versionType: 0
+  descriptionLocalizationKey: React Version Desc
+  drives:
+  - {fileID: 11400000, guid: 85de3ee0bded78546b1bc6ab4b5fb731, type: 2}
+  - {fileID: 11400000, guid: 9c99d5d7131920741b9635c5e7ff15ad, type: 2}
+  packages:
+  - {fileID: 11400000, guid: 0f2b32cf3af98f147adcc60421a3ceb1, type: 2}
+  - {fileID: 11400000, guid: cfd6b6122b7792546a6a70da0ce13b3a, type: 2}
+  colorsData:
+  - {fileID: 11400000, guid: 0618665d4fb327b4493e036c7dc9bd25, type: 2}
+  - {fileID: 11400000, guid: f404a820980a1f94f81d4d0f3d4325cb, type: 2}
+  - {fileID: 11400000, guid: 1cab3d42793cfb345ba8f9def3a4f415, type: 2}
+  rimsData:
+  - {fileID: 11400000, guid: cd0a54a1be15aa3438f4a5c2517ae2b9, type: 2}
+  - {fileID: 11400000, guid: d9c544fef67cee247bf3d9322d70c1e6, type: 2}

@@ -18,9 +18,6 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
 
     [SerializeField] RectTransform transformToRefresh;
     [SerializeField] TextMeshProUGUI versionDescription;
-    [SerializeField] ReactVersionData reactVersionData;
-    [SerializeField] SharpVersionData sharpVersionData;
-    [SerializeField] UnityVersionData unityVersionData;
 
     [SerializeField] GameObject textTogglePrefab;
     [SerializeField] GameObject versionTogglePrefab;
@@ -110,25 +107,21 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         }
     }
 
-    void ActivateToggles<T>(List<Toggle> toggles, T dataCollection) where T : class {
+    void ActivateToggles<T>(List<Toggle> toggles, List<T> dataCollection) where T : LocalizableData {
         foreach (Toggle toggle in toggles) {
             string toggleName = toggle.gameObject.name;
 
-            bool isActive = dataCollection switch {
-                IReadOnlyList<string> list => list.Contains(toggleName),
-                IReadOnlyDictionary<string, string> dictionary => dictionary.ContainsKey(toggleName),
-                _ => false
-            };
+            bool isActive = dataCollection.Find(data => data.localizationTableKeyProperty == toggleName) != null;
 
             toggle.gameObject.SetActive(isActive);
         }
     }
 
     void ActivateObjects() {
-        ActivateToggles(driveToggleGroupBehaviour.GetToggles(), currentVersion.drives);
-        ActivateToggles(colorsToggleGroupBehaviour.GetToggles(), currentVersion.colorsData);
-        ActivateToggles(rimsToggleGroupBehaviour.GetToggles(), currentVersion.rimsData);
-        ActivateToggles(packages, currentVersion.packages);
+        ActivateToggles(driveToggleGroupBehaviour.GetToggles(), currentVersion.drivesProperty);
+        ActivateToggles(colorsToggleGroupBehaviour.GetToggles(), currentVersion.colorsDataProperty);
+        ActivateToggles(rimsToggleGroupBehaviour.GetToggles(), currentVersion.rimsDataProperty);
+        ActivateToggles(packages, currentVersion.packagesProperty);
     }
 
     async void RefreshData() {
@@ -139,7 +132,7 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
             StopAllCoroutines();
         }
         SetCurrentVersion(versionToggleGroupBehaviour.GetSelectedToggle().gameObject);
-        versionDescription.text = await Common.GetLocalizationEntry(currentVersion.description);
+        versionDescription.text = await Common.GetLocalizationEntry(currentVersion.localizationTableKeyProperty);
         ActivateObjects();
         RefreshSelectedToggles();
         StartCoroutine(RefreshLayout());
@@ -170,32 +163,32 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         return ui;
     }
 
-    void InitializeColorToggles<T>(IReadOnlyList<Item<T>> list, ToggleGroup toggleGroup, GameObject togglePrefab, UnityAction<bool,string> callback) {
+    void InitializeColorToggles(IReadOnlyList<PaintColorData> list, ToggleGroup toggleGroup, GameObject togglePrefab, UnityAction<bool,Color> callback) {
         foreach (var element in list) {
-            var colorObject = CreateUIObject(element.localizationTableKey, toggleGroup.gameObject, togglePrefab);
+            var colorObject = CreateUIObject(element.localizationTableKeyProperty, toggleGroup.gameObject, togglePrefab);
             Toggle toggleComponent = colorObject.GetComponent<Toggle>();
             Image image = colorObject.GetComponentInChildren<Image>();
             toggleComponent.group = toggleGroup;
-            image.color = Common.ColorFromHex(element.hex);
-            toggleComponent.onValueChanged.AddListener((value) => callback(value, element.hex) );
-            colorObject.GetComponentInChildren<OptionalIndicatorController>().SetOptionalIndicatorVisibility(element.optional);
+            image.color = element.colorProperty;
+            toggleComponent.onValueChanged.AddListener((value) => callback(value, element.colorProperty) );
+            colorObject.GetComponentInChildren<OptionalIndicatorController>().SetOptionalIndicatorVisibility(element.optionalProperty);
         }
     }
 
     void InitializeUIObjects() {
-        foreach (var version in Common.versions) {
-            GameObject versionObject = CreateUIObject(version.Value, versionToggleGroup.gameObject, versionTogglePrefab);
+        foreach (var version in Common.versionsData) {
+            GameObject versionObject = CreateUIObject(version.localizationTableKeyProperty, versionToggleGroup.gameObject, versionTogglePrefab);
             versionObject.GetComponent<Toggle>().group = versionToggleGroup;
-            versions.Add(versionObject, GetSOForVersion(version.Key));
+            versions.Add(versionObject, GetSOForVersion(version.versionType));
         }
 
-        foreach (var drive in Common.drives) {
-            GameObject driveObject = CreateUIObject(drive.Value, driveToggleGroup.gameObject, textTogglePrefab);
+        foreach (var drive in Common.drivesData) {
+            GameObject driveObject = CreateUIObject(drive.localizationTableKeyProperty, driveToggleGroup.gameObject, textTogglePrefab);
             driveObject.GetComponent<Toggle>().group = driveToggleGroup;
         }
 
-        InitializeColorToggles<eColor>(Common.colors, colorsToggleGroup, colorTogglePrefab, OnCarColorChanged );
-        InitializeColorToggles<eRims>(Common.rims, rimsToggleGroup, colorTogglePrefab, OnRimsColorChanged);
+        InitializeColorToggles(Common.paintColorsData, colorsToggleGroup, colorTogglePrefab, OnCarColorChanged );
+        InitializeColorToggles(Common.paintColorsData, rimsToggleGroup, colorTogglePrefab, OnRimsColorChanged);
 
 
         /* let toggle group know that toggles were made dynamically */
@@ -207,35 +200,35 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
         versionToggleGroupBehaviour.onToggleChanged += RefreshData;
         LocaleSelector.onLanguageChanged += RefreshData;
 
-        foreach (var package in Common.packages) {
-            var packageObject = CreateUIObject(package.Value, packageList, textTogglePrefab);
+        foreach (var package in Common.packagesData) {
+            var packageObject = CreateUIObject(package.localizationTableKeyProperty, packageList, textTogglePrefab);
             packages.Add(packageObject.GetComponent<Toggle>());
         }
     }
 
-    void OnCarColorChanged(bool value, string colorHex) {
+    void OnCarColorChanged(bool value, Color color) {
         if (value) {
-            carColorChanger.ChangeElementsColor(colorHex);
-            UpdateColorMatch(colorHex);
-            if (rimsToggleGroupBehaviour.GetSelectedToggle().name == FindRimByType(eRims.COLORMATCH).localizationTableKey) {
-                OnRimsColorChanged(true, colorHex);
+            carColorChanger.ChangeElementsColor(color);
+            UpdateColorMatch(color);
+            if (rimsToggleGroupBehaviour.GetSelectedToggle().name == FindColorByType(eColor.COLORMATCH).localizationTableKeyProperty) {
+                OnRimsColorChanged(true, color);
             }
         }
     }
 
-    void UpdateColorMatch(string colorHex) {
-        Item<eRims> colorMatchRims = FindRimByType(eRims.COLORMATCH);
-        colorMatchRims.UpdateHex(colorHex);
+    void UpdateColorMatch(Color color) {
+        PaintColorData colorMatchRims = FindColorByType(eColor.COLORMATCH);
+        colorMatchRims.SetColor(color);
 
-        GameObject foundObject = configObjects.Find(obj => obj.name == FindRimByType(eRims.COLORMATCH).localizationTableKey);
+        GameObject foundObject = configObjects.Find(obj => obj.name == FindColorByType(eColor.COLORMATCH).localizationTableKeyProperty);
         if (foundObject != null) {
-            foundObject.GetComponentInChildren<Image>().color = Common.ColorFromHex(colorHex);
+            foundObject.GetComponentInChildren<Image>().color = color;
         }
     }
 
-    void OnRimsColorChanged(bool value, string colorHex) {
+    void OnRimsColorChanged(bool value, Color color) {
         if (value) {
-            rimsColorChanger.ChangeElementsColor(colorHex);
+            rimsColorChanger.ChangeElementsColor(color);
         }
     }
 
@@ -244,14 +237,10 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
     }
 
     VersionData GetSOForVersion(Common.eVersion version) {
-        if (version == eVersion.REACT) {
-            return reactVersionData;
-        }
-        else if (version == eVersion.SHARP) {
-            return sharpVersionData;
-        }
-        else if (version == eVersion.UNITY) {
-            return unityVersionData;
+        foreach (var versionData in Common.versionsData) {
+            if (version == versionData.versionType) {
+                return versionData;
+            }
         }
         return null;
     }

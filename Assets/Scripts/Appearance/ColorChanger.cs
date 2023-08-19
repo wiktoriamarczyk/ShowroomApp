@@ -26,11 +26,11 @@ public class ColorChanger : MonoBehaviour {
         StartCoroutine(ChangeColorToDefault());
     }
 
-    public void ChangeElementsColor(string col) {
+    public void ChangeElementsColor(Color col) {
         if (isCoroutineActive) {
             StopAllCoroutines();
         }
-        StartCoroutine(ChangeElementsColor(Common.ColorFromHex(col)));
+        StartCoroutine(ChangeElementsColorCoroutine(col));
     }
 
     IEnumerator ChangeColorToDefault() {
@@ -47,7 +47,7 @@ public class ColorChanger : MonoBehaviour {
         isCoroutineActive = false;
     }
 
-    IEnumerator ChangeElementsColor(Color color) {
+    IEnumerator ChangeElementsColorCoroutine(Color color) {
         isCoroutineActive = true;
         progress = 0f;
         while (progress < 1){

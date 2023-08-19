@@ -9,6 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6bdab631f8446742b923e563aaa3469, type: 3}
-  m_Name: ReactVersionData
+  m_Script: {fileID: 11500000, guid: 91a06b29ee76dfe499b96b5e73f5d762, type: 3}
+  m_Name: MagentaFusionColor
   m_EditorClassIdentifier: 
+  colorType: 4
+  localizationTableKey: Magenta Fusion Color
+  color: {r: 0.89411765, g: 0, b: 0.48235294, a: 1}
+  metallic: 0
+  smoothness: 1
+  optional: 1

@@ -8,11 +8,11 @@ public class SceneManager : MonoBehaviour {
     void Awake() {
         cameraController.onScreenSaver += PanelManager.Instance.HideAllPanels;
         cameraController.onCameraMovement += PanelManager.Instance.ShowAllPrevOpenedPanels;
+        return;
+        //gallery.onGalleryLoaded += DisableSplashScreen;
 
-        gallery.onGalleryLoaded += DisableSplashScreen;
-
-        splashScreen.SetActive(true);
-        cameraController.DisableRotation();
+        //splashScreen.SetActive(true);
+        //cameraController.DisableRotation();
     }
 
     void DisableSplashScreen() {

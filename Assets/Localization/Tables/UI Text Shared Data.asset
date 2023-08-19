@@ -78,15 +78,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1079217730359296
-    m_Key: React Version Text
+    m_Key: React Version Desc
     m_Metadata:
       m_Items: []
   - m_Id: 1079467912204288
-    m_Key: Sharp Version Text
+    m_Key: Sharp Version Desc
     m_Metadata:
       m_Items: []
   - m_Id: 1079493191274496
-    m_Key: Unity Version Text
+    m_Key: Unity Version Desc
     m_Metadata:
       m_Items: []
   - m_Id: 1079859597283328
