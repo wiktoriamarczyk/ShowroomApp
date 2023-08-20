@@ -12,7 +12,7 @@ public class OutsideCameraMovement : MonoBehaviour {
     const float radius = 3f;
     const float movementSpeed = 0.5f;
     const float screenSaverSpeed = 0.75f;
-    const float timeToScreenSaver = 500f;
+    const float timeToScreenSaver = 10f;
     const float distanceToSpeedMultiplier = 0.01f;
     const float scrollToZoomMultiplier = 0.3f;
     const float touchToZoomMultiplier = 0.01f;
@@ -31,7 +31,7 @@ public class OutsideCameraMovement : MonoBehaviour {
 
     public eMovementType movementType { get; set; } = eMovementType.PLAYER_INPUT;
 
-    [SerializeField] Text text;
+    [SerializeField] Text debugInfo;
 
     public enum eMovementType {
         NONE,
@@ -47,7 +47,7 @@ public class OutsideCameraMovement : MonoBehaviour {
     }
 
     void Update() {
-        text.text = $"Movement type: {movementType}\n" +
+        debugInfo.text = $"Movement type: {movementType}\n" +
                     $"Speed: {speed}\n" +
                     $"Timer: {timer}\n" +
                     $"Last position: {lastPosition}\n" +

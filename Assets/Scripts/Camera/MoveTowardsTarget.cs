@@ -16,6 +16,7 @@ public class MoveTowardsTarget : MonoBehaviour {
     [SerializeField] float cameraSpeed = 3f;
 
     Vector3 lastPosition = new Vector3();
+    Quaternion lastRotation = new Quaternion();
     List<CatmulRomSegment> currentCameraPath;
     public event Action<eAnimType> onAnimStart;
     public event Action<eAnimType> onAnimEnd;
@@ -40,6 +41,7 @@ public class MoveTowardsTarget : MonoBehaviour {
 
         if (forward) {
             lastPosition = transform.position;
+            lastRotation = transform.rotation;
         }
 
         currentCameraPath = GenerateCatmulRomSegments(lastPosition, cameraSpeed, forward);
@@ -125,21 +127,43 @@ public class MoveTowardsTarget : MonoBehaviour {
         return CatmullRom(segment.points[0], segment.points[1], segment.points[2], segment.points[3], t);
     }
 
+    void CorrectTransformRotation(eAnimType type, float progress) {
+
+        Quaternion targetRotation = transform.rotation;
+
+        if (type == eAnimType.ENTER_CAR) {
+            targetRotation = Quaternion.Lerp(lastRotation, targetRotation, progress);
+        }
+        else {
+            targetRotation = Quaternion.Lerp(targetRotation, lastRotation, progress);
+        }
+        transform.rotation = targetRotation;
+    }
+        
+
     IEnumerator SetNewPosition(eAnimType type) {
         isCoroutineActive = true;
         onAnimStart?.Invoke(type);
-        while (currentCameraPath.Count > 0) {
-            CatmulRomSegment currentSegment = currentCameraPath[0];
-            currentCameraPath.RemoveAt(0);
+        for (int i=0; i<currentCameraPath.Count; ++i) {
+            CatmulRomSegment currentSegment = currentCameraPath[i];
 
             float progress = 0; // from 0 to 1
             while(progress < 1.0f) {
                 progress = Mathf.Clamp01(progress + Time.deltaTime * currentSegment.speedMultiplier);
                 transform.position = CatmullRom(currentSegment, progress);
+                
+               
                 transform.LookAt(rotationTarget.transform.position);
+
+                if ( (type == eAnimType.ENTER_CAR && i==0)
+                  || (type == eAnimType.EXIT_CAR  && i == currentCameraPath.Count - 1)) {
+                    CorrectTransformRotation(type, progress);
+                }
+
                 yield return null;
             }
         }
+        currentCameraPath.Clear();
         isCoroutineActive = false;
         onAnimEnd?.Invoke(type);
     }

@@ -1863,7 +1863,7 @@ MonoBehaviour:
   target: {fileID: 1255311053}
   startPosition: {x: 3.1083984, y: 2.1185608, z: 3.2518463}
   startRotation: {x: 19.010517, y: -125.646, z: 0}
-  text: {fileID: 572417451}
+  debugInfo: {fileID: 572417451}
 --- !u!114 &282840816
 MonoBehaviour:
   m_ObjectHideFlags: 0

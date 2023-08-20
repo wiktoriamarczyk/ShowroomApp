@@ -22,14 +22,14 @@ public class CameraController : MonoBehaviour {
             interiorCamera.enabled = true;
         }
         else {
-            outsideCamera.EnableRotation();
+            outsideCamera.enabled = true;
         }
         interiorCameraActivator.interactable = true;
     }
 
     void OnAnimStart(MoveTowardsTarget.eAnimType type) {
         interiorCameraActivator.interactable = false;
-        outsideCamera.DisableRotation();
+        outsideCamera.enabled = false;
         interiorCamera.enabled = false;
     }
 }
