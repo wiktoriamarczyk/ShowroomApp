@@ -20,14 +20,12 @@ public class ConfigurationsSaver : MonoBehaviour {
     }
 
     async UniTask GetAndSaveConfiguration() {
-        PanelManager.instance.SetPopupDefaultInput(Common.GetDefaultConfigName());
-
-        bool result = await PanelManager.instance.ShowPopup(Common.ePopupType.INPUT_FIELD, Common.localizationConfigNameInfo);
-        if (!result) {
+        var popupData = await PanelManager.instance.ShowPopup2<InputFieldPopupController>(p => p.Init(Common.localizationConfigNameInfo, Common.GetDefaultConfigName()));
+        if (!popupData.result) {
             return;
         }
 
-        string configName = PanelManager.instance.GetPopupInput();
+        string configName = popupData.popupController.GetUserInput();
         if (configName == String.Empty) {
             configName = GetDefaultConfigName();
         }
@@ -67,8 +65,8 @@ public class ConfigurationsSaver : MonoBehaviour {
         if (configList != null) {
             dataOverwrite = TryOverwriteConfig(newConfig, configList);
             if (dataOverwrite) {
-                bool result = await PanelManager.instance.ShowPopup(Common.ePopupType.DEFAULT, Common.localizationOverrideDataWarning);
-                if (!result) {
+                var popupData = await PanelManager.instance.ShowPopup2<PopupController>(p => p.Init(Common.localizationOverrideDataWarning));
+                if (!popupData.result) {
                     return;
                 }
             }

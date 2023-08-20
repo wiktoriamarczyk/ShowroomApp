@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using static Common;
 using System.Linq;
 using UnityEngine.EventSystems;
+using System.Collections;
 
 public class PanelManager : MonoBehaviour {
     static public PanelManager instance { get; private set; }
@@ -63,41 +64,49 @@ public class PanelManager : MonoBehaviour {
         currentPanel = null;
     }
 
-    T GetPopupByType<T>(ePopupType popupType) where T : class {
+    //T GetPopupByType<T>(ePopupType popupType) where T : class {
+    //    foreach (var popup in popups) {
+    //        if (popup.GetPopupType() == popupType) {
+    //            return popup as T;
+    //        }
+    //    }
+    //    return null;
+    //}
+
+
+    T GetPopupPrefabByType<T>() where T : class {
         foreach (var popup in popups) {
-            if (popup.GetPopupType() == popupType) {
+            if (popup is T) {
                 return popup as T;
             }
         }
         return null;
     }
-
-    public async UniTask<bool> ShowPopup(ePopupType popupType, string text) {
-        PopupController selectedPopupController = GetPopupByType <PopupController>(popupType);
-        if (selectedPopupController == null) {
-            return false;
+    
+    public async UniTask<PopupController.PopupShowResult<T>> ShowPopup2<T>(Action<T> InitFunc) where T : PopupController {
+        PopupController.PopupShowResult<T> popupData;
+        popupData.result = false;
+        popupData.popupController = null;
+        
+        T selectedPopupPrefab = GetPopupPrefabByType<T>();
+        if (selectedPopupPrefab == null) {
+            return popupData;
         }
+
+        GameObject newPopup = Instantiate(selectedPopupPrefab.gameObject, panelContainer.transform.parent);
+        T newPopupControler = newPopup.GetComponent<T>();
+        InitFunc?.Invoke(newPopupControler);
+        
         TurnOnBackgroundEffects();
         interactionController.Block();
-        selectedPopupController.Show();
-        selectedPopupController.SetTextToDisplay(text);
-        bool result = await selectedPopupController.WaitForCloseAsync();
-        HidePopup(selectedPopupController);
-        return result;
-    }
+        newPopupControler.Show();
+        bool result = await newPopupControler.WaitForCloseAsync();
+        
+        popupData.result = result;
+        popupData.popupController = newPopupControler;
 
-    public void SetPopupDefaultInput(string text) {
-        GetPopupByType<InputFieldPopupController>(Common.ePopupType.INPUT_FIELD)?.SetInputFieldPlaceholder(text);
-    }
-
-    public string GetPopupInput() {
-        return GetPopupByType<InputFieldPopupController>(Common.ePopupType.INPUT_FIELD)?.GetUserInput();
-    }
-
-    public void HidePopup(PopupController popup) {
-        TurnOffBackgroundEffects();
-        interactionController.Enable();
-        popup.Hide();
+        HidePopup(newPopupControler);
+        return popupData;
     }
 
     public bool IsPanelShown(GameObject obj) {
@@ -115,6 +124,18 @@ public class PanelManager : MonoBehaviour {
     public void TurnOffBackgroundEffects() {
         backgroundEffects.TurnOffBlurryDarkBackground();
     }
+    
+    void HidePopup(PopupController popup) {
+        TurnOffBackgroundEffects();
+        interactionController.Enable();
+        popup.Hide();
+        StartCoroutine(DeletePopup(popup));
+    }
+
+    IEnumerator DeletePopup(PopupController popup) {
+        yield return new WaitForSeconds(0.5f);
+        Destroy(popup.gameObject);
+    }
 
     void Update() {
         if (Input.GetMouseButtonUp(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)) {
@@ -129,10 +150,6 @@ public class PanelManager : MonoBehaviour {
 
         interactionController = panelContainer.GetComponent<InteractionController>();
         panels = panelContainer.GetComponentsInChildren<Panel>(true).ToList();
-
-        foreach (var popup in popups) {
-            popup.PopupAwake();
-        }
 
         foreach (var panel in panels) {
             panel.PanelAwake();

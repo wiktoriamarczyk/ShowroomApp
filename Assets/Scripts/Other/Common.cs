@@ -30,10 +30,6 @@ public static class Common {
     public const float dreamloDebugDelay = 2f;
     public const int   maxInputLength = 20;
 
-    public enum ePopupType {
-        DEFAULT,
-        INPUT_FIELD
-    }
     public enum eConfigurationType {
         VERSION,
         DRIVE,

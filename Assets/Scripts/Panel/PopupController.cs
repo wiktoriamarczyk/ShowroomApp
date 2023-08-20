@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Components;
@@ -8,22 +9,26 @@ public class PopupController : MonoBehaviour {
     [SerializeField] Button mainButton;
     [SerializeField] Button altButton;
     [SerializeField] TextMeshProUGUI textToDisplay;
-    [SerializeField] Common.ePopupType type;
 
     Panel panel;
     UniTaskCompletionSource<bool> popupTask;
     LocalizeStringEvent localization;
 
+    public struct PopupShowResult<T> where T : PopupController {
+        public bool result;
+        public T popupController;
+    }
+
+    public void Init(string text) {
+        SetTextToDisplay(text);
+    }
+    
     public void Show() {
         panel.Show();
     }
 
     public void Hide() {
         panel.Hide();
-    }
-
-    public Common.ePopupType GetPopupType() {
-        return type;
     }
 
     public UniTask<bool> WaitForCloseAsync() {
@@ -39,7 +44,7 @@ public class PopupController : MonoBehaviour {
         }
     }
 
-   public virtual void PopupAwake() {
+   public virtual void Awake() {
         panel = GetComponent<Panel>();
         mainButton.onClick.AddListener(() => OnButtonClick(true));
         altButton.onClick.AddListener(() => OnButtonClick(false));

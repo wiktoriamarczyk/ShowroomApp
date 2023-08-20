@@ -1,8 +1,15 @@
 using TMPro;
+using Unity.VisualScripting;
 
 public class InputFieldPopupController : PopupController {
     TMP_InputField inputField;
     string placeholderText;
+    
+
+    public void Init(string text, string placeholderText) {
+        base.Init(text);
+        SetInputFieldPlaceholder(placeholderText);
+    }
 
     public void SetInputFieldPlaceholder(string text) {
         TextMeshProUGUI placeholder = inputField?.placeholder.GetComponent<TextMeshProUGUI>();
@@ -25,8 +32,8 @@ public class InputFieldPopupController : PopupController {
         SetInputFieldPlaceholder(placeholderText);
     }
 
-    public override void PopupAwake() {
-        base.PopupAwake();
+    public override void Awake() {
+        base.Awake();
         inputField = GetComponentInChildren<TMP_InputField>();
         inputField?.onValueChanged.AddListener(OnInputFieldValueChanged);
     }

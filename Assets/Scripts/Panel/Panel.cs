@@ -15,7 +15,7 @@ public abstract class Panel : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     const float timeThreshold = 0.5f;
 
-    protected void Awake() {
+    protected void Start() {
         PanelManager.instance.onPointerUp += OnPointerUp;
     }
 
