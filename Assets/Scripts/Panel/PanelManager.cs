@@ -4,6 +4,7 @@ using System;
 using Cysharp.Threading.Tasks;
 using static Common;
 using System.Linq;
+using UnityEngine.EventSystems;
 
 public class PanelManager : MonoBehaviour {
     static public PanelManager instance { get; private set; }
@@ -18,6 +19,7 @@ public class PanelManager : MonoBehaviour {
 
     public event Action onPanelOpened;
     public event Action onPanelClosed;
+    public event Action onPointerUp;
 
     public void HideAllPanels() {
         prevOpenedPanels.Clear();
@@ -112,6 +114,12 @@ public class PanelManager : MonoBehaviour {
 
     public void TurnOffBackgroundEffects() {
         backgroundEffects.TurnOffBlurryDarkBackground();
+    }
+
+    void Update() {
+        if (Input.GetMouseButtonUp(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)) {
+            onPointerUp?.Invoke();
+        }
     }
 
     void Awake() {

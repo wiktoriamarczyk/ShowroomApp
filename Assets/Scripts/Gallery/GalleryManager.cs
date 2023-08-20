@@ -36,7 +36,7 @@ public class GalleryManager : MonoBehaviour {
     }
 
     async void Awake() {
-        return;
+        //return;
         cancelTokenSrc = new CancellationTokenSource();
         cancelToken = cancelTokenSrc.Token;
 

@@ -21,6 +21,12 @@ public class ToggleGroupBehaviour : MonoBehaviour {
         return toggles.ToList();
     }
 
+    public void SelectDefaultToggle() {
+        if (defaultToggle != null) {
+            SelectToggle(defaultToggle);
+        }
+    }
+
     public void SelectToggle(Toggle toggle) {
         if (selectedToggle != null) {
             selectedToggle.isOn = false;
