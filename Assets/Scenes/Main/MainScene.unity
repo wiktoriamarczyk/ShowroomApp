@@ -9013,6 +9013,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 35587289}
   m_CullTransparentMesh: 1
+--- !u!224 &1584934910 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 633495183338878058, guid: 6edff74c2bc1b7b43bfa50d96bdf8a97, type: 3}
+  m_PrefabInstance: {fileID: 1936267791}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1611637310
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10020,7 +10025,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3527199901272084604, guid: 83c20ce69e2efe4419a13e6039b8df37, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3599544093611132895, guid: 83c20ce69e2efe4419a13e6039b8df37, type: 3}
       propertyPath: m_AnchorMax.y
@@ -10096,7 +10101,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5218634706281813589, guid: 83c20ce69e2efe4419a13e6039b8df37, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 279.7
       objectReference: {fileID: 0}
     - target: {fileID: 5218634706281813589, guid: 83c20ce69e2efe4419a13e6039b8df37, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10148,19 +10153,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6061906049200927723, guid: 83c20ce69e2efe4419a13e6039b8df37, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6061906049200927723, guid: 83c20ce69e2efe4419a13e6039b8df37, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6061906049200927723, guid: 83c20ce69e2efe4419a13e6039b8df37, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 135.87
       objectReference: {fileID: 0}
     - target: {fileID: 6061906049200927723, guid: 83c20ce69e2efe4419a13e6039b8df37, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 45.79
       objectReference: {fileID: 0}
     - target: {fileID: 6061906049200927723, guid: 83c20ce69e2efe4419a13e6039b8df37, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -10168,7 +10173,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6061906049200927723, guid: 83c20ce69e2efe4419a13e6039b8df37, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -22.895
       objectReference: {fileID: 0}
     - target: {fileID: 6107874937230626332, guid: 83c20ce69e2efe4419a13e6039b8df37, type: 3}
       propertyPath: m_SizeDelta.x
@@ -10184,7 +10189,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6677046912251368286, guid: 83c20ce69e2efe4419a13e6039b8df37, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 45.79
       objectReference: {fileID: 0}
     - target: {fileID: 7289401135459783720, guid: 83c20ce69e2efe4419a13e6039b8df37, type: 3}
       propertyPath: m_AnchorMax.y
@@ -10200,7 +10205,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7289401135459783720, guid: 83c20ce69e2efe4419a13e6039b8df37, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 25.79
       objectReference: {fileID: 0}
     - target: {fileID: 7289401135459783720, guid: 83c20ce69e2efe4419a13e6039b8df37, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -10208,7 +10213,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7289401135459783720, guid: 83c20ce69e2efe4419a13e6039b8df37, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -22.895
       objectReference: {fileID: 0}
     - target: {fileID: 7873139427832285546, guid: 83c20ce69e2efe4419a13e6039b8df37, type: 3}
       propertyPath: m_AnchorMax.y
@@ -14223,7 +14228,7 @@ PrefabInstance:
     - target: {fileID: 5980561368415109241, guid: a256375d021438844b24566d773e678a, type: 3}
       propertyPath: m_Content
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1584934910}
     - target: {fileID: 5980561368415109241, guid: a256375d021438844b24566d773e678a, type: 3}
       propertyPath: m_VerticalScrollbar
       value: 

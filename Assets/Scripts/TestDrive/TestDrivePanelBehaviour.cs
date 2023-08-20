@@ -33,15 +33,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
 
     const string modifyDataPath = "http://dreamlo.com/lb/-Ur0ruQAokKXyyv8uxxT0wOw8r3LFlWUyISb24jdTvEw/";
     const string dataPath = "http://dreamlo.com/lb/6486be2b8f40bb7d84121bba/json";
-    const int earliestDrivingHour = 8;
-    const int latestDrivingHour = 22;
-    const int minuteStep = 30;
-    const int eventDays = 7;
 
-
-    const string startEventDay = "startEventDay";
-    const string startEventMonth = "startEventMonth";
-    const string startEventYear = "startEventYear";
 
     enum eDate {
         TODAY = 0,
@@ -81,17 +73,10 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     }
 
     void RestartFirstDayOfEvent() {
-        PlayerPrefs.SetInt(startEventDay, DateTime.Now.Day);
-        PlayerPrefs.SetInt(startEventMonth, DateTime.Now.Month);
-        PlayerPrefs.SetInt(startEventYear, DateTime.Now.Year);
+        Common.RestartFirstDayOfEvent();
         InsertDateAndTimeData();
     }
 
-    DateTime GetStartEventDate() {
-        return new DateTime(PlayerPrefs.GetInt(startEventYear),
-                            PlayerPrefs.GetInt(startEventMonth),
-                            PlayerPrefs.GetInt(startEventDay));
-    }
 
     void OnNameChanged() {
         driverName.text = driverName.text.Trim();
@@ -104,16 +89,16 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         driveTime.ClearOptions();
         List<string> hoursList = new List<string>();
         DateTime earliestTime = DateTime.Now;
-        if (earliestTime.Hour >= latestDrivingHour || earliestTime.Hour <= earliestDrivingHour) {
+        if (earliestTime.Hour >= Common.latestDrivingHour || earliestTime.Hour <= Common.earliestDrivingHour) {
             EraseDropdownOptionAtIndex(driveDate, (int)eDate.TODAY);
         }
         if (driveDate.value == (int)eDate.TODAY) {
             earliestTime = GetEarliestTestDriveTimeFromDate(DateTime.Now);
         }
         else {
-            earliestTime = DateTime.MinValue.AddHours(earliestDrivingHour);
+            earliestTime = DateTime.MinValue.AddHours(Common.earliestDrivingHour);
         }
-        for (DateTime time = earliestTime; time.Hour < latestDrivingHour; time = time.AddMinutes(minuteStep)) {
+        for (DateTime time = earliestTime; time.Hour < Common.latestDrivingHour; time = time.AddMinutes(Common.minuteStep)) {
             hoursList.Add(time.ToString("HH:mm"));
         }
         driveTime.AddOptions(RemoveOccupiedHours(hoursList));
@@ -227,12 +212,12 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         driveDate.ClearOptions();
 
         List<string> dateList = new List<string>();
-        DateTime earliestDate = GetStartEventDate();
-        if (earliestDate.Date == DateTime.Now.Date && earliestDate.Hour >= latestDrivingHour) {
+        DateTime earliestDate = Common.GetStartEventDate();
+        if (earliestDate.Date == DateTime.Now.Date && earliestDate.Hour >= Common.latestDrivingHour) {
             earliestDate = earliestDate.AddDays(1);
         }
 
-        DateTime lastDate = earliestDate.AddDays(eventDays);
+        DateTime lastDate = earliestDate.AddDays(Common.eventDays);
         for (DateTime date = DateTime.Now; date <= lastDate; date = date.AddDays(1)) {
             dateList.Add(date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture));
         }
@@ -406,17 +391,17 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     }
 
     static DateTime GetEarliestTestDriveTimeFromDate(DateTime time) {
-        if (time.Hour >= latestDrivingHour || time.Hour <= earliestDrivingHour) {
+        if (time.Hour >= Common.latestDrivingHour || time.Hour <= Common.earliestDrivingHour) {
             time = time.AddDays(1);
-            time = new DateTime(time.Year, time.Month, time.Day, earliestDrivingHour, 00, 00);
+            time = new DateTime(time.Year, time.Month, time.Day, Common.earliestDrivingHour, 00, 00);
             return time;
         }
-        if (time.Minute > minuteStep) {
+        if (time.Minute > Common.minuteStep) {
             time = time.AddHours(1);
             time = new DateTime(time.Year, time.Month, time.Day, time.Hour, 00, 00);
         }
         else {
-            time = time.AddMinutes(minuteStep - time.Minute);
+            time = time.AddMinutes(Common.minuteStep - time.Minute);
         }
         return time;
     }

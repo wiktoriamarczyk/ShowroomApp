@@ -15,7 +15,24 @@ MonoBehaviour:
   localizationTableKey: Unity
   versionType: 2
   descriptionLocalizationKey: Unity Version Desc
-  drives: []
-  packages: []
-  colorsData: []
-  rimsData: []
+  drives:
+  - {fileID: 11400000, guid: 9c99d5d7131920741b9635c5e7ff15ad, type: 2}
+  - {fileID: 11400000, guid: e9acf25d35e552545a8930c601d30908, type: 2}
+  - {fileID: 11400000, guid: 96441efd3c616d54e8293eb35df15547, type: 2}
+  - {fileID: 11400000, guid: 4007ab16faf20a540bd048ac77b65b67, type: 2}
+  packages:
+  - {fileID: 11400000, guid: 0f2b32cf3af98f147adcc60421a3ceb1, type: 2}
+  - {fileID: 11400000, guid: cfd6b6122b7792546a6a70da0ce13b3a, type: 2}
+  - {fileID: 11400000, guid: 41faed056d97de34f948145a8bccb642, type: 2}
+  - {fileID: 11400000, guid: ea3d22ac8f5b6ea40b3e0dc0a29f2c8c, type: 2}
+  colorsData:
+  - {fileID: 11400000, guid: 0618665d4fb327b4493e036c7dc9bd25, type: 2}
+  - {fileID: 11400000, guid: f404a820980a1f94f81d4d0f3d4325cb, type: 2}
+  - {fileID: 11400000, guid: 1cab3d42793cfb345ba8f9def3a4f415, type: 2}
+  - {fileID: 11400000, guid: ff1c763e3b7fa4d47908bc475593f954, type: 2}
+  - {fileID: 11400000, guid: d1cca536620ac9c4f8f75d034e34a5ae, type: 2}
+  - {fileID: 11400000, guid: f955f6bbb407fdb448ff4574fba96a4d, type: 2}
+  rimsData:
+  - {fileID: 11400000, guid: cd0a54a1be15aa3438f4a5c2517ae2b9, type: 2}
+  - {fileID: 11400000, guid: d9c544fef67cee247bf3d9322d70c1e6, type: 2}
+  - {fileID: 11400000, guid: f555e85831dc92a4ba8bcbaf94bfb845, type: 2}

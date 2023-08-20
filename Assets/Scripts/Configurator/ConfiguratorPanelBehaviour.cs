@@ -132,7 +132,7 @@ public class ConfiguratorPanelBehaviour : MonoBehaviour {
             StopAllCoroutines();
         }
         SetCurrentVersion(versionToggleGroupBehaviour.GetSelectedToggle().gameObject);
-        versionDescription.text = await Common.GetLocalizationEntry(currentVersion.localizationTableKeyProperty);
+        versionDescription.text = await Common.GetLocalizationEntry(currentVersion.descriptionLocalizationKeyProperty);
         ActivateObjects();
         RefreshSelectedToggles();
         StartCoroutine(RefreshLayout());

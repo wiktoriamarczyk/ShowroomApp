@@ -17,5 +17,5 @@ MonoBehaviour:
   colorType: 7
   color: {r: 0.65882355, g: 0.65882355, b: 0.65882355, a: 1}
   metallic: 1
-  smoothness: 0.35
+  smoothness: 0.65
   optional: 0

@@ -19,9 +19,16 @@ public static class Common {
 
     public const string defaultConfigName = "Config";
     public const string playerPrefsConfigCountName = "ConfigurationCount";
+    public const string startEventDay = "startEventDay";
+    public const string startEventMonth = "startEventMonth";
+    public const string startEventYear = "startEventYear";
+    public const int    eventDays = 7;
+    public const int    earliestDrivingHour = 8;
+    public const int    latestDrivingHour = 22;
+    public const int    minuteStep = 30;
 
     public const float dreamloDebugDelay = 2f;
-    public const int maxInputLength = 20;
+    public const int   maxInputLength = 20;
 
     public enum ePopupType {
         DEFAULT,
@@ -96,7 +103,14 @@ public static class Common {
         rimsPaintColorsData.Sort((a, b) => a.colorTypeProperty.CompareTo(b.colorTypeProperty));
         rimsPaintColorsData = rimsPaintColorsData.Where(color => color.colorUsageProperty == eColorUsage.RIMS).ToList();
         drivesData = Common.GetAllScriptableObejctsInstances<DriveData>();
+        drivesData.Sort((a, b) => a.driveTypeProperty.CompareTo(b.driveTypeProperty));
         packagesData = Common.GetAllScriptableObejctsInstances<PackageData>();
+        packagesData.Sort((a, b) => a.packageTypeProperty.CompareTo(b.packageTypeProperty));
+
+        TimeSpan duration = DateTime.Now - GetStartEventDate();
+        if (duration.Days >= eventDays || duration.Days < 0) {
+            RestartFirstDayOfEvent();
+        }
     }
 
     public static BodyPaintColorData FindBodyColorByType(eColor type) {
@@ -111,12 +125,24 @@ public static class Common {
         return defaultConfigName + " " + GetConfigurationCount();
     }
 
+    /* ---PLAYER PREFS--- */
     public static int GetConfigurationCount() {
         return PlayerPrefs.GetInt(playerPrefsConfigCountName);
     }
     public static void SetConfigurationCount(int value) {
         PlayerPrefs.SetInt(playerPrefsConfigCountName, value);
     }
+    public static void RestartFirstDayOfEvent() {
+        PlayerPrefs.SetInt(startEventDay, DateTime.Now.Day);
+        PlayerPrefs.SetInt(startEventMonth, DateTime.Now.Month);
+        PlayerPrefs.SetInt(startEventYear, DateTime.Now.Year);
+    }
+    public static DateTime GetStartEventDate() {
+        return new DateTime(PlayerPrefs.GetInt(startEventYear),
+                            PlayerPrefs.GetInt(startEventMonth),
+                            PlayerPrefs.GetInt(startEventDay));
+    }
+
     public static async UniTask<string> GetLocalizationEntry(string localizationKey) {
         string localizationTableKey = localizationKey;
         string text = String.Empty;
