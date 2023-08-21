@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Collections;
 
 public class OutsideCameraMovement : MonoBehaviour {
     [SerializeField] GameObject target;
@@ -19,6 +20,7 @@ public class OutsideCameraMovement : MonoBehaviour {
 
     float lastTime;
     float timer = timeToScreenSaver;
+    float oneFrameStopTime = 0;
     bool directMovementControl = false;
     bool dampingEnabled = true;
     Vector3 lastPosition;
@@ -59,7 +61,8 @@ public class OutsideCameraMovement : MonoBehaviour {
                     $"Input.mousePosition: {Input.mousePosition}\n" +
                     $"ScreenToWorldPosition: {ScreenToWorldPosition(Input.mousePosition)}\n";
 
-
+        if (Time.time == oneFrameStopTime)
+            return;
 
         if (movementType == eMovementType.NONE) {
             return;
@@ -91,12 +94,14 @@ public class OutsideCameraMovement : MonoBehaviour {
         movementType = eMovementType.PLAYER_INPUT;
         timer = timeToScreenSaver;
         dampingEnabled = true;
+        oneFrameStopTime = Time.time;
     }
 
     public void DisableRotation() {
         movementType = eMovementType.NONE;
         dampingEnabled = false;
         directMovementControl = false;
+        oneFrameStopTime = Time.time;
     }
 
     void HandleScreenSaver() {
@@ -143,8 +148,10 @@ public class OutsideCameraMovement : MonoBehaviour {
          and current time is remembered */
         bool isTouchActive = Input.touchCount == 1;
 
-        if ( (!isTouchActive && Input.GetMouseButtonDown(0)) ||
-             (isTouchActive && Input.GetTouch(0).phase == TouchPhase.Began)) {
+        if ( (!isTouchActive && Input.GetMouseButtonDown(0)) // if we are in mouse mode and LMB is pressed
+           || (isTouchActive && ( (Input.GetTouch(0).phase == TouchPhase.Began) // if touch is active and gesture has began ...
+                                 || (!directMovementControl && Input.GetTouch(0).phase == TouchPhase.Moved) ) // ... or if we are in touch mode and we didn't catch begin of current touch event
+               ) ){
             lastTime = Time.time;
             swipeStartPos = lastPosition = ScreenToWorldPosition(Input.mousePosition);
             directMovementControl = true;

@@ -15,22 +15,42 @@ public abstract class Panel : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     const float timeThreshold = 0.5f;
 
+    bool IsScreenPositionInside(Vector2 screenSpacePos) {
+        RectTransform rectTransform = GetComponent<RectTransform>();
+        Vector2 localPoint;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, screenSpacePos, null, out localPoint);
+        return rectTransform.rect.Contains(localPoint);
+
+    }
+
     protected void Start() {
-        PanelManager.instance.onPointerUp += OnPointerUp;
+        PanelManager.instance.onPointerDown += OnCustomPointerDown;
+        PanelManager.instance.onPointerUp += OnCustomPointerUp;
     }
 
     protected void OnDestroy() {
-        PanelManager.instance.onPointerUp -= OnPointerUp;
+        PanelManager.instance.onPointerDown -= OnCustomPointerDown;
+        PanelManager.instance.onPointerUp -= OnCustomPointerUp;
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
+        if (Input.touchCount == 0)
+            OnCustomPointerEnter();
+    }
+    public void OnPointerExit(PointerEventData eventData) {
+        if (Input.touchCount == 0)
+            OnCustomPointerExit();
+    }
+    public void OnCustomPointerEnter() {
         SceneManager.instance.DisableCameraRotation();
         isPointerInside = true;
     }
-    public void OnPointerExit(PointerEventData eventData) {
-        SceneManager.instance.EnableCameraRotation();
+    public void OnCustomPointerExit() {
+        if (isPointerInside)
+            SceneManager.instance.EnableCameraRotation();
         isPointerInside = false;
     }
+
     public bool ExclusiveVisibility() {
         return exclusiveVisibility;
     }
@@ -50,11 +70,25 @@ public abstract class Panel : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         onPanelClosed?.Invoke();
         isPanelShown = false;
     }
+    public void OnCustomPointerDown(Vector2 position) {
+        bool IsInside = IsScreenPositionInside(position);
+        if (Input.touchCount > 0 && IsInside != isPointerInside) {
+            if (IsInside)
+                OnCustomPointerEnter();
+            else
+                OnCustomPointerExit();
+        }
+    }
 
-    public void OnPointerUp() {
+    public void OnCustomPointerUp(Vector2 position) {
+        bool IsInside = IsScreenPositionInside(position);
+        if (Input.touchCount > 0 && IsInside != isPointerInside) {
+            if (!IsInside)
+                OnCustomPointerExit();
+        }
+
         if (!isPointerInside && isPanelShown && (Time.time - lastShowTime) >= timeThreshold) {
             onPanelCloseRequest?.Invoke();
         }
     }
-
 }

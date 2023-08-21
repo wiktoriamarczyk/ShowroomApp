@@ -84,6 +84,7 @@ public static class Common {
         string desciprion;
     }
 
+    static ScriptableObjectsDatabase database;
     static public List<VersionData> versionsData;
     static public List<BodyPaintColorData> bodyPaintColorsData;
     static public List<PaintColorData> rimsPaintColorsData;
@@ -91,6 +92,8 @@ public static class Common {
     static public List<PackageData> packagesData;
 
     static Common() {
+        database = GameObject.FindFirstObjectByType<ScriptableObjectsDatabase>();
+
         versionsData = Common.GetAllScriptableObejctsInstances<VersionData>();
         bodyPaintColorsData = Common.GetAllScriptableObejctsInstances<BodyPaintColorData>();
         bodyPaintColorsData.Sort((a, b) => a.colorTypeProperty.CompareTo(b.colorTypeProperty));
@@ -103,9 +106,15 @@ public static class Common {
         packagesData = Common.GetAllScriptableObejctsInstances<PackageData>();
         packagesData.Sort((a, b) => a.packageTypeProperty.CompareTo(b.packageTypeProperty));
 
-        TimeSpan duration = DateTime.Now - GetStartEventDate();
-        if (duration.Days >= eventDays || duration.Days < 0) {
+        
+        if (!PlayerPrefs.HasKey(startEventYear)) {
             RestartFirstDayOfEvent();
+        }
+        else {
+            TimeSpan duration = DateTime.Now - GetStartEventDate();
+            if (duration.Days >= eventDays || duration.Days < 0) {
+                RestartFirstDayOfEvent();
+            }
         }
     }
 
@@ -155,15 +164,18 @@ public static class Common {
         }
     }
     public static List<T> GetAllScriptableObejctsInstances<T>() where T : ScriptableObject {
-        string[] guids = AssetDatabase.FindAssets($"t: {typeof(T).Name}"); //FindAssets uses tags check documentation for more info
-        T[] a = new T[guids.Length];
-        for (int i = 0; i < guids.Length; i++) //probably could get optimized
-        {
-            string path = AssetDatabase.GUIDToAssetPath(guids[i]);
-            a[i] = AssetDatabase.LoadAssetAtPath(path, typeof(T)) as T;
-        }
+        //string[] guids = AssetDatabase.FindAssets($"t: {typeof(T).Name}"); //FindAssets uses tags check documentation for more info
+        //T[] a = new T[guids.Length];
+        //for (int i = 0; i < guids.Length; i++) //probably could get optimized
+        //{
+        //    string path = AssetDatabase.GUIDToAssetPath(guids[i]);
+        //    a[i] = AssetDatabase.LoadAssetAtPath(path, typeof(T)) as T;
+        //}
 
-        return a.ToList();
+        //return a.ToList();
+
+        List<T> so = database.objectsProperty.OfType<T>().ToList();
+        return so;
     }
 
 }

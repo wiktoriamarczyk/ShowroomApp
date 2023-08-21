@@ -20,7 +20,8 @@ public class PanelManager : MonoBehaviour {
 
     public event Action onPanelOpened;
     public event Action onPanelClosed;
-    public event Action onPointerUp;
+    public event Action<Vector2> onPointerDown;
+    public event Action<Vector2> onPointerUp;
 
     public void HideAllPanels() {
         prevOpenedPanels.Clear();
@@ -63,16 +64,6 @@ public class PanelManager : MonoBehaviour {
         HidePanel(currentPanel);
         currentPanel = null;
     }
-
-    //T GetPopupByType<T>(ePopupType popupType) where T : class {
-    //    foreach (var popup in popups) {
-    //        if (popup.GetPopupType() == popupType) {
-    //            return popup as T;
-    //        }
-    //    }
-    //    return null;
-    //}
-
 
     T GetPopupPrefabByType<T>() where T : class {
         foreach (var popup in popups) {
@@ -138,8 +129,16 @@ public class PanelManager : MonoBehaviour {
     }
 
     void Update() {
-        if (Input.GetMouseButtonUp(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)) {
-            onPointerUp?.Invoke();
+        if (Input.touchCount==0) {
+            if (Input.GetMouseButtonDown(0))
+                onPointerDown?.Invoke(Input.mousePosition);
+            else if (Input.GetMouseButtonUp(0))
+                onPointerUp?.Invoke(Input.mousePosition);
+        }else{
+            if (Input.GetTouch(0).phase == TouchPhase.Began)
+                onPointerDown?.Invoke(Input.GetTouch(0).position);
+            else if (Input.GetTouch(0).phase == TouchPhase.Ended)
+                onPointerUp?.Invoke(Input.GetTouch(0).position);
         }
     }
 
