@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localizationTableKey: ColorMatch Color
   colorUsage: 2
-  colorType: 8
-  color: {r: 0, g: 0, b: 0, a: 1}
+  colorType: 9
+  color: {r: 0.5921569, g: 0.7882353, b: 0, a: 1}
   metallic: 1
   smoothness: 0.65
   optional: 0

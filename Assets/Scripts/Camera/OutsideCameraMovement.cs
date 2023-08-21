@@ -12,7 +12,7 @@ public class OutsideCameraMovement : MonoBehaviour {
     const float radius = 3f;
     const float movementSpeed = 0.5f;
     const float screenSaverSpeed = 0.75f;
-    const float timeToScreenSaver = 10f;
+    const float timeToScreenSaver = 120f;
     const float distanceToSpeedMultiplier = 0.01f;
     const float scrollToZoomMultiplier = 0.3f;
     const float touchToZoomMultiplier = 0.01f;

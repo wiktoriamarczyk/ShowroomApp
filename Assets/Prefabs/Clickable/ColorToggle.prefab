@@ -530,3 +530,4 @@ MonoBehaviour:
   onToggleOff:
     m_PersistentCalls:
       m_Calls: []
+  onThickness: 10

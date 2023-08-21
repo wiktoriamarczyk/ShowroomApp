@@ -9,8 +9,10 @@ public class ToggleBehaviour : MonoBehaviour {
     [SerializeField] Image frameImage;
     [SerializeField] UnityEvent onToggleOn;
     [SerializeField] UnityEvent onToggleOff;
+    [SerializeField] float onThickness = 10f;
     Color imageDefaultColor;
     Color frameDefaultColor;
+    float frameDefaultThickness;
     bool isOn = false;
     Icon icon;
 
@@ -31,6 +33,7 @@ public class ToggleBehaviour : MonoBehaviour {
         }
         icon?.ChangeToAlternativeColor();
         SetColors(imageColorOn, frameColorOn);
+        ChangeOutlineThickness(onThickness);
         isOn = true;
     }
 
@@ -40,7 +43,14 @@ public class ToggleBehaviour : MonoBehaviour {
         }
         SetColors(imageDefaultColor, frameDefaultColor);
         icon?.ChangeToDefaultColor();
+        ChangeOutlineThickness(frameDefaultThickness);
         isOn = false;
+    }
+
+    void ChangeOutlineThickness(float thickness) {
+        if (frameImage != null) {
+            frameImage.material.SetFloat("_Thickness",thickness);
+        }
     }
 
     public void SetDefaultColor(Color color) {
@@ -70,6 +80,11 @@ public class ToggleBehaviour : MonoBehaviour {
         }
         if (frameImage != null) {
             frameDefaultColor = frameImage.color;
+
+            Material mat = Instantiate(frameImage.material);
+            frameImage.material = mat;
+
+            frameDefaultThickness = frameImage.material.GetFloat("_Thickness");
         }
         Toggle toggle = GetComponent<Toggle>();
         if (toggle) {

@@ -164,6 +164,7 @@ MonoBehaviour:
   onToggleOff:
     m_PersistentCalls:
       m_Calls: []
+  onThickness: 10
 --- !u!114 &6716420600174090157
 MonoBehaviour:
   m_ObjectHideFlags: 0

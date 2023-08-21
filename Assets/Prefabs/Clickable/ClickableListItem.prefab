@@ -95,6 +95,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: ClickableListItem
       objectReference: {fileID: 0}
+    - target: {fileID: 7136344311230058969, guid: 0b3ca6f461a9a3443b981b1edba1b648, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 7d8f7ba62973fd24c85a457256b763bf, type: 3}
+    - target: {fileID: 7136344311230058969, guid: 0b3ca6f461a9a3443b981b1edba1b648, type: 3}
+      propertyPath: m_Color.b
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7136344311230058969, guid: 0b3ca6f461a9a3443b981b1edba1b648, type: 3}
+      propertyPath: m_Color.g
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7136344311230058969, guid: 0b3ca6f461a9a3443b981b1edba1b648, type: 3}
+      propertyPath: m_Color.r
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7136344311230058969, guid: 0b3ca6f461a9a3443b981b1edba1b648, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 32084ae7d6eac534a9993aa658ebd3fe, type: 2}
     - target: {fileID: 8537361171011469506, guid: 0b3ca6f461a9a3443b981b1edba1b648, type: 3}
       propertyPath: m_Type
       value: 1
