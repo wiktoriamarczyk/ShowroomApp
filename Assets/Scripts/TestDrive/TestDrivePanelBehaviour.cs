@@ -8,7 +8,6 @@ using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Localization.LocalizationTableCollection;
 
 public class TestDrivePanelBehaviour : MonoBehaviour {
     [SerializeField] TMP_Dropdown driveDate;

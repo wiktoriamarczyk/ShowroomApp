@@ -5,8 +5,8 @@ public class InteriorCameraMovement : MonoBehaviour {
     [SerializeField] float speed = 5.0f;
     [SerializeField] float sensitivity = 5.0f;
 
-    const int maxCameraAngle = 30;
-    const int minCameraAngle = -30;
+    const int maxCameraAngle = 20;
+    const int minCameraAngle = -20;
 
     void Update() {
         // Rotate the camera based on the mouse movement
