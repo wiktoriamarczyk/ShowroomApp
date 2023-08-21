@@ -3,22 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ImagesSetter {
-    public Image centerImageProperty {
-        get {
-            return centerImageContainer;
-        }
-        set {
-            centerImageContainer = value;
-            centerImage = centerImageContainer.GetComponentsInChildren<Image>()[2];
-        }
-    }
-    Image centerImageContainer { get; set; }
+public class ImagesSetter : MonoBehaviour {
+    Image centerImageContainer;
     Image centerImage;
     List<Image> thumbnails = new List<Image>();
     int imgIndex = 0;
 
     public Func<string, Texture2D> LoadTexture;
+    public Image centerImageContainerProperty {
+        get => centerImageContainer;
+        set => centerImageContainer = value;
+    }
+    public Image centerImageProperty {
+        get => centerImage;
+        set => centerImage = value;
+    }
 
     public void DisplayThumbnails(List<Texture2D> textures, Transform parent) {
         foreach (var texture in textures) {
@@ -53,6 +52,7 @@ public class ImagesSetter {
         if (imgIndex >= thumbnails.Count) {
             imgIndex = 0;
         }
+        DisposeCenterImage();
         DisplayCenterImage(thumbnails[imgIndex]);
     }
 
@@ -61,6 +61,7 @@ public class ImagesSetter {
         if (imgIndex < 0) {
             imgIndex = thumbnails.Count - 1;
         }
+        DisposeCenterImage();
         DisplayCenterImage(thumbnails[imgIndex]);
     }
 
@@ -74,7 +75,10 @@ public class ImagesSetter {
     }
 
     void DisposeCenterImage() {
-        GameObject.Destroy(centerImageContainer.sprite);
+        if (centerImage.sprite != null) {
+            Destroy(centerImage.sprite.texture);
+            Destroy(centerImage.sprite);
+        }
     }
 
     Sprite GetSprite(Texture2D tex) {
@@ -94,7 +98,10 @@ public class ImagesSetter {
 
     void OnDestroy() {
         foreach (var image in thumbnails) {
-            GameObject.Destroy(image.sprite);
+            Destroy(image.sprite.texture);
+            Destroy(image.sprite);
+            Destroy(image.gameObject);
         }
+        thumbnails.Clear();
     }
 }

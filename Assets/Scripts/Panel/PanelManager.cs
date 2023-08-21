@@ -74,7 +74,7 @@ public class PanelManager : MonoBehaviour {
         return null;
     }
 
-    public async UniTask<PopupController.PopupShowResult<T>> ShowPopup2<T>(Action<T> InitFunc) where T : PopupController {
+    public async UniTask<PopupController.PopupShowResult<T>> ShowPopup<T>(Action<T> InitFunc) where T : PopupController {
         PopupController.PopupShowResult<T> popupData;
         popupData.result = false;
         popupData.popupController = null;

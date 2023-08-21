@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class GalleryManager : MonoBehaviour {
     [SerializeField] Panel galleryPanel;
     [SerializeField] GameObject imagesContainer;
-    [SerializeField] Image centerImage;
+    [SerializeField] Image centerImageContainer;
+    [SerializeField] Image centerImageHolder;
 
     ImagesProvider imgProvider;
     ImagesSetter imgSetter;
@@ -18,6 +19,8 @@ public class GalleryManager : MonoBehaviour {
     public event Action onGalleryLoaded;
 
     const string siteURL = "http://itsilesia.com/3d/data/PraktykiGaleria/";
+    const int centerImgWidth = 385;
+    const int centerImgHeight = 250;
 
     public void DisplayNextCenterImage() {
         imgSetter.DisplayNextCenterImage();
@@ -40,15 +43,16 @@ public class GalleryManager : MonoBehaviour {
         cancelToken = cancelTokenSrc.Token;
 
         imgProvider = new ImagesProvider();
-        imgSetter = new ImagesSetter();
-        centerImage.gameObject.SetActive(false);
-        imgSetter.centerImageProperty = centerImage;
+        imgSetter = GetComponent<ImagesSetter>();
+        centerImageContainer.gameObject.SetActive(false);
+        imgSetter.centerImageContainerProperty = centerImageContainer;
+        imgSetter.centerImageProperty = centerImageHolder;
         imgSetter.LoadTexture = GetFullSizeFromThumbnail;
 
         galleryPanel.onPanelOpened += PanelManager.instance.TurnOnBackgroundEffects;
         galleryPanel.onPanelClosed += PanelManager.instance.TurnOffBackgroundEffects;
         try {
-            await imgProvider.LoadTexturesFromManifest(cancelToken, siteURL, new Vector2Int(385, 250));
+            await imgProvider.LoadTexturesFromManifest(cancelToken, siteURL, new Vector2Int(centerImgWidth, centerImgHeight));
         }
         catch (System.OperationCanceledException) {
             Debug.Log("Image loading canceled");

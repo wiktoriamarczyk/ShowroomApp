@@ -250,7 +250,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         string time = driveTime.captionText.text;
         string name = driverName.text;
         if (string.IsNullOrEmpty(date) || string.IsNullOrEmpty(time)) {
-            await PanelManager.instance.ShowPopup2<PopupController>(p => p.Init(Common.localizationIncorectDataWarning));
+            await PanelManager.instance.ShowPopup<PopupController>(p => p.Init(Common.localizationIncorectDataWarning));
             return;
         }
 
@@ -264,7 +264,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
 
         bool webOperationResult = await SendDataToWeb(finalUrl);
         if (!webOperationResult) {
-            await PanelManager.instance.ShowPopup2<PopupController>(p => p.Init(Common.localizationOperationFailedWarning));
+            await PanelManager.instance.ShowPopup<PopupController>(p => p.Init(Common.localizationOperationFailedWarning));
             return;
         }
 
@@ -280,7 +280,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     }
 
     async UniTask ShowDeletePopup(GameObject item) {
-        var popup = await PanelManager.instance.ShowPopup2<PopupController>(p => p.Init(Common.localizationDeleteWarning));
+        var popup = await PanelManager.instance.ShowPopup<PopupController>(p => p.Init(Common.localizationDeleteWarning));
         if (popup.result) {
             await OnDelete(item);
         }
@@ -293,7 +293,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         string url = Path.Combine(modifyDataPath, "delete/" + formattedDate);
         bool webOperationResult = await SendDataToWeb(url);
         if (!webOperationResult) {
-            await PanelManager.instance.ShowPopup2<PopupController>(p => p.Init(Common.localizationOperationFailedWarning));
+            await PanelManager.instance.ShowPopup<PopupController>(p => p.Init(Common.localizationOperationFailedWarning));
             return;
         }
         testDriveObjects.Remove(item);

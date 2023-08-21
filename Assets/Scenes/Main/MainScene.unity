@@ -8147,6 +8147,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1441780060}
   - component: {fileID: 1441780061}
+  - component: {fileID: 1441780062}
   m_Layer: 0
   m_Name: GalleryManager
   m_TagString: Untagged
@@ -8183,7 +8184,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   galleryPanel: {fileID: 3861642024899617088}
   imagesContainer: {fileID: 310669270}
-  centerImage: {fileID: 487278215}
+  centerImageContainer: {fileID: 487278215}
+  centerImageHolder: {fileID: 1332622576}
+--- !u!114 &1441780062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441780059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 741baa8d8c424b04c8e5d9a02c6b63ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1447576493 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1635306896247990, guid: 7ecf74b289b28f246bfea1ee3e275c26, type: 3}
