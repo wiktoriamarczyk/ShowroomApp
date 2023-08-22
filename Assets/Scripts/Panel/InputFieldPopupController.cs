@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 public class InputFieldPopupController : PopupController {
     TMP_InputField inputField;
     string placeholderText;
-    
+
 
     public void Init(string text, string placeholderText) {
         base.Init(text);
@@ -40,6 +40,7 @@ public class InputFieldPopupController : PopupController {
 
     void OnInputFieldValueChanged(string text) {
         if (text.Length > Common.maxInputLength) {
+            inputField.text = text.Remove(Common.maxInputLength);
             return;
         }
     }

@@ -8,6 +8,7 @@ using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static System.Net.Mime.MediaTypeNames;
 
 public class TestDrivePanelBehaviour : MonoBehaviour {
     [SerializeField] TMP_Dropdown driveDate;
@@ -81,6 +82,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     void OnNameChanged() {
         driverName.text = driverName.text.Trim();
         if (driverName.text.Length > Common.maxInputLength) {
+            driverName.text = driverName.text.Remove(Common.maxInputLength);
             return;
         }
     }
