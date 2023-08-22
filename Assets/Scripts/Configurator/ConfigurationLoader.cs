@@ -45,7 +45,7 @@ public class ConfigurationLoader : MonoBehaviour {
         configObject.transform.localScale = Vector3.one;
 
         var textMeshPro = configObject.GetComponentInChildren<TextMeshProUGUI>();
-        textMeshPro.text = configObject.name + " " + config.configDate;
+        textMeshPro.text = configObject.name + " " + config.configSaveDate;
 
         Button button = configObject.GetComponent<Button>();
         button.onClick.AddListener(() => DisplayClickedConfiguration(config));
@@ -54,6 +54,9 @@ public class ConfigurationLoader : MonoBehaviour {
     }
 
     void CreateConfigurationObjects() {
+        if (configurations == null) {
+            return;
+        }
         foreach (ConfigData config in configurations) {
             CreateConfigurationObject(config);
         }

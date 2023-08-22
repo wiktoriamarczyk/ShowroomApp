@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class PopupController : MonoBehaviour {
     [SerializeField] Button mainButton;
     [SerializeField] Button altButton;
+    [SerializeField] Button closeButton;
     [SerializeField] TextMeshProUGUI textToDisplay;
 
     Panel panel;
@@ -22,13 +23,14 @@ public class PopupController : MonoBehaviour {
     public void Init(string text) {
         SetTextToDisplay(text);
     }
-    
+
     public void Show() {
         panel.Show();
     }
 
     public void Hide() {
         panel.Hide();
+        panel.OnDestroy();
     }
 
     public UniTask<bool> WaitForCloseAsync() {
@@ -48,6 +50,7 @@ public class PopupController : MonoBehaviour {
         panel = GetComponent<Panel>();
         mainButton.onClick.AddListener(() => OnButtonClick(true));
         altButton.onClick.AddListener(() => OnButtonClick(false));
+        closeButton.onClick.AddListener(() => OnButtonClick(false));
         localization = textToDisplay.GetComponent<LocalizeStringEvent>();
     }
 

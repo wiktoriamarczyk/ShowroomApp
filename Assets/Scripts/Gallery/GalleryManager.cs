@@ -62,7 +62,5 @@ public class GalleryManager : MonoBehaviour {
     void OnDestroy() {
         cancelTokenSrc.Cancel();
         cancelTokenSrc.Dispose();
-        galleryPanel.onPanelOpened -= PanelManager.instance.TurnOnBackgroundEffects;
-        galleryPanel.onPanelClosed -= PanelManager.instance.TurnOffBackgroundEffects;
     }
 }

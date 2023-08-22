@@ -32,8 +32,6 @@ public class SceneManager : MonoBehaviour {
 
     void OnDestroy() {
         gallery.onGalleryLoaded -= DisableSplashScreen;
-        cameraController.onScreenSaver -= PanelManager.instance.HideAllPanels;
-        cameraController.onCameraMovement -= PanelManager.instance.ShowAllPrevOpenedPanels;
         if (instance == this) {
             instance = null;
         }

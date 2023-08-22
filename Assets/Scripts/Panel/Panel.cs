@@ -28,7 +28,7 @@ public abstract class Panel : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         PanelManager.instance.onPointerUp += OnCustomPointerUp;
     }
 
-    protected void OnDestroy() {
+    public void OnDestroy() {
         PanelManager.instance.onPointerDown -= OnCustomPointerDown;
         PanelManager.instance.onPointerUp -= OnCustomPointerUp;
     }

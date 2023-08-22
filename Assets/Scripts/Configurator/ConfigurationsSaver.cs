@@ -46,7 +46,8 @@ public class ConfigurationsSaver : MonoBehaviour {
 
         ConfigData configData = new ConfigData {
             configName = configName,
-            configDate = currentDate,
+            configCreationDate = currentDate,
+            configSaveDate = currentDate,
             version = version,
             drive = drive,
             color = color,
@@ -101,7 +102,9 @@ public class ConfigurationsSaver : MonoBehaviour {
     bool TryOverwriteConfig(ConfigData newConfig, List<ConfigData> configList) {
         for (int i = 0; i < configList.Count; ++i) {
             if (configList[i].configName == newConfig.configName) {
+                string configCreationDate = configList[i].configCreationDate;
                 configList[i] = newConfig;
+                configList[i].configCreationDate = configCreationDate;
                 return true;
             }
         }

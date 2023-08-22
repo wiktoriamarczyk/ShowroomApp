@@ -106,7 +106,10 @@ public static class Common {
         packagesData = Common.GetAllScriptableObejctsInstances<PackageData>();
         packagesData.Sort((a, b) => a.packageTypeProperty.CompareTo(b.packageTypeProperty));
 
-        
+        SetStartingPlayerPrefsValues();
+    }
+
+    static void SetStartingPlayerPrefsValues() {
         if (!PlayerPrefs.HasKey(startEventYear)) {
             RestartFirstDayOfEvent();
         }
@@ -115,6 +118,10 @@ public static class Common {
             if (duration.Days >= eventDays || duration.Days < 0) {
                 RestartFirstDayOfEvent();
             }
+        }
+
+        if (!PlayerPrefs.HasKey(playerPrefsConfigCountName)) {
+            SetConfigurationCount(0);
         }
     }
 

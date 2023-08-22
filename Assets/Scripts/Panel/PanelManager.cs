@@ -73,12 +73,12 @@ public class PanelManager : MonoBehaviour {
         }
         return null;
     }
-    
+
     public async UniTask<PopupController.PopupShowResult<T>> ShowPopup2<T>(Action<T> InitFunc) where T : PopupController {
         PopupController.PopupShowResult<T> popupData;
         popupData.result = false;
         popupData.popupController = null;
-        
+
         T selectedPopupPrefab = GetPopupPrefabByType<T>();
         if (selectedPopupPrefab == null) {
             return popupData;
@@ -87,12 +87,12 @@ public class PanelManager : MonoBehaviour {
         GameObject newPopup = Instantiate(selectedPopupPrefab.gameObject, panelContainer.transform.parent);
         T newPopupControler = newPopup.GetComponent<T>();
         InitFunc?.Invoke(newPopupControler);
-        
+
         TurnOnBackgroundEffects();
         interactionController.Block();
         newPopupControler.Show();
         bool result = await newPopupControler.WaitForCloseAsync();
-        
+
         popupData.result = result;
         popupData.popupController = newPopupControler;
 
@@ -115,7 +115,7 @@ public class PanelManager : MonoBehaviour {
     public void TurnOffBackgroundEffects() {
         backgroundEffects.TurnOffBlurryDarkBackground();
     }
-    
+
     void HidePopup(PopupController popup) {
         TurnOffBackgroundEffects();
         interactionController.Enable();
