@@ -50,7 +50,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         TIME = 1,
         NAME = 2,
     }
-    enum eTestDriveInfoSaved: int {
+    enum eTestDriveInfoSaved : int {
         DATE_AND_TIME = 0,
         NAME = 1,
     }
@@ -58,9 +58,9 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     void Awake() {
         modifier = new TestDriveLoader();
         LocaleSelector.onLanguageChanged += UpdateLocalization;
-        refresh.onClick.AddListener(async () => { await RefreshAndInsertRegisteredData(); InsertDateAndTimeData(); }) ;
+        refresh.onClick.AddListener(async () => { await RefreshAndInsertRegisteredData(); InsertDateAndTimeData(); });
         submit.onClick.AddListener(async () => await OnSubmit());
-        restart.onClick.AddListener(RestartFirstDayOfEvent);
+        restart.onClick.AddListener(delegate { RestartFirstDayOfEvent(DateTime.Now); });
         driveDate.onValueChanged.AddListener(delegate { RefreshTimeDropdown(); });
         driverName.onValueChanged.AddListener(delegate { OnNameChanged(); });
         registeredDates.onValueChanged.AddListener(delegate { DisplayRegisteredTestDrives(); });
@@ -73,11 +73,10 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         InsertDateAndTimeData();
     }
 
-    void RestartFirstDayOfEvent() {
-        Common.RestartFirstDayOfEvent();
+    void RestartFirstDayOfEvent(DateTime date) {
+        Common.RestartFirstDayOfEvent(date);
         InsertDateAndTimeData();
     }
-
 
     void OnNameChanged() {
         driverName.text = driverName.text.Trim();
@@ -91,41 +90,47 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         driveTime.ClearOptions();
         List<string> hoursList = new List<string>();
         DateTime earliestTime = DateTime.Now;
-        if (driveDate.options.Count < 1) {
-            Common.RestartFirstDayOfEvent();
-        }
+        bool restart = false;
         string selectedDate = driveDate.options[driveDate.value].text;
         selectedDate = selectedDate.Replace("/", ".");
         string format = "dd.MM.yyyy";
         DateTime currentDate = DateTime.Now;
-        string currentDateString = currentDate.ToString(format);
+
         DateTime selectedDateTime = DateTime.ParseExact(selectedDate, format, CultureInfo.InvariantCulture);
+        DateTime currentDateTime = DateTime.ParseExact(currentDate.ToString(format), format, CultureInfo.InvariantCulture);
 
-        earliestTime = selectedDateTime.AddHours(Common.earliestDrivingHour);
 
-        if (selectedDate == currentDateString) {
-            if (currentDate.Hour >= Common.latestDrivingHour) {
-                if (driveTime.options.Count <= 1) {
-                    Common.RestartFirstDayOfEvent();
+        if (selectedDateTime == currentDateTime) {
+            earliestTime = GetEarliestTestDriveTimeFromDate(DateTime.Now);
+            earliestTime = earliestTime.AddSeconds(-earliestTime.Second);
+
+            if (earliestTime.Day != selectedDateTime.Day) {
+                if (driveDate.options.Count <= 1) {
+                    restart = true;
                 }
                 EraseDropdownOptionAtIndex(driveDate, (int)eDate.TODAY);
             }
-            else {
-                earliestTime = GetEarliestTestDriveTimeFromDate(DateTime.Now);
-                earliestTime = earliestTime.AddSeconds(-earliestTime.Second);
-            }
-         }
+        }
+        else {
+            earliestTime = GetEarliestTestDriveTimeFromDate(selectedDateTime);
+        }
 
-        DateTime latestTime = new DateTime(selectedDateTime.Year, selectedDateTime.Month, selectedDateTime.Day);
+        DateTime latestTime = new DateTime(earliestTime.Year, earliestTime.Month, earliestTime.Day);
         latestTime = latestTime.AddHours(Common.latestDrivingHour);
 
         for (DateTime time = earliestTime; time <= latestTime; time = time.AddMinutes(Common.minuteStep)) {
             hoursList.Add(time.ToString("HH:mm"));
         }
         driveTime.AddOptions(RemoveOccupiedHours(hoursList));
+        if (restart) {
+            RestartFirstDayOfEvent(earliestTime);
+        }
     }
 
     List<string> RemoveOccupiedHours(List<string> hours) {
+        if (driveDate.options.Count < 1) {
+            return hours;
+        }
         int selectedDateIndex = driveDate.value;
         if (selectedDateIndex < 0) {
             return hours;
@@ -352,7 +357,7 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         try {
             data = await modifier.GetData(dataPath, cancelToken);
         }
-         catch (System.OperationCanceledException) {
+        catch (System.OperationCanceledException) {
             Debug.Log("Test drive operation canceled");
         }
         DeactivateLoader();
@@ -412,8 +417,12 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
     }
 
     static DateTime GetEarliestTestDriveTimeFromDate(DateTime time) {
-        if (time.Hour >= Common.latestDrivingHour || time.Hour < Common.earliestDrivingHour) {
+        if (time.Hour >= Common.latestDrivingHour) {
             time = time.AddDays(1);
+            time = new DateTime(time.Year, time.Month, time.Day, Common.earliestDrivingHour, 00, 00);
+            return time;
+        }
+        else if (time.Hour < Common.earliestDrivingHour) {
             time = new DateTime(time.Year, time.Month, time.Day, Common.earliestDrivingHour, 00, 00);
             return time;
         }

@@ -144,6 +144,11 @@ public static class Common {
     public static void SetConfigurationCount(int value) {
         PlayerPrefs.SetInt(playerPrefsConfigCountName, value);
     }
+    public static void RestartFirstDayOfEvent(DateTime date) {
+        PlayerPrefs.SetInt(startEventDay, date.Day);
+        PlayerPrefs.SetInt(startEventMonth, date.Month);
+        PlayerPrefs.SetInt(startEventYear, date.Year);
+    }
     public static void RestartFirstDayOfEvent() {
         PlayerPrefs.SetInt(startEventDay, DateTime.Now.Day);
         PlayerPrefs.SetInt(startEventMonth, DateTime.Now.Month);
