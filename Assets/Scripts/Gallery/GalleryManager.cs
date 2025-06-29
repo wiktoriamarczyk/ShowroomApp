@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class GalleryManager : MonoBehaviour {
@@ -16,7 +15,7 @@ public class GalleryManager : MonoBehaviour {
     CancellationTokenSource cancelTokenSrc;
     CancellationToken cancelToken;
 
-    public event Action onGalleryLoaded;
+    public event Action<bool> onGalleryLoaded;
 
     const string siteURL = "http://itsilesia.com/3d/data/PraktykiGaleria/";
     const int centerImgWidth = 385;
@@ -38,7 +37,7 @@ public class GalleryManager : MonoBehaviour {
         return imgProvider.LoadTextureFromDisk(imageName);
     }
 
-    async void Awake() {
+    async void Start() {
         cancelTokenSrc = new CancellationTokenSource();
         cancelToken = cancelTokenSrc.Token;
 
@@ -54,13 +53,14 @@ public class GalleryManager : MonoBehaviour {
         try {
             await imgProvider.LoadTexturesFromManifest(cancelToken, siteURL, new Vector2Int(centerImgWidth, centerImgHeight));
         }
-        catch (System.OperationCanceledException) {
-            Debug.Log("Image loading canceled");
+        catch (Exception e) {
+            Debug.LogError($"Error loading gallery: {e.Message}");
+            onGalleryLoaded?.Invoke(false);
             return;
         }
 
         imgSetter.DisplayThumbnails(imgProvider.LoadThumbnails(), imagesContainer.transform);
-        onGalleryLoaded?.Invoke();
+        onGalleryLoaded?.Invoke(true);
     }
 
     void OnDestroy() {

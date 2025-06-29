@@ -13,18 +13,18 @@ MonoBehaviour:
   m_Name: Localization-Assets-Shared
   m_EditorClassIdentifier: 
   m_GroupName: Localization-Assets-Shared
-  m_Data:
-    m_SerializedData: []
   m_GUID: c5a4fd02e94770845915c9437f06ea4c
   m_SerializeEntries:
   - m_GUID: 4cd571c6ed2034c4eaed2a9dff668879
     m_Address: Assets/Localization/Tables/UI Text Shared Data.asset
     m_ReadOnly: 1
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cfa1369aa0aa1664bbc56fb74784fec8
     m_Address: Assets/Localization/Tables/UI Images Shared Data.asset
     m_ReadOnly: 1
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: c5e4e49aaf1f00f40be2666418fdf7d7, type: 2}
   m_SchemaSet:

@@ -1,3 +1,5 @@
+using System.Collections;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class SceneManager : MonoBehaviour {
@@ -5,6 +7,8 @@ public class SceneManager : MonoBehaviour {
     [SerializeField] GameObject splashScreen;
     [SerializeField] OutsideCameraMovement cameraController;
     [SerializeField] GalleryManager gallery;
+
+    const float splashScreenWaitTime = 2f;
 
     public void DisableCameraRotation() {
         cameraController.DisableRotation();
@@ -25,7 +29,18 @@ public class SceneManager : MonoBehaviour {
         cameraController.DisableRotation();
     }
 
-    void DisableSplashScreen() {
+    void DisableSplashScreen(bool value) {
+        if (value) {
+            splashScreen.SetActive(false);
+            cameraController.EnableRotation();
+        }
+        else {
+            StartCoroutine(DisableSplashScreenForceWait());
+        }
+    }
+
+    IEnumerator DisableSplashScreenForceWait() {
+        yield return new WaitForSeconds(splashScreenWaitTime);
         splashScreen.SetActive(false);
         cameraController.EnableRotation();
     }

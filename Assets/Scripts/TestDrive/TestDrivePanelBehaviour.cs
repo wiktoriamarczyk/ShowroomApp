@@ -357,8 +357,8 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         try {
             data = await modifier.GetData(dataPath, cancelToken);
         }
-        catch (System.OperationCanceledException) {
-            Debug.Log("Test drive operation canceled");
+        catch (Exception e) {
+            Debug.Log($"Test drive operation error: {e.Message}");
         }
         DeactivateLoader();
         return data;
@@ -370,8 +370,8 @@ public class TestDrivePanelBehaviour : MonoBehaviour {
         try {
             result = await modifier.UpdateData(url, cancelToken);
         }
-        catch (System.OperationCanceledException) {
-            Debug.Log("Test drive operation canceled");
+        catch (Exception e) {
+            Debug.Log($"Test drive operation error: {e.Message}");
         }
         DeactivateLoader();
         return result;
